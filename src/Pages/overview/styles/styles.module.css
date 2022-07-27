@@ -1,0 +1,278 @@
+.main {
+  padding: 28px;
+  min-height: 100vh;
+  background-color: #f3f3f6;
+}
+.section_title h2 {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0;
+}
+.section_title p {
+  color: #9a9a9a;
+  margin-top: 0;
+}
+.reports {
+  padding-top: 36px;
+}
+.report_content {
+  width: 100%;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-radius: 5px;
+  min-height: 100px;
+  padding: 16px;
+}
+.report_content .img {
+  display: flex;
+  justify-content: flex-end;
+}
+.report_content p {
+  color: #6c6b80;
+  font-size: 14px;
+}
+.report_content h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+/* daily_subscribers */
+.daily_subscribers {
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-radius: 5px;
+  padding: 16px;
+  min-height: 100%;
+}
+.daily_subscribers .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+.header .title h4 {
+  font-size: 16px;
+  font-weight: 500;
+}
+.header .title p {
+  font-size: 14px;
+  color: #00000066;
+}
+.daily_subscribers .header .action {
+  display: flex;
+  gap: 1px;
+  align-items: flex-start;
+  margin-right: -16px;
+}
+.action .select {
+  position: relative;
+}
+.action .select ul {
+  padding: 6px 0px;
+  border-radius: 5px;
+  min-width: 100px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+
+  list-style: none;
+}
+.action .select ul li {
+  padding: 6px 22px 6px 12px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.action .select ul li:hover {
+  background-color: #f5f5f5;
+
+  /* transition: all 0.3s ease; */
+}
+.action .select button {
+  background-color: #fff;
+  border: 1px solid #d1d1db;
+  height: 36px;
+  padding: 3px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.action .select button span {
+  margin-left: 12px;
+  margin-right: -10px;
+}
+.action .more {
+  position: relative;
+}
+.action .more button {
+  background-color: #fff;
+  border: none;
+  height: 36px;
+  padding: 3px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.action .more ul {
+  padding: 6px 0px;
+  border-radius: 5px;
+  min-width: 100px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  list-style: none;
+}
+.action .more ul li {
+  padding: 6px 22px 6px 12px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.action .more ul li:hover {
+  background-color: #f5f5f5;
+}
+.main_subscribers_section {
+  overflow: auto hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* Recent Subscribers */
+.recent_subscribers {
+  background-color: #fff;
+  min-height: 100%;
+  border-radius: 5px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  display: flex;
+  flex-direction: column;
+}
+.recent_subscribers .header {
+  padding: 16px;
+}
+.recent_subscribers .subscribers {
+  padding: 16px;
+}
+.subscribers .subscriber {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.subscriber div:first-child img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.subscriber div:nth-child(2) {
+  flex-grow: 1;
+}
+.subscriber div:nth-child(2) p:first-child {
+  font-weight: 500;
+  font-size: 16px;
+}
+.subscriber div:nth-child(2) p:nth-child(2) {
+  font-size: 11px;
+  color: #343a40;
+}
+.subscriber .view {
+  font-weight: 500;
+  font-size: 12px;
+  color: #1f53d7;
+}
+.recent_subscribers .viewAll {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px;
+}
+.allWrapper {
+  margin-top: auto;
+}
+.recent_subscribers .viewAll a {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+.recent_subscribers .viewAll a span {
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
+/* User Logs */
+.user_logs {
+  padding: 12px 0;
+}
+.user_logs .log {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.user_logs .log div:first-child {
+  display: flex;
+  gap: 3px;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.user_logs .log div:first-child span {
+  color: #1f53d7;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.user_logs .log div:last-child {
+  font-size: 10px;
+  color: #9d9caf;
+  font-style: italic;
+  white-space: nowrap;
+}
+/* Subs by location */
+.sub_by_location .location {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 16px;
+}
+.sub_by_location .location div:first-child {
+  flex-grow: 1;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.sub_by_location .location div:nth-child(2) {
+  color: #6c6b80;
+  min-width: 120px;
+  text-align: right;
+}
+.sub_by_location .location div:nth-child(3) {
+  color: #1f53d7;
+  min-width: 120px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 12px;
+  }
+  .sub_by_location .location div:nth-child(3) {
+    min-width: auto;
+  }
+  .sub_by_location .location div:nth-child(2) {
+    min-width: auto;
+  }
+}

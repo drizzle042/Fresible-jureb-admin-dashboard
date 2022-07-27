@@ -1,0 +1,21 @@
+$primary-color: #2f49d0;
+@import "loaders.css/src/animations/line-scale.scss";
+
+.loader-hidden {
+  display: none;
+}
+.loader-active {
+  display: block;
+}
+.loaderWrapper {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #ffffffe6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}

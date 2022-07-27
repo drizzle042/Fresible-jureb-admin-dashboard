@@ -1,0 +1,97 @@
+import React from "react";
+import Layout from "../Layout/Layout";
+import styles from "./styles/styles.module.css";
+import Image1 from "./assets/images/total-users.png";
+import Image2 from "./assets/images/active-users.png";
+import Image3 from "./assets/images/total-revenue.png";
+import { Grid } from "@mui/material";
+import DailySubscribers from "./components/DailySubscribers";
+import RecentSubscribers from "./components/RecentSubscribers";
+import UserLogs from "./components/UserLogs";
+import SubscribersByLocation from "./components/SubscribersByLocation";
+import useFetch from "../../lib/components/Hooks/useFetch"
+import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading"
+import FetchError from "../../lib/components/Hooks/FetchError"
+
+
+const Overview = () => {
+
+  // Get requests and Overview data
+  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/overview`);
+  
+  const { data:orgData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=1`)
+  const recentSubs = orgData?.data?.slice(0, 4);
+  
+  const { data:kpiData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/load`);
+  const subsByLocale = kpiData?.data?.subsByLocale
+
+  return (
+    <Layout>
+      <main className={styles.main}>
+        <div className={styles.section_title}>
+          <h2>Overview</h2>
+          <p>Get insights to accounts on jureb here</p>
+        </div>
+        {isLoading && <FetchLoading />}
+        {error && <FetchError error={error} />}
+        {data && 
+            <section>
+              <div className={styles.reports}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} sm={6} md={4} lg={4}>
+                    <div className={styles.report_content}>
+                      <p>Total Users</p>
+                      <div className={styles.img}>
+                        <img src={Image1} alt="Total Users" />
+                      </div>
+                      <h3>{data?.data?.topStats?.usersCount}</h3>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={4}>
+                    <div className={styles.report_content}>
+                      <p>Active Users</p>
+                      <div className={styles.img}>
+                        <img src={Image2} alt="Active Users" />
+                      </div>
+                      <h3>{data?.data?.topStats?.activeUsersCount}</h3>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={4}>
+                    <div className={styles.report_content}>
+                      <p>Total Revenue</p>
+                      <div className={styles.img}>
+                        <img src={Image3} alt="Total Revenue" />
+                      </div>
+                      <h3>{data?.data?.topStats?.totalRevenue}</h3>
+                    </div>
+                  </Grid>
+                </Grid>
+              </div>
+              <div className={styles.reports}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <DailySubscribers styles={styles} />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    {recentSubs && <RecentSubscribers styles={styles} data={recentSubs}/>}
+                  </Grid>
+                </Grid>
+              </div>
+              <div className={styles.reports}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    {data?.data?.logs && <UserLogs data={data?.data?.logs} styles={styles} />}
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    {subsByLocale && <SubscribersByLocation styles={styles} data={subsByLocale}/>}
+                  </Grid>
+                </Grid>
+              </div>
+            </section>
+        }
+      </main>
+    </Layout>
+  );
+};
+
+export default Overview;
