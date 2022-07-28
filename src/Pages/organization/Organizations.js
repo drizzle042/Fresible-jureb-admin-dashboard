@@ -28,8 +28,10 @@ const Organizations = () => {
   // set Search Data Context
   const { searchData, isLoading, error } = useContext(SearchDataContext);
   // Components
-  const { pageNumber } = usePaginator();
+  const { pageNumber, PaginatorTemplate } = usePaginator();
   // Get requests
+  const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/sub-period-stats`)
+
   const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=MONTHLY`)
   const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=QUARTERLY`)
   const { data:BiAnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=BIANNUALLY`)
@@ -46,23 +48,23 @@ const Organizations = () => {
           <Search styles={styles} hooksContent={hooksContent} />
           <div className={styles.tab_panel}>
             <TabContext value={value}>
-              <TabHeaders handleChange={handleChange} styles={styles} />
+              <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />
               {isLoading && <FetchLoading />}
               {error && <FetchError error={error} />}
               <TabPanel className={styles.t_p} value={"1"}>
-                {searchData && <All data={searchData} styles={styles} />}
+                {searchData && <All data={searchData} styles={styles} PaginatorTemplate={PaginatorTemplate} />}
               </TabPanel>
               <TabPanel className={styles.t_p} value={"2"}>
-                {MonthlyData && <Monthly data={MonthlyData} styles={styles} />}
+                {MonthlyData && <Monthly data={MonthlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
               </TabPanel>
               <TabPanel className={styles.t_p} value={"3"}>
-                {QuarterlyData && <Quarterly data={QuarterlyData} styles={styles} />}
+                {QuarterlyData && <Quarterly data={QuarterlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
               </TabPanel>
               <TabPanel className={styles.t_p} value={"4"}>
-                {BiAnnualData && <BiAnnually data={BiAnnualData} styles={styles} />}
+                {BiAnnualData && <BiAnnually data={BiAnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
               </TabPanel>
               <TabPanel className={styles.t_p} value={"5"}>
-                {AnnualData && <Annually data={AnnualData} styles={styles} />}
+                {AnnualData && <Annually data={AnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
               </TabPanel>
             </TabContext>
           </div>

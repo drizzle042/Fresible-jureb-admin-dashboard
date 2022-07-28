@@ -73,17 +73,17 @@ const Overview = () => {
                     <DailySubscribers styles={styles} />
                   </Grid>
                   <Grid item xs={12} sm={12} md={4} lg={4}>
-                    {recentSubs && <RecentSubscribers styles={styles} data={recentSubs}/>}
+                    <RecentSubscribers styles={styles} data={recentSubs}/>
                   </Grid>
                 </Grid>
               </div>
               <div className={styles.reports}>
                 <Grid container spacing={4}>
                   <Grid item xs={12} sm={12} md={4} lg={4}>
-                    {data?.data?.logs && <UserLogs data={data?.data?.logs} styles={styles} />}
+                    <UserLogs data={data?.data?.logs} styles={styles} />
                   </Grid>
                   <Grid item xs={12} sm={12} md={8} lg={8}>
-                    {subsByLocale && <SubscribersByLocation styles={styles} data={subsByLocale}/>}
+                    <SubscribersByLocation styles={styles} data={subsByLocale}/>
                   </Grid>
                 </Grid>
               </div>

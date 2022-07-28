@@ -5,9 +5,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 
 const SubscribersByLocation = ({ styles, data }) => {
-  
-  const subscribers = data;
-  
   return (
     <div className={styles.recent_subscribers}>
       <div className={styles.header}>
@@ -17,16 +14,15 @@ const SubscribersByLocation = ({ styles, data }) => {
       </div>
       <Divider />
       <div className={styles.sub_by_location}>
-        {subscribers?.map((item, index) => (
+        {data?.map((item, index) => (
           <div key={index}>
             <div className={styles.location}>
               <div>{item?.name}</div>
               <div>{item?.totaldocs?.toLocaleString()}</div>
               <div>
-                <Link to={`/organizations/${index}`}>View details</Link>
+                <Link to={""}>View details</Link>
               </div>
             </div>
-            {index !== subscribers?.length - 1 && <Divider />}
           </div>
         ))}
       </div>

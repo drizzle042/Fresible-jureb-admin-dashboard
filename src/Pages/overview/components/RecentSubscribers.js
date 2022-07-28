@@ -6,9 +6,6 @@ import orgImage from "../assets/images/active-users.png";
 
 
 const RecentSubscribers = ({ styles, data }) => {
-
-  const subscribers = data;
-
   return (
     <div className={styles.recent_subscribers}>
       <div className={styles.header}>
@@ -19,7 +16,7 @@ const RecentSubscribers = ({ styles, data }) => {
       </div>
       <Divider />
       <div className={styles.subscribers}>
-        {subscribers?.map((item, index) => (
+        {data?.map((item, index) => (
           <div key={index} className={styles.subscriber}>
             <div>
               <img src={orgImage} alt={item?.name} />
@@ -29,7 +26,7 @@ const RecentSubscribers = ({ styles, data }) => {
               <p>{new Date(item?.joinDate).toLocaleDateString("en-GB")}</p>
             </div>
             <div>
-              <Link to={`/organizations/${item?.orgId}`} className={styles.view}>
+              <Link to={`/organizations/${item?.id}`} className={styles.view}>
                 View
               </Link>
             </div>

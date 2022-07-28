@@ -22,7 +22,7 @@ const ViewOrganization = () => {
     <Layout>
       <main className={styles.main}>
         {isLoading && <FetchLoading />}
-        {error && <FetchError />}
+        {error && <FetchError error={error}/>}
         {organization &&
         <div>
           {organization?.map((client, index) => (
@@ -49,7 +49,8 @@ const ViewOrganization = () => {
                               : ""
                           }
                         >
-                          {String(client?.subscription?.status).toLowerCase()}
+                          {/* {String(client?.subscription?.status).toLowerCase()} */}
+                          {"Subscription status goes here"}
                         </div>
                       </div>
                       <div className={styles.payment_details}>
@@ -119,9 +120,8 @@ const ViewOrganization = () => {
                       </div>
                       <div className={styles.org_details}>
                         <span>Billing Address:</span>
-                        {/* {client?.orgAddress &&
-                        <span>{client?.orgAddress?.houseNo}, {client?.orgAddress?.street}, {client?.orgAddress?.city}, {client?.orgAddress?.lga}, {client?.orgAddress?.state}, {client?.orgAddress?.country}</span>} */}
-                        {"The Organizations address goes here"}
+                        {client?.address &&
+                        <span>{client?.address?.houseNo} {client?.address?.street}, {client?.address?.city}, {client?.address?.lga}, {client?.address?.state}, {client?.address?.country}.</span>}
                       </div>
                     </div>
                   </Grid>
@@ -136,13 +136,12 @@ const ViewOrganization = () => {
                     >
                       <div className={styles.org_details}>
                         <span>Email:</span>
-                        {/* <a href={`mailto:${client?.email}`} style={{ color: "blue" }}>{client?.email}</a> */}
-                        {"The organizations email goes here"}
+                        <a href={`mailto:${client?.owner?.email}`} style={{ color: "blue" }}>{client?.owner?.email}</a>
                       </div>
                       <div className={styles.org_details}>
                         <span>Account Status:</span>
-                        <span>{client?.subscription?.status}</span>
-                        {/* <span>{"Account status goes here"}</span> */}
+                        {/* <span>{client?.subscription?.status}</span> */}
+                        <span>{"Account status goes here"}</span>
                       </div>
                       <div className={styles.org_details}>
                         <span>Organization ID:</span>

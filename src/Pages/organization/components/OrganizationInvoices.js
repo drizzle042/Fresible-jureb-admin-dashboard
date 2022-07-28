@@ -11,9 +11,11 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import downloadImg from "../assets/images/download.png";
 import { invoices } from "../../../lib/static/data";
+import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
 const OrganizationInvoices = ({ styles, hooksContent }) => {
   const { filterData } = hooksContent;
+  const { PaginatorTemplate } = usePaginator();
   return (
     <div className={styles.org_invoices}>
       <h4>Invoices</h4>
@@ -120,22 +122,7 @@ const OrganizationInvoices = ({ styles, hooksContent }) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <div className={styles.pagination}>
-          <div>
-            Displaying <span>20</span> of <span>20</span> Per Page
-          </div>
-          <div>
-            <span className={styles.pageNumber}>
-              <span>1</span>
-              <span>-</span>
-              <span>6</span>
-              <span style={{ margin: "0 5px" }}>of</span>
-              <span>6</span>
-            </span>
-            <span className={styles.action}>-</span>
-            <span className={styles.action_2}>+</span>
-          </div>
-        </div>
+        <PaginatorTemplate />
       </div>
     </div>
   );

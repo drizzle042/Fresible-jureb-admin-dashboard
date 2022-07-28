@@ -6,14 +6,15 @@ const usePost = (url) => {
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
-  function postDataFunc(data){
+  function postDataFunc(data, contentType){
     if (data){
       fetch(url, {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + tokens?.data?.accessToken
+          "Authorization": "Bearer " + tokens?.data?.accessToken,
+          "Content-Type": contentType,
         },
-        body: data
+        body: data,
       })
       .then((res) => {
         switch (res.status) {

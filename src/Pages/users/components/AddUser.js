@@ -68,7 +68,7 @@ const AddUser = ({ open, handleClose, styles }) => {
           variant="contained" 
           color="secondary"
           onClick={() => {
-            postDataFunc(JSON.stringify(formData));
+            postDataFunc(JSON.stringify(formData), "application/json")
             handleClose()
           }}>
           Add User

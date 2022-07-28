@@ -7,11 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
-import usePaginator from "../../../../lib/components/Hooks/PaginatorTemplate";
 
-const Monthly = ({ data, styles }) => {
-
-  const { PaginatorTemplate } = usePaginator()
+const Monthly = ({ data, styles, PaginatorTemplate }) => {
   return (
     <div>
       <TableContainer className={styles.table_container} component={Paper}>
@@ -36,7 +33,6 @@ const Monthly = ({ data, styles }) => {
               </TableCell>
             </TableRow>
           </TableHead>
-          {data &&
           <TableBody>
             {data?.data?.map((user, index) => (
               <TableRow
@@ -74,10 +70,9 @@ const Monthly = ({ data, styles }) => {
               </TableRow>
             ))}
           </TableBody>
-          }
         </Table>
       </TableContainer>
-      {data && <PaginatorTemplate totalDocs={data?.totalDocs} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />}
+        <PaginatorTemplate totalDocs={data?.totalDocs} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
     </div>
   );
 };

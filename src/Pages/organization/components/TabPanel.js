@@ -12,7 +12,7 @@ const TabLabel = ({ title, label, styles }) => {
   );
 };
 
-const TabHeaders = ({ handleChange, styles }) => {
+const TabHeaders = ({ handleChange, styles, data }) => {
   return (
     <div style={{ borderBottom: "1px solid #ccc" }}>
       <TabList
@@ -22,23 +22,23 @@ const TabHeaders = ({ handleChange, styles }) => {
         scrollButtons="auto"
       >
         <Tab
-          label={<TabLabel styles={styles} title="All" label={112} />}
+          label={<TabLabel styles={styles} title="All" label={data?.data?.all} />}
           value={"1"}
         />
         <Tab
-          label={<TabLabel styles={styles} title="Monthly" label={12} />}
+          label={<TabLabel styles={styles} title="Monthly" label={data?.data?.monthly} />}
           value={"2"}
         />
         <Tab
-          label={<TabLabel styles={styles} title="Quarterly" label={52} />}
+          label={<TabLabel styles={styles} title="Quarterly" label={data?.data?.quarterly} />}
           value={"3"}
         />
         <Tab
-          label={<TabLabel styles={styles} title="Bi-annually" label={52} />}
+          label={<TabLabel styles={styles} title="Bi-annually" label={data?.data?.biannually} />}
           value={"4"}
         />
         <Tab
-          label={<TabLabel styles={styles} title="Annually" label={87} />}
+          label={<TabLabel styles={styles} title="Annually" label={data?.data?.annually} />}
           value={"5"}
         />
       </TabList>
