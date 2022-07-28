@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import { SearchDataContext } from "../../../App";
+import { SearchDataContext } from "../Organizations";
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -8,11 +8,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
-const Search = ({ styles, hooksContent }) => {
+const Search = ({ styles, hooksContent, handleSearchInput }) => {
   const { filterData } = hooksContent;
-
-  // set Search Data Context
-  const { handleSearchInput } = useContext(SearchDataContext);
 
   return (
     <div className={styles.filters}>

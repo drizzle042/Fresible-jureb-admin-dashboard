@@ -1,11 +1,13 @@
-import React, {useContext} from "react";
-import {SearchDataContext} from "../../App";
-import Layout from "../Layout/Layout";
+import React from "react";
 import Search from "./components/Search";
 import styles from "./styles/styles.module.css";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
+import Header from "../Layout/Components/Header/Header";
 import TabHeaders from "./components/TabPanel";
+import OrgModal from "../Layout/Components/Sidebar/Components/OrgModal";
+import Sidebar from "../Layout/Components/Sidebar/Sidebar";
+import { Box } from "@mui/material";
 import All from "./components/users/All";
 import Monthly from "./components/users/Monthly";
 import Quarterly from "./components/users/Quarterly";
@@ -17,18 +19,26 @@ import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading";
 import FetchError from "../../lib/components/Hooks/FetchError";
 import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
 
+const drawerWidth = 240;
 const Organizations = () => {
   const { hooksContent } = CustomHook();
   const [value, setValue] = React.useState("1");
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // set Search Data Context
-  const { searchData, isLoading, error } = useContext(SearchDataContext);
-  // Components
+  // set Search Data
+  const {data:searchData, isLoading, error, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations`);
+
+  // Pagination
   const { pageNumber, PaginatorTemplate } = usePaginator();
+
   // Get requests
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/sub-period-stats`)
 
@@ -38,40 +48,58 @@ const Organizations = () => {
   const { data:AnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=ANNUALLY`)
 
   return (
-    <Layout>
-      <main className={styles.main}>
-        <div className={styles.section_title}>
-          <h2>Subscribers</h2>
-          <p>Get insights to accounts on jureb here</p>
-        </div>
-        <section>
-          <Search styles={styles} hooksContent={hooksContent} />
-          <div className={styles.tab_panel}>
-            <TabContext value={value}>
-              <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />
-              {isLoading && <FetchLoading />}
-              {error && <FetchError error={error} />}
-              <TabPanel className={styles.t_p} value={"1"}>
-                {searchData && <All data={searchData} styles={styles} PaginatorTemplate={PaginatorTemplate} />}
-              </TabPanel>
-              <TabPanel className={styles.t_p} value={"2"}>
-                {MonthlyData && <Monthly data={MonthlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
-              </TabPanel>
-              <TabPanel className={styles.t_p} value={"3"}>
-                {QuarterlyData && <Quarterly data={QuarterlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
-              </TabPanel>
-              <TabPanel className={styles.t_p} value={"4"}>
-                {BiAnnualData && <BiAnnually data={BiAnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
-              </TabPanel>
-              <TabPanel className={styles.t_p} value={"5"}>
-                {AnnualData && <Annually data={AnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
-              </TabPanel>
-            </TabContext>
-          </div>
-        </section>
-      </main>
-    </Layout>
+    <div>
+      {open && <OrgModal setOpen={setOpen} />}
+      <Box sx={{ display: "flex" }}>
+        <Sidebar
+          handleDrawerToggle={handleDrawerToggle}
+          mobileOpen={mobileOpen}
+          setMobileOpen={setMobileOpen}
+          setOpen={setOpen}
+        />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            width: { xs: `calc(100% - ${drawerWidth}px)` },
+          }}
+        >
+          <Header handleDrawerToggle={handleDrawerToggle} handleSearchInput={handleSearchInput} />
+          <main className={styles.main}>
+            <div className={styles.section_title}>
+              <h2>Subscribers</h2>
+              <p>Get insights to accounts on jureb here</p>
+            </div>
+            <section>
+              <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} />
+              <div className={styles.tab_panel}>
+                <TabContext value={value}>
+                  <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />
+                  {isLoading && <FetchLoading />}
+                  {error && <FetchError error={error} />}
+                  <TabPanel className={styles.t_p} value={"1"}>
+                    {searchData && <All data={searchData} styles={styles} PaginatorTemplate={PaginatorTemplate} />}
+                  </TabPanel>
+                  <TabPanel className={styles.t_p} value={"2"}>
+                    {MonthlyData && <Monthly data={MonthlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                  </TabPanel>
+                  <TabPanel className={styles.t_p} value={"3"}>
+                    {QuarterlyData && <Quarterly data={QuarterlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                  </TabPanel>
+                  <TabPanel className={styles.t_p} value={"4"}>
+                    {BiAnnualData && <BiAnnually data={BiAnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                  </TabPanel>
+                  <TabPanel className={styles.t_p} value={"5"}>
+                    {AnnualData && <Annually data={AnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                  </TabPanel>
+                </TabContext>
+              </div>
+            </section>
+          </main>
+        </Box>
+      </Box>
+    </div>
   );
 };
 
-export default Organizations;
+export { Organizations };

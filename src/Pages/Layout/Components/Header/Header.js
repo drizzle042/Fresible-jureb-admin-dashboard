@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { SearchDataContext } from "../../../../App";
+import React from "react";
 import Notification from "../../../../lib/assets/images/notification.png";
 import UserImg from "../../../../lib/assets/images/user-img.png";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,10 +8,7 @@ import useFetch from "../../../../lib/components/Hooks/useFetch";
 import { Link, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 
-const Header = ({ handleDrawerToggle }) => {
-
-  // set Search Data Context
-  const { handleSearchInput } = useContext(SearchDataContext)
+const Header = ({ handleDrawerToggle, handleSearchInput }) => {
   // Components
   const navigate = useNavigate()
   // Get profilepic and name
