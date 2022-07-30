@@ -6,13 +6,13 @@ import { Collapse } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const subscribers = [
-  { id: "1", day: "Sunday", total_subscribers: 200 },
-  { id: "2", day: "Monday", total_subscribers: 330 },
-  { id: "3", day: "Tuesday", total_subscribers: 270 },
-  { id: "4", day: "Wednesday", total_subscribers: 390 },
-  { id: "5", day: "Thursday", total_subscribers: 160 },
-  { id: "6", day: "Friday", total_subscribers: 240 },
-  { id: "7", day: "Saturday", total_subscribers: 420 },
+  { id: "1", day: "Sunday", total_subscribers: 0 },
+  { id: "2", day: "Monday", total_subscribers: 0 },
+  { id: "3", day: "Tuesday", total_subscribers: 0 },
+  { id: "4", day: "Wednesday", total_subscribers: 1 },
+  { id: "5", day: "Thursday", total_subscribers: 0 },
+  { id: "6", day: "Friday", total_subscribers: 0 },
+  { id: "7", day: "Saturday", total_subscribers: 0 },
 ];
 
 const DailySubscribers = ({ styles }) => {
