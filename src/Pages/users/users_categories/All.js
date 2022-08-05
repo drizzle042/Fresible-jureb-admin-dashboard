@@ -6,13 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button } from "@mui/material";
+import usePut from "../../../lib/components/Hooks/usePut";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
 const All = ({ styles, data }) => {
   
-  const { PaginatorTemplate } = usePaginator()
+  const { putFunc: deactivate } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/deactivate?id=`);
+  const { putFunc: activate } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/activate?id=`);
+  const { PaginatorTemplate } = usePaginator();
+
   return (
     <div>
       <TableContainer className={styles.table_container} component={Paper}>
@@ -60,9 +63,27 @@ const All = ({ styles, data }) => {
 
                 <TableCell align="left">
                   <span>
-                    <Button>
-                      <DeleteForeverIcon />
-                    </Button>
+                    {
+                      user?.status === "ACTIVE"
+                        ? <Button 
+                            variant="outlined" 
+                            color="error"
+                            onClick={()=> {
+                              deactivate(user?.id)
+                            }}>
+                              Deactivate
+                          </Button>
+                        : user?.status === "INACTIVE"
+                        ? <Button 
+                            variant="outlined" 
+                            color="success"
+                            onClick={()=> {
+                              activate(user?.id)
+                            }}>
+                              Activate
+                          </Button>
+                        : ""
+                    }
                   </span>
                 </TableCell>
               </TableRow>

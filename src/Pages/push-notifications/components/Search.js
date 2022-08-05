@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -9,6 +9,7 @@ import useFetch from "../../../lib/components/Hooks/useFetch";
 const Search = ({ styles, hooksContent, setData }) => {
   const { filterData } = hooksContent;
   // fetch Search input data
+  const [resourceEndpoint, setResourceEndpoint] = useState("")
   const {data, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
   setData(data)
   return (
@@ -22,7 +23,8 @@ const Search = ({ styles, hooksContent, setData }) => {
           value={hooksContent?.title}
           onChange={hooksContent?.handleChange(filterData.title)}
           onInput={(e) => {
-            handleSearchInput(e?.target?.value)
+            setResourceEndpoint(`?keyword=${e?.target?.value}`)
+            handleSearchInput(resourceEndpoint)
           }}
           InputProps={{
             endAdornment: (

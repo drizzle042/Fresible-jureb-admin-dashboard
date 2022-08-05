@@ -1,18 +1,27 @@
-import React from "react";
-import { InputAdornment, TextField } from "@mui/material";
+import React, {useState} from "react";
+import { 
+  InputAdornment, 
+  TextField, 
+  Select, 
+  MenuItem } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import useFetch from "../../../lib/components/Hooks/useFetch";
 
 const Search = ({ styles, hooksContent, setData }) => {
+
   const { filterData } = hooksContent;
   // fetch Search input data
+  const [resourceEndpoint, setResourceEndpoint] = useState("")
   const {data, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices`)
   setData(data)
+
+  function handleSelect(){
+    console.log(hooksContent?.status)
+  }
+
   return (
     <div className={styles.filters}>
       <div className={styles.search_bar}>
@@ -24,7 +33,8 @@ const Search = ({ styles, hooksContent, setData }) => {
           value={hooksContent?.title}
           onChange={hooksContent?.handleChange(filterData.title)}
           onInput={(e) => {
-            handleSearchInput(e?.target?.value)
+            setResourceEndpoint(`?keyword=${e?.target?.value}`)
+            handleSearchInput(resourceEndpoint)
           }}
           InputProps={{
             endAdornment: (
@@ -78,9 +88,10 @@ const Search = ({ styles, hooksContent, setData }) => {
           size="small"
           value={hooksContent?.status}
           onChange={hooksContent?.handleChange(filterData.status)}
+          onClose={handleSelect}
           displayEmpty
         >
-          <MenuItem disabled value="">
+          <MenuItem disabled value="status">
             Status
           </MenuItem>
           <MenuItem value="success">Success</MenuItem>

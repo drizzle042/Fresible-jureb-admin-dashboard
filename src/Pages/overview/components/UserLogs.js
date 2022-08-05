@@ -42,7 +42,7 @@ const UserLogs = ({ data, styles }) => {
           >
             <div>
               <span>{item?.replacers[0]?.name}</span>
-              {item?.text}
+              {item?.text?.replace("$1", "").replace("$2", item?.replacers[1]?.name).replace("$3", item?.replacers[2]?.name).replace("$4", item?.replacers[3]?.name)}
             </div>
             <div>{
               item?.createdAt ?

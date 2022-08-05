@@ -2,7 +2,7 @@ import { Divider } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import orgImage from "../assets/images/active-users.png";
+import DefaultImg from "../../../lib/components/defaultImg";
 
 
 const RecentSubscribers = ({ styles, data }) => {
@@ -19,14 +19,16 @@ const RecentSubscribers = ({ styles, data }) => {
         {data?.map((item, index) => (
           <div key={index} className={styles.subscriber}>
             <div>
-              <img src={orgImage} alt={item?.name} />
+              {item?.organizationLogo === "" ? 
+                <DefaultImg name={item?.organizationName}/> : 
+                <img src={item?.organizationLogo} alt={item?.organizationName} />}
             </div>
             <div>
-              <p>{item?.name}</p>
-              <p>{new Date(item?.joinDate).toLocaleDateString("en-GB")}</p>
+              <p>{item?.organizationName}</p>
+              <p>{new Date(item?.date).toLocaleDateString("en-GB")}</p>
             </div>
             <div>
-              <Link to={`/organizations/${item?.id}`} className={styles.view}>
+              <Link to={`/organizations/${item?.organizationId}`} className={styles.view}>
                 View
               </Link>
             </div>

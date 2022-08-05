@@ -8,13 +8,8 @@ import usePost from "../../lib/components/Hooks/usePost";
 
 const Security = () => {
   const { hooksContent } = CustomHook();
-  const {
-    userData: { currentPassword },
-  } = hooksContent;
-  let formData = {};
-  const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
-  formData.token = tokens?.data?.accessToken;
 
+  let formData = {};
   let passwords = {};
   function checkPassword(newPassword, confirmPassword){
     if (newPassword === confirmPassword){
@@ -42,8 +37,9 @@ const Security = () => {
               <TextField
                 type="password"
                 size="small"
-                value={hooksContent.currentPassword}
-                onChange={hooksContent.handleChange(currentPassword)}
+                onChange={(e) => {
+                  formData.password = e?.target?.value;
+                }}
                 fullWidth
                 placeholder="***************"
               />
@@ -55,7 +51,7 @@ const Security = () => {
                 size="small"
                 onChange={(e) => {
                   passwords.newPassword = e.target.value;
-                  }}
+                }}
                 fullWidth
                 placeholder="***************"
               />
@@ -67,7 +63,7 @@ const Security = () => {
                 size="small"
                 onChange={(e) => {
                   passwords.confirmPassword = e.target.value;
-                  }}
+                }}
                 fullWidth
                 placeholder="***************"
               />
@@ -78,8 +74,7 @@ const Security = () => {
               color="secondary"
               onClick={() => {
                 if (checkPassword(passwords?.newPassword, passwords?.confirmPassword) === true){
-                  formData.password = passwords?.confirmPassword;
-                  console.log(formData)
+                  formData.newPassword = passwords?.confirmPassword;
                   postDataFunc(JSON.stringify(formData), "application/json")
                 }
               }}>

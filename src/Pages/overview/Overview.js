@@ -10,7 +10,7 @@ import RecentSubscribers from "./components/RecentSubscribers";
 import UserLogs from "./components/UserLogs";
 import SubscribersByLocation from "./components/SubscribersByLocation";
 import useFetch from "../../lib/components/Hooks/useFetch"
-import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading"
+import LoaderComponent from "../../lib/components/LoaderComponent/Loader"
 import FetchError from "../../lib/components/Hooks/FetchError"
 
 
@@ -18,9 +18,8 @@ const Overview = () => {
 
   // Get requests and Overview data
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/overview`);
-  
-  const { data:orgData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=1`)
-  const recentSubs = orgData?.data?.slice(0, 4);
+
+  const recentSubs = data?.data?.recentSubscribers?.reverse().slice(0, 4);
   
   const { data:kpiData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/load`);
   const subsByLocale = kpiData?.data?.subsByLocale
@@ -32,7 +31,7 @@ const Overview = () => {
           <h2>Overview</h2>
           <p>Get insights to accounts on jureb here</p>
         </div>
-        {isLoading && <FetchLoading />}
+        {isLoading && <LoaderComponent />}
         {error && <FetchError error={error} />}
         {data && 
             <section>
@@ -44,7 +43,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image1} alt="Total Users" />
                       </div>
-                      <h3>{data?.data?.topStats?.usersCount}</h3>
+                      <h3>{data?.data?.topStats?.usersCount.toLocaleString()}</h3>
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={4}>
@@ -53,7 +52,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image2} alt="Active Users" />
                       </div>
-                      <h3>{data?.data?.topStats?.activeUsersCount}</h3>
+                      <h3>{data?.data?.topStats?.activeUsersCount.toLocaleString()}</h3>
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={4}>
@@ -62,7 +61,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image3} alt="Total Revenue" />
                       </div>
-                      <h3>{data?.data?.topStats?.totalRevenue}</h3>
+                      <h3>NGN {data?.data?.topStats?.totalRevenue.toLocaleString()}</h3>
                     </div>
                   </Grid>
                 </Grid>

@@ -2,8 +2,8 @@ import { useState } from "react";
 
 const CustomHook = () => {
   const [title, setTitle] = useState("");
-  const [dateFrom, setDateFrom] = useState(new Date("2022-01-18T21:11:54"));
-  const [dateTo, setDateTo] = useState(new Date("2022-01-18T21:11:54"));
+  const [dateFrom, setDateFrom] = useState(new Date());
+  const [dateTo, setDateTo] = useState(new Date());
   const [status, setStatus] = useState("");
 
   const filterData = {

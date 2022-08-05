@@ -12,7 +12,7 @@ import BiAnnually from "./components/users/BiAnnually";
 import Annually from "./components/users/Annually";
 import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading";
+import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
 import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
 
@@ -24,7 +24,10 @@ const Payments = () => {
   };
 
   const { pageNumber } = usePaginator()
+
   // Get requests
+  const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices/sub-period-stats`)
+
   const { data:AllData, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}`)
   const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?plan=MONTHLY&page=${pageNumber}`)
   const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?plan=QUARTERLY&page=${pageNumber}`)
@@ -42,8 +45,8 @@ const Payments = () => {
           <Search hooksContent={hooksContent} styles={styles} setData={setData} />
           <div className={styles.tab_panel}>
             <TabContext value={value}>
-              <TabHeaders handleChange={handleChange} styles={styles} />
-              {isLoading && <FetchLoading />}
+              {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
+              {isLoading && <LoaderComponent />}
               {error && <FetchError error={error} />}
               <TabPanel className={styles.t_p} value="1">
                 {AllData && <All data={AllData} styles={styles} />}

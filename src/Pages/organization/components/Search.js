@@ -1,5 +1,4 @@
-import React, {useContext} from "react";
-import { SearchDataContext } from "../Organizations";
+import React, { useState } from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -10,6 +9,7 @@ import Select from "@mui/material/Select";
 
 const Search = ({ styles, hooksContent, handleSearchInput }) => {
   const { filterData } = hooksContent;
+  const [resourceEndpoint, setResourceEndpoint] = useState("")
 
   return (
     <div className={styles.filters}>
@@ -22,7 +22,8 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
           value={hooksContent?.title}
           onChange={hooksContent?.handleChange(filterData.title)}
           onInput={(e) => {
-            handleSearchInput(e?.target?.value)
+            setResourceEndpoint(`?keyword=${e?.target?.value}`);
+            handleSearchInput(resourceEndpoint);
           }}
           InputProps={{
             endAdornment: (
@@ -39,7 +40,11 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
             label="Date From"
             inputFormat="MM/dd/yyyy"
             value={hooksContent.dateFrom}
-            onChange={(e) => hooksContent.setDateFrom(e)}
+            onChange={(e) => {
+              hooksContent.setDateFrom(e);
+              setResourceEndpoint(`${resourceEndpoint}?dateFrom=${e}`);
+              handleSearchInput(resourceEndpoint);
+            }}
             renderInput={(params) => (
               <TextField
                 className={styles.input}
@@ -57,7 +62,11 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
             label="Date To"
             inputFormat="MM/dd/yyyy"
             value={hooksContent.dateTo}
-            onChange={(e) => hooksContent.setDateTo(e)}
+            onChange={(e) => {
+              hooksContent.setDateTo(e);
+              setResourceEndpoint(`${resourceEndpoint}?dateTo=${e}`);
+              handleSearchInput(resourceEndpoint);
+            }}
             renderInput={(params) => (
               <TextField
                 className={styles.input}
@@ -76,11 +85,14 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
           size="small"
           displayEmpty
           value={hooksContent?.status}
-          onChange={hooksContent?.handleChange(filterData.status)}
+          onChange={(e) => {
+            hooksContent?.handleChange(filterData.status);
+            console.log(e?.target?.value)
+            setResourceEndpoint(`${resourceEndpoint}?status=${e?.target?.value}`);
+            handleSearchInput(resourceEndpoint);
+          }}
         >
-          <MenuItem disabled value="">
-            Status
-          </MenuItem>
+          <MenuItem disabled value="">Status</MenuItem>
           <MenuItem value="active">Active</MenuItem>
           <MenuItem value="inactive">Inactive</MenuItem>
           <MenuItem value="expired">Expired</MenuItem>

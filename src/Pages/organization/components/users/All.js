@@ -74,7 +74,7 @@ const All = ({ data, styles, PaginatorTemplate }) => {
           </TableBody>
         </Table>
       </TableContainer>
-        <PaginatorTemplate totalDocs={data?.totalDocs} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
+        <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
     </div>
   );
 };

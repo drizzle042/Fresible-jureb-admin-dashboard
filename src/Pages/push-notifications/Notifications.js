@@ -17,7 +17,7 @@ import PreviewMessageMobile from "./components/message/PreviewMessageMobile";
 import Feedback from "../../lib/components/Feedback/Feedback";
 import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading";
+import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
 
 const Notifications = () => {
@@ -128,7 +128,7 @@ const Notifications = () => {
             <TabContext value={value}>
               <TabHeaders handleChange={handleChange} styles={styles} />
               <TabPanel className={styles.t_p} value="1">
-                {isLoading && <FetchLoading />}
+                {isLoading && <LoaderComponent />}
                 {error && <FetchError error={error} />}
                 {data && <All data={data} styles={styles} />}
               </TabPanel>

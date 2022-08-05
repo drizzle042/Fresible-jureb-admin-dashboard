@@ -30,21 +30,3 @@ td {
 th {
   white-space: nowrap !important;
 }
-.notification_badges [data-badge="NEW"] {
-  position: relative;
-}
-.notification_badges [data-badge="NEW"]:after {
-  position: absolute;
-  right: -10px;
-  top: -10px;
-  min-width: 10px;
-  min-height: 10px;
-  line-height: 10px;
-  padding: 5px;
-  color: #fff;
-  background-color: #2bff00;
-  font-size: 10px;
-  border-radius: 20px;
-  content: attr(data-badge);
-  border: solid 1px #2bff00;
-}

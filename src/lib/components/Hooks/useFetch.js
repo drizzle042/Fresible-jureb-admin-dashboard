@@ -40,7 +40,7 @@ const useFetch = (url) => {
   };
   
   function handleSearchInput(value){
-    let resourceEndpoint = `${url}?keyword=${value}`;
+    let resourceEndpoint = `${url}${value}`;
     fetch(resourceEndpoint, {
       method: "GET",
       headers: {

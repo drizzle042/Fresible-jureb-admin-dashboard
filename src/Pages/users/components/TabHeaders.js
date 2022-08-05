@@ -12,7 +12,7 @@ const TabLabel = ({ title, label, styles }) => {
   );
 };
 
-const TabHeaders = ({ handleChange, styles }) => {
+const TabHeaders = ({ handleChange, styles, data }) => {
   return (
     <div style={{ borderBottom: "1px solid #ccc" }}>
       <TabList
@@ -22,15 +22,15 @@ const TabHeaders = ({ handleChange, styles }) => {
         onChange={handleChange}
       >
         <Tab
-          label={<TabLabel styles={styles} title="All" label={112} />}
+          label={<TabLabel styles={styles} title="All" label={data?.data?.all} />}
           value="1"
         />
         <Tab
-          label={<TabLabel styles={styles} title="Active" label={12} />}
+          label={<TabLabel styles={styles} title="Active" label={data?.data?.active} />}
           value="2"
         />
         <Tab
-          label={<TabLabel styles={styles} title="Inactive" label={52} />}
+          label={<TabLabel styles={styles} title="Inactive" label={data?.data?.inactive} />}
           value="3"
         />
       </TabList>

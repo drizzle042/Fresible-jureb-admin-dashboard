@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Button,
   InputAdornment,
@@ -13,6 +13,7 @@ import useFetch from "../../../lib/components/Hooks/useFetch";
 const Search = ({ styles, openDialog, setData }) => {
 
   // fetch Search input data
+  const [resourceEndpoint, setResourceEndpoint] = useState("")
   const {data, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`)
   setData(data)
 
@@ -26,7 +27,8 @@ const Search = ({ styles, openDialog, setData }) => {
             size="small"
             placeholder="Enter Text Here..."
             onInput={(e) => {
-              handleSearchInput(e?.target?.value)
+              setResourceEndpoint(`?keyword=${e?.target?.value}`)
+              handleSearchInput(resourceEndpoint)
             }}
             InputProps={{
               endAdornment: (

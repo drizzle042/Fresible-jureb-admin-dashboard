@@ -9,7 +9,7 @@ import Inactive from "./users_categories/Inactive";
 import TabHeaders from "./components/TabHeaders";
 import AddUser from "./components/AddUser";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading";
+import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
 
 const Users = () => {
@@ -27,6 +27,8 @@ const Users = () => {
   };
 
   // Get data request
+  const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/status-stats`)
+
   const {data, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`)
 
   return (
@@ -40,8 +42,8 @@ const Users = () => {
           <Search styles={styles} openDialog={handleOpenUserDailog} setData={setData} />
           <div className={styles.tab_panel}>
             <TabContext value={value}>
-              <TabHeaders handleChange={handleChange} styles={styles} />
-              {isLoading && <FetchLoading />}
+              {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
+              {isLoading && <LoaderComponent />}
               {error && <FetchError error={error} />}
               {data &&
                 <div>

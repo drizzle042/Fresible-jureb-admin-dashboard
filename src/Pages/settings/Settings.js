@@ -5,7 +5,7 @@ import SettingsLayout from "./components/SettingsLayout";
 import styles from "./styles/styles.module.css";
 import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import FetchLoading from "../../lib/components/LoaderComponent/FetchLoading";
+import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
 import usePost from "../../lib/components/Hooks/usePost";
 
@@ -37,7 +37,7 @@ const Settings = () => {
           <p>Manage who has access to what on Jureb</p>
         </div>
         <SettingsLayout>
-          {isLoading && <FetchLoading />}
+          {isLoading && <LoaderComponent />}
           {error && <FetchError error={error} />}
           {data && 
           <form onSubmit={() => { postDataFunc([...postData])}}>
