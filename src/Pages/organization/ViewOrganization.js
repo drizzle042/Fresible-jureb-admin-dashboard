@@ -1,4 +1,5 @@
 import { Divider, Grid, IconButton } from "@mui/material";
+import EastIcon from '@mui/icons-material/East';
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../Layout/Layout";
@@ -17,6 +18,7 @@ const ViewOrganization = () => {
 
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
   const client = data?.data;
+  const {data: invoiceData, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/invoices?organizationId=${id}`)
 
   return (
     <Layout>
@@ -38,7 +40,7 @@ const ViewOrganization = () => {
                 <Grid item xs={12} sm={6} md={4} lg={5}>
                   <div className={styles.payment_info}>
                     <div className={styles.title}>
-                      <div>Simple Start</div>
+                      <div>{client?.subscription?.planName}</div>
                       <div
                         className={
                           client?.subscription?.status === "ACTIVE"
@@ -48,14 +50,13 @@ const ViewOrganization = () => {
                             : ""
                         }
                       >
-                        {/* {String(client?.subscription?.status).toLowerCase()} */}
-                        {"Subscription status goes here"}
+                        {String(client?.subscription?.status).toLowerCase()}
                       </div>
                     </div>
                     <div className={styles.payment_details}>
                       <ul>
                         <li>
-                          Billed:<span className={styles.active}>{"Billing Type goes here"}</span>
+                          Billed:<span className={styles.active}> {String(client?.subscription?.billingInterval)?.toLowerCase()}</span>
                         </li>
                         <li>
                           Active Users:<span>{
@@ -90,7 +91,7 @@ const ViewOrganization = () => {
                       <div className={styles.sub_action}>
                         <button className={styles.cancel}>Cancel Plan</button>
                         <button className={styles.upgrade}>
-                          Upgrade Plan <span></span>
+                          Upgrade Plan <span><EastIcon sx={{color: "blue"}}/></span>
                         </button>
                       </div>
                     </div>
@@ -139,8 +140,7 @@ const ViewOrganization = () => {
                     </div>
                     <div className={styles.org_details}>
                       <span>Account Status:</span>
-                      {/* <span>{client?.subscription?.status}</span> */}
-                      <span>{"Account status goes here"}</span>
+                      <span>{client?.status}</span>
                     </div>
                     <div className={styles.org_details}>
                       <span>Organization ID:</span>
@@ -151,7 +151,7 @@ const ViewOrganization = () => {
               </Grid>
             </section>
             <section style={{ marginTop: 24 }}>
-              <OrganizationInvoices hooksContent={hooksContent} styles={styles} />
+              <OrganizationInvoices hooksContent={hooksContent} styles={styles} invoiceData={invoiceData} handleSearchInput={handleSearchInput} />
             </section>
           </div>
         </div>

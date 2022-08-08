@@ -17,8 +17,8 @@ const SubscribersByLocation = ({ styles, data }) => {
         {data?.map((item, index) => (
           <div key={index}>
             <div className={styles.location}>
-              <div>{item?.name}</div>
-              <div>{item?.totaldocs?.toLocaleString()}</div>
+              <div>{item?.state}</div>
+              <div>{item?.count}</div>
               <div>
                 <Link to={""}>View details</Link>
               </div>

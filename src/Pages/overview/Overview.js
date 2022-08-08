@@ -19,10 +19,7 @@ const Overview = () => {
   // Get requests and Overview data
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/overview`);
 
-  const recentSubs = data?.data?.recentSubscribers?.reverse().slice(0, 4);
-  
-  const { data:kpiData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/load`);
-  const subsByLocale = kpiData?.data?.subsByLocale
+  const recentSubs = data?.data?.recentSubscribers?.slice(0, 4);
 
   return (
     <Layout>
@@ -61,7 +58,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image3} alt="Total Revenue" />
                       </div>
-                      <h3>NGN {data?.data?.topStats?.totalRevenue.toLocaleString()}</h3>
+                      <h3>₦{data?.data?.topStats?.totalRevenue.toLocaleString()}</h3>
                     </div>
                   </Grid>
                 </Grid>
@@ -82,7 +79,7 @@ const Overview = () => {
                     <UserLogs data={data?.data?.logs} styles={styles} />
                   </Grid>
                   <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <SubscribersByLocation styles={styles} data={subsByLocale}/>
+                    <SubscribersByLocation styles={styles} data={data?.data?.subscribersByLocation}/>
                   </Grid>
                 </Grid>
               </div>

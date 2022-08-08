@@ -10,10 +10,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import downloadImg from "../assets/images/download.png";
-import { invoices } from "../../../lib/static/data";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
-const OrganizationInvoices = ({ styles, hooksContent }) => {
+const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchInput }) => {
   const { filterData } = hooksContent;
   const { PaginatorTemplate } = usePaginator();
   return (
@@ -28,6 +27,9 @@ const OrganizationInvoices = ({ styles, hooksContent }) => {
             placeholder="Enter Text Here..."
             value={hooksContent?.title}
             onChange={hooksContent?.handleChange(filterData.title)}
+            onInput = {(e) => {
+              handleSearchInput(e?.target?.value)
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -82,7 +84,7 @@ const OrganizationInvoices = ({ styles, hooksContent }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoices?.map((invoice, index) => (
+              {invoiceData?.data?.map((invoice, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -95,23 +97,23 @@ const OrganizationInvoices = ({ styles, hooksContent }) => {
                     {invoice?.number}
                   </TableCell>
                   <TableCell align="left">
-                    {new Date(invoice?.date).toLocaleDateString("en-GB")}
+                    {new Date(invoice?.paidAt).toLocaleDateString("en-GB")}
                   </TableCell>
                   <TableCell align="left">
                     <span
                       className={
-                        invoice?.status === "Paid"
+                        invoice?.status === "PAID"
                           ? styles.status_paid
-                          : invoice?.status === "Expired"
+                          : invoice?.status === "EXPIRED"
                           ? styles.status_expired
                           : ""
                       }
                     >
-                      {invoice?.status}
+                      {String(invoice?.status)?.toLowerCase()}
                     </span>
                   </TableCell>
-                  <TableCell align="left">{invoice?.plan}</TableCell>
-                  <TableCell align="left">{invoice?.period}</TableCell>
+                  <TableCell align="left">{invoice?.subscriptionMeta?.planName}</TableCell>
+                  <TableCell align="left">{String(invoice?.subscriptionMeta?.billingInterval)?.toLowerCase()}</TableCell>
                   <TableCell className={styles.client_cell} align="left">
                     <button className={styles.download_invoice}>
                       Download <img src={downloadImg} alt="download invoice" />
@@ -122,7 +124,7 @@ const OrganizationInvoices = ({ styles, hooksContent }) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <PaginatorTemplate />
+        <PaginatorTemplate totalDocs={invoiceData?.data?.length} limit={invoiceData?.limit} page={invoiceData?.page} totalPages={invoiceData?.totalPages} />
       </div>
     </div>
   );
