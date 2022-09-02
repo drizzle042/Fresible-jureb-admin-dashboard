@@ -68,19 +68,17 @@ const ViewOrganization = () => {
                         <li>
                           Subscription Date:
                           <span>
-                            {/* {new Date(client?.createdAt).toLocaleDateString(
+                            {new Date(client?.subscription?.startAt).toLocaleDateString(
                               "en-GB"
-                            )} */}
-                            {"Subscription date goes here"}
+                            )}
                           </span>
                         </li>
                         <li>
                           Due Date:
                           <span>
-                            {/* {new Date(client?.dateCreated).toLocaleDateString(
+                            {new Date(client?.subscription?.endAt).toLocaleDateString(
                               "en-GB"
-                            )} */}
-                            {"Due date goes here"}
+                            )}
                           </span>
                         </li>
                       </ul>
@@ -91,7 +89,7 @@ const ViewOrganization = () => {
                       <div className={styles.sub_action}>
                         <button className={styles.cancel}>Cancel Plan</button>
                         <button className={styles.upgrade}>
-                          Upgrade Plan <span><EastIcon sx={{color: "blue"}}/></span>
+                          Upgrade Plan <IconButton><EastIcon sx={{color: "blue"}}/></IconButton>
                         </button>
                       </div>
                     </div>

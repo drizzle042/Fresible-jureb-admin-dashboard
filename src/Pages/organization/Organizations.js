@@ -43,10 +43,7 @@ const Organizations = () => {
   return (
     <Layout>
       <main className={styles.main}>
-        <div className={styles.section_title}>
-          <h2>Subscribers</h2>
-          <p>Get insights to accounts on jureb here</p>
-        </div>
+        
         <section>
           <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} />
           <div className={styles.tab_panel}>

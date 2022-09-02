@@ -10,6 +10,8 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
 }
 .headerContent img {
   width: auto;
@@ -27,6 +29,33 @@
   border: none !important;
   box-shadow: none;
 }
+/* Admin activity logs */
+.user_logs{
+  padding: 1rem 0;
+}
+.user_logs .log {
+  display: flex;
+  padding: 12px 16px;
+  gap: 16px;
+  justify-content: space-between;
+}
+.log_text {
+  color: #1f53d7;
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+.user_logs .log .time {
+  font-size: 15px;
+  color: #9d9caf;
+  font-style: italic;
+  text-align: right;
+  white-space: nowrap;
+}
+
 @media (max-width: 900px) {
   .headerContent h5 {
     display: none;

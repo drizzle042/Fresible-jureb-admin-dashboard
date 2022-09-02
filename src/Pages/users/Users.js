@@ -34,10 +34,7 @@ const Users = () => {
   return (
     <Layout>
       <main className={styles.main}>
-        <div className={styles.section_title}>
-          <h2>Users</h2>
-          <p>Manage who has access to what on Jureb</p>
-        </div>
+       
         <section>
           <Search styles={styles} openDialog={handleOpenUserDailog} setData={setData} />
           <div className={styles.tab_panel}>

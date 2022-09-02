@@ -25,6 +25,21 @@ const Notifications = () => {
   // Get All Notifications
   const { data, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
 
+  // Real time notification 
+  let  URL = `${process.env.REACT_APP_BACKEND_API_URL}`.replace('https', 'wss')
+  const socket = new WebSocket(URL);
+
+  // Send messages
+  function sendNotification(data){
+    socket.addEventListener("open", (e) => {
+      socket.send(data)
+    })}
+  // Receive messages
+  socket.addEventListener("message", (e) => {
+    console.log(e.data);
+  })
+  
+
   const { hooksContent } = CustomHook();
   const [value, setValue] = React.useState("1");
   const [newMessage, setNewMessage] = useState(false);
@@ -108,11 +123,7 @@ const Notifications = () => {
     <Layout>
       <main className={styles.main}>
         <div className={styles.section_title}>
-          <div className={styles.header}>
-            <h2>Push Notification</h2>
-            <p>Send targeted messages to your audience</p>
-          </div>
-          <div>
+          <div >
             <Button
               onClick={openNewMessage}
               variant="contained"
@@ -149,6 +160,7 @@ const Notifications = () => {
         open={newMessage}
         handleClose={closeNewMessage}
         hooksContent={hooksContent}
+        sendNotification={sendNotification}
       />
       <PreviewMessageWeb
         styles={styles}

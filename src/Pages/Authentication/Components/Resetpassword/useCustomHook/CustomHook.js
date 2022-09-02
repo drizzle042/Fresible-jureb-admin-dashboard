@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signInSchema } from "../../../../lib/components/Validations/authentication";
+import { forgotPasswordSchema } from "../../../../../lib/components/Validations/authentication";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { backendURL } from "../../../../../config";
 
 const CustomHook = () => {
   const navigate = useNavigate();
-  const url = `${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/auth/auth-tokens`;
+  const url = `${backendURL}/api/v1/admin/auth/password-reset-request`;
 
   const {
     handleSubmit,
@@ -14,7 +15,7 @@ const CustomHook = () => {
     formState: { errors },
     control,
   } = useForm({
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(forgotPasswordSchema),
     mode: "all",
   });
 
@@ -22,8 +23,7 @@ const CustomHook = () => {
     try {
       const { data } = await axios.post(url, formData);
       if (data) {
-        localStorage.setItem("user-tokens", JSON.stringify(data));
-        navigate("/overview");
+        navigate("/reset-mail");
       }
     } catch (error) {
       console.log(error?.response);

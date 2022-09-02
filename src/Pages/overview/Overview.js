@@ -14,6 +14,7 @@ import LoaderComponent from "../../lib/components/LoaderComponent/Loader"
 import FetchError from "../../lib/components/Hooks/FetchError"
 
 
+
 const Overview = () => {
 
   // Get requests and Overview data
@@ -23,11 +24,9 @@ const Overview = () => {
 
   return (
     <Layout>
+     
       <main className={styles.main}>
-        <div className={styles.section_title}>
-          <h2>Overview</h2>
-          <p>Get insights to accounts on jureb here</p>
-        </div>
+        
         {isLoading && <LoaderComponent />}
         {error && <FetchError error={error} />}
         {data && 

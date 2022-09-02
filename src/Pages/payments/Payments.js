@@ -29,18 +29,15 @@ const Payments = () => {
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices/sub-period-stats`)
 
   const { data:AllData, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}`)
-  const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?plan=MONTHLY&page=${pageNumber}`)
-  const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?plan=QUARTERLY&page=${pageNumber}`)
-  const { data:BiAnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?plan=BIANNUALLY&page=${pageNumber}`)
-  const { data:AnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?plan=ANNUALLY&page=${pageNumber}`)
+  const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=monthly`)
+  const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=quarterly`)
+  const { data:BiAnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=biannually`)
+  const { data:AnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=annually`)
 
   return (
     <Layout>
       <main className={styles.main}>
-        <div className={styles.section_title}>
-          <h2>Payment History</h2>
-          <p>See all payments made for the Jureb Subscription</p>
-        </div>
+      
         <section>
           <Search hooksContent={hooksContent} styles={styles} setData={setData} />
           <div className={styles.tab_panel}>

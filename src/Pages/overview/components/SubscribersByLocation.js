@@ -29,7 +29,7 @@ const SubscribersByLocation = ({ styles, data }) => {
       <div className={styles.allWrapper}>
         <Divider />
         <div className={styles.viewAll}>
-          <Link to="/organizations">
+          <Link to="/subs-by-location">
             See all
             <span>
               <ArrowForwardIosIcon style={{ fontSize: 12 }} />

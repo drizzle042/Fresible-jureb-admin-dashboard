@@ -1,0 +1,130 @@
+.nav {
+    width: 100%;
+    padding: 16px 0 0 32px;
+  }
+  @media (max-width: 600px) {
+    .nav {
+      width: 100%;
+      padding: 16px;
+    }
+  }
+  .logo {
+    width: 100px;
+    object-fit: cover;
+  }
+  .logoWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .main {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .wrapper {
+    background-color: #f3f3f6;
+  }
+  .content {
+    width: 600px;
+    min-height: 90vh;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 0 auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border: 1px solid #ccc;
+    padding: 40px;
+    background-color: #fff;
+  }
+  @media (max-width: 600px) {
+    .wrapper {
+      background-color: #fff;
+    }
+    .content {
+      box-shadow: none;
+      border: none;
+      padding: 40px 16px;
+      background-color: transparent;
+    }
+  }
+  /* Reset Content */
+  .resetContent img {
+    margin: 0 auto;
+  }
+  .resettext{
+    margin-left: 5%;
+  }
+  
+  .content h2 {
+    text-align: center;
+    margin-bottom: 37px;
+    font-size: 30px;
+    font-weight: 500;
+  }
+  .inputWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .buttonWrapper {
+    display: flex;
+    justify-content: center;
+    max-width: 360px;
+    margin: 0 auto;
+    margin-top: 32px;
+  }
+  .forgotAction {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  .forgotAction span {
+    text-decoration: underline;
+    color: #1f53d7;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .signupAction {
+    color: #1997f0;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .contentSection {
+    max-width: 350px;
+    margin: 0 auto;
+  }
+  .socials {
+    margin-top: 42px;
+  }
+  .socialLogin {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .socialLogin div {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 18px;
+    border: 1px solid #d2dae6;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .socialLogin div img {
+    width: auto;
+  }
+  
+  @media (max-width: 600px) {
+    .content {
+      padding: 40px 22px;
+      box-shadow: none;
+    }
+  }
+  

@@ -7,7 +7,7 @@ import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
-import usePost from "../../lib/components/Hooks/usePost";
+import useFilePost from "../../lib/components/Hooks/useFilePost";
 
 const Settings = () => {
   const { hooksContent } = CustomHook();
@@ -20,27 +20,27 @@ const Settings = () => {
   // Get request
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
   // Post request
-  const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/`)
+  const { postDataFunc } = useFilePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
 
   // intended Form Data
   let postData = new FormData();
-  postData.set("firstName", hooksContent?.firstName)
+  postData.set("avatarUpload", hooksContent?.image)
   postData.set("lastName", hooksContent?.lastName)
-  postData.set("email", hooksContent?.email)
-  postData.set("image", hooksContent?.image)
+  postData.set("firstName", hooksContent?.firstName)
+  // postData.set("email", hooksContent?.email)
 
   return (
     <Layout>
       <main className={styles.main}>
-        <div className={styles.section_title}>
-          <h2>Settings</h2>
-          <p>Manage who has access to what on Jureb</p>
-        </div>
+       
         <SettingsLayout>
           {isLoading && <LoaderComponent />}
           {error && <FetchError error={error} />}
           {data && 
-          <form onSubmit={() => { postDataFunc([...postData])}}>
+          <form onSubmit={(e) => { 
+            e.preventDefault()
+            postDataFunc(postData)
+            }}>
             <div className={styles.upload_wrapper}>
               <div>
                 <Avatar

@@ -55,7 +55,7 @@ const UserLogs = ({ data, styles }) => {
       <div className={styles.allWrapper}>
         <Divider />
         <div className={styles.viewAll}>
-          <Link to="">
+          <Link to="/organizations-activities">
             See all
             <span>
               <ArrowForwardIosIcon style={{ fontSize: 12 }} />

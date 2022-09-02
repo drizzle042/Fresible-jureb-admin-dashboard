@@ -1,21 +1,30 @@
 import { useState, useEffect } from "react";
+// import axios from "axios";
 
-const usePost = (url) => {
+const useFilePost = (url) => {
     
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
-  function postDataFunc(data, contentType){
+  function postDataFunc(data){
     if (data){
       fetch(url, {
         method: "POST",
+        body: data,
         headers: {
           "Authorization": "Bearer " + tokens?.data?.accessToken,
-          "Content-Type": contentType,
         },
-        body: data,
       })
+      // axios.post(
+      //   url,
+      //   data,
+      //   {
+      //     headers: {
+      //       "Authorization": "Bearer " + tokens?.data?.accessToken,
+      //     }
+      //   }
+      // )
       .then((res) => {
         switch (res.status) {
           case 400:
@@ -47,4 +56,4 @@ const usePost = (url) => {
   return { isLoading, error, postDataFunc }
 }
 
-export default usePost
+export default useFilePost
