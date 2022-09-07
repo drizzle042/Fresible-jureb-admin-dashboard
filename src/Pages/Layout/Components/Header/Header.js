@@ -33,11 +33,11 @@ const Header = ({ handleDrawerToggle, handleSearchInput }) => {
   const path = {
     'overview':{
       title: "Overview",
-      subtitle:"Get insights to everything happening on jureb here"
+      subtitle:"Get insights to everything happening on Jureb here"
     },
     'organizations':{
       title:"Subscribers",
-      subtitle:"Get insights to accounts on jureb here"
+      subtitle:"Get insights to accounts on Jureb here"
     },
     'organizations-activities':{
       title:"User Activities",
@@ -45,7 +45,7 @@ const Header = ({ handleDrawerToggle, handleSearchInput }) => {
     },
     'subs-by-location':{
       title:"Subscribers By Location",
-      subtitle:"Get insights to accounts on jureb here"
+      subtitle:"Get insights to accounts on Jureb here"
     },
     'payments':{
       title:"Payment History",

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const usePost = (url) => {
     
@@ -41,10 +43,25 @@ const usePost = (url) => {
             console.log(err);
           })}
   };
+
+  const { handleSubmit } = useForm({shouldUseNativeValidation: true});
+
+  const submitForm = async (data) => {
+    try {
+      await axios.put(url, data, {
+        headers: {
+          "Authorization": "Bearer " + tokens?.data?.accessToken,
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // eslint-disable-next-line
   useEffect(postDataFunc, [url]);
 
-  return { isLoading, error, postDataFunc }
+  return { isLoading, error, postDataFunc, handleSubmit, submitForm }
 }
 
 export default usePost

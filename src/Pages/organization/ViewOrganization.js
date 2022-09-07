@@ -137,10 +137,6 @@ const ViewOrganization = () => {
                       <a href={`mailto:${client?.owner?.email}`} style={{ color: "blue" }}>{client?.owner?.email}</a>
                     </div>
                     <div className={styles.org_details}>
-                      <span>Account Status:</span>
-                      <span>{client?.status}</span>
-                    </div>
-                    <div className={styles.org_details}>
                       <span>Organization ID:</span>
                       <span>{client?.id}</span>
                     </div>
@@ -149,7 +145,7 @@ const ViewOrganization = () => {
               </Grid>
             </section>
             <section style={{ marginTop: 24 }}>
-              <OrganizationInvoices hooksContent={hooksContent} styles={styles} invoiceData={invoiceData} handleSearchInput={handleSearchInput} />
+              <OrganizationInvoices hooksContent={hooksContent} styles={styles} invoiceData={invoiceData} handleSearchInput={handleSearchInput} clientID={id}/>
             </section>
           </div>
         </div>

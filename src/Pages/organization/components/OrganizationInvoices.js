@@ -1,6 +1,7 @@
+import React, {useState, useEffect} from "react";
 import { InputAdornment, MenuItem, Select, TextField } from "@mui/material";
-import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import ImportExportIcon from '@mui/icons-material/ImportExport';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,9 +13,31 @@ import { Link } from "react-router-dom";
 import downloadImg from "../assets/images/download.png";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
-const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchInput }) => {
+const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchInput, clientID }) => {
   const { filterData } = hooksContent;
+
+  const [searchUrl, setSearchUrl] = useState({
+    keyword: "",
+    status: ""
+  });
+
+  const [status, setStatus] = useState("");
+
+  function handleSelectStatus(e){
+    setStatus(e?.target?.value);
+    setSearchUrl({
+      ...searchUrl,
+      status: e?.target?.value,
+    });
+  };
+
+  useEffect(() => {
+    handleSearchInput(searchUrl);
+    // eslint-disable-next-line
+  }, [searchUrl])
+
   const { PaginatorTemplate } = usePaginator();
+
   return (
     <div className={styles.org_invoices}>
       <h4>Invoices</h4>
@@ -27,8 +50,11 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
             placeholder="Enter Text Here..."
             value={hooksContent?.title}
             onChange={hooksContent?.handleChange(filterData.title)}
-            onInput = {(e) => {
-              handleSearchInput(e?.target?.value)
+            onInput={(e) => {
+              setSearchUrl({
+                ...searchUrl,
+                keyword: e?.target?.value,
+              });
             }}
             InputProps={{
               endAdornment: (
@@ -44,8 +70,8 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
             className={styles.input}
             fullWidth
             size="small"
-            value={hooksContent?.status}
-            onChange={hooksContent?.handleChange(filterData.status)}
+            value={status}
+            onChange={handleSelectStatus}
             displayEmpty
           >
             <MenuItem disabled value="">
@@ -56,7 +82,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
           </Select>
         </div>
         <div className={styles.viewUsers}>
-          <Link to="/organizations">View Users</Link>
+          <Link to={`/organizations/members/${clientID}`}>View Users</Link>
         </div>
         <div className={styles.input}></div>
       </div>
@@ -69,7 +95,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
                   Invoice Number
                 </TableCell>
                 <TableCell className={styles.thead_cell} align="left">
-                  BIlling Date
+                  BIlling Date <ImportExportIcon />
                 </TableCell>
                 <TableCell className={styles.thead_cell} align="left">
                   Status

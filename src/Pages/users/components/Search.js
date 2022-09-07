@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
   Button,
   InputAdornment,
@@ -8,14 +8,28 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import useFetch from "../../../lib/components/Hooks/useFetch";
 
-const Search = ({ styles, openDialog, setData }) => {
+const Search = ({ styles, openDialog, handleSearchInput }) => {
 
-  // fetch Search input data
-  const [resourceEndpoint, setResourceEndpoint] = useState("")
-  const {data, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`)
-  setData(data)
+  const [searchUrl, setSearchUrl] = useState({
+    keyword: "",
+    status: ""
+  });
+
+  const [status, setStatus] = useState("");
+
+  function handleSelect(e){
+    setStatus(e?.target?.value);
+    setSearchUrl({
+      ...searchUrl,
+      status: e?.target?.value,
+    });
+  };
+
+  useEffect(() => {
+    handleSearchInput(searchUrl);
+    // eslint-disable-next-line
+  }, [searchUrl])
 
   return (
     <div className={styles.filters}>
@@ -27,8 +41,10 @@ const Search = ({ styles, openDialog, setData }) => {
             size="small"
             placeholder="Enter Text Here..."
             onInput={(e) => {
-              setResourceEndpoint(`?keyword=${e?.target?.value}`)
-              handleSearchInput(resourceEndpoint)
+              setSearchUrl({
+                ...searchUrl,
+                keyword: e?.target?.value,
+              });
             }}
             InputProps={{
               endAdornment: (
@@ -44,14 +60,15 @@ const Search = ({ styles, openDialog, setData }) => {
             className={styles.input}
             fullWidth
             size="small"
-            value=""
+            value={status}
+            onChange={handleSelect}
             displayEmpty
           >
             <MenuItem disabled value="">
               Status
             </MenuItem>
             <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="expired">Expired</MenuItem>
+            <MenuItem value="inactive">Inactive</MenuItem>
           </Select>
         </div>
       </div>

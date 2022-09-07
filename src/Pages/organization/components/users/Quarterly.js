@@ -46,7 +46,7 @@ const Quarterly = ({ data, styles, PaginatorTemplate }) => {
                 >
                   <Link to={`/organizations/${user?.id}`}>{user?.name}</Link>
                 </TableCell>
-                <TableCell align="left">{user?.owner?.email}</TableCell>
+                <TableCell align="left"><a href={`mailto:${user?.owner?.email}`} style={{ color: "blue" }}>{user?.owner?.email}</a></TableCell>
                 <TableCell align="left">
                   {new Date(user?.joinDate).toLocaleDateString("en-GB")}
                 </TableCell>

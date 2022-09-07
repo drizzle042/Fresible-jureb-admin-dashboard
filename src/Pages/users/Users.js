@@ -29,20 +29,20 @@ const Users = () => {
   // Get data request
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/status-stats`)
 
-  const {data, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`)
+  const {data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators?`)
 
   return (
     <Layout>
       <main className={styles.main}>
        
         <section>
-          <Search styles={styles} openDialog={handleOpenUserDailog} setData={setData} />
+          <Search styles={styles} openDialog={handleOpenUserDailog} handleSearchInput={handleSearchInput} />
+          {isLoading && <LoaderComponent />}
+          {error && <FetchError error={error} />}
+          {data &&
           <div className={styles.tab_panel}>
             <TabContext value={value}>
               {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
-              {isLoading && <LoaderComponent />}
-              {error && <FetchError error={error} />}
-              {data &&
                 <div>
                   <TabPanel className={styles.t_p} value="1">
                     <All data={data} styles={styles} />
@@ -54,9 +54,8 @@ const Users = () => {
                     <Inactive data={data} styles={styles} />
                   </TabPanel>
                 </div>
-              }
             </TabContext>
-          </div>
+          </div>}
         </section>
         <AddUser
           styles={styles}

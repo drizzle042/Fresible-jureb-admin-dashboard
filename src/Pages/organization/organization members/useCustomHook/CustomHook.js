@@ -2,15 +2,11 @@ import { useState } from "react";
 
 const CustomHook = () => {
   const [title, setTitle] = useState("");
-  const [dateFrom, setDateFrom] = useState(new Date());
-  const [dateTo, setDateTo] = useState(new Date());
   const [status, setStatus] = useState("");
 
   const filterData = {
     title: "title",
-    status: "",
-    dateFrom: "dateFrom",
-    dateTo: "dateTo",
+    status: "status",
   };
   const handleChange = (name) => (e) => {
     const { value } = e.target;
@@ -29,10 +25,6 @@ const CustomHook = () => {
   const hooksContent = {
     handleChange,
     title,
-    dateFrom,
-    setDateFrom,
-    dateTo,
-    setDateTo,
     status,
     filterData,
   };

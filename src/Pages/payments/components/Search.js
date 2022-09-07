@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { 
   InputAdornment, 
   TextField, 
@@ -8,19 +8,31 @@ import SearchIcon from "@mui/icons-material/Search";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import useFetch from "../../../lib/components/Hooks/useFetch";
 
-const Search = ({ styles, hooksContent, setData }) => {
-
+const Search = ({ styles, hooksContent, handleSearchInput }) => {
   const { filterData } = hooksContent;
-  // fetch Search input data
-  const [resourceEndpoint, setResourceEndpoint] = useState("")
-  const {data, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices`)
-  setData(data)
 
-  function handleSelect(){
-    console.log(hooksContent?.status)
-  }
+  const [searchUrl, setSearchUrl] = useState({
+    keyword: "",
+    dateFrom: "",
+    dateTo: "",
+    status: ""
+  });
+
+  useEffect(() => {
+    handleSearchInput(searchUrl);
+    // eslint-disable-next-line
+  }, [searchUrl])
+
+  const [status, setStatus] = useState("");
+
+  function handleSelect(e){
+    setStatus(e?.target?.value);
+    setSearchUrl({
+      ...searchUrl,
+      status: e?.target?.value,
+    });
+  };
 
   return (
     <div className={styles.filters}>
@@ -33,8 +45,10 @@ const Search = ({ styles, hooksContent, setData }) => {
           value={hooksContent?.title}
           onChange={hooksContent?.handleChange(filterData.title)}
           onInput={(e) => {
-            setResourceEndpoint(`?keyword=${e?.target?.value}`)
-            handleSearchInput(resourceEndpoint)
+            setSearchUrl({
+              ...searchUrl,
+              keyword: e?.target?.value,
+            });
           }}
           InputProps={{
             endAdornment: (
@@ -51,7 +65,13 @@ const Search = ({ styles, hooksContent, setData }) => {
             label="Date From"
             inputFormat="MM/dd/yyyy"
             value={hooksContent.dateFrom}
-            onChange={(e) => hooksContent.setDateFrom(e)}
+            onChange={(e) => {
+              hooksContent.setDateFrom(e);
+              setSearchUrl({
+                ...searchUrl,
+                dateFrom: e,
+              });
+            }}
             renderInput={(params) => (
               <TextField
                 className={styles.input}
@@ -69,7 +89,13 @@ const Search = ({ styles, hooksContent, setData }) => {
             label="Date To"
             inputFormat="MM/dd/yyyy"
             value={hooksContent.dateTo}
-            onChange={(e) => hooksContent.setDateTo(e)}
+            onChange={(e) => {
+              hooksContent.setDateTo(e);
+              setSearchUrl({
+                ...searchUrl,
+                dateTo: e,
+              });
+            }}
             renderInput={(params) => (
               <TextField
                 className={styles.input}
@@ -86,14 +112,11 @@ const Search = ({ styles, hooksContent, setData }) => {
           className={styles.input}
           fullWidth
           size="small"
-          value={hooksContent?.status}
-          onChange={hooksContent?.handleChange(filterData.status)}
-          onClose={handleSelect}
           displayEmpty
+          value={status}
+          onChange={handleSelect}
         >
-          <MenuItem disabled value="status">
-            Status
-          </MenuItem>
+          <MenuItem disabled value="">Status</MenuItem>
           <MenuItem value="success">Success</MenuItem>
           <MenuItem value="failed">Failed</MenuItem>
           <MenuItem value="cancelled">Cancelled</MenuItem>

@@ -103,7 +103,7 @@ const AdminLogs = ({ open, setOpen }) => {
                     <TableCell 
                       align="left"
                       sx={{ border: 0 }}>
-                        <sapn className={styles.log_text}>{data.name} {data.message}</sapn>
+                        <span className={styles.log_text}>{data.name} {data.message}</span>
                     </TableCell>
                     <TableCell
                       align="right"

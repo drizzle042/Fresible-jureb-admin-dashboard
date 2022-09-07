@@ -80,7 +80,7 @@ const All = ({ styles, data }) => {
                             onClick={()=> {
                               activate(user?.id)
                             }}>
-                              Activate
+                              Make active
                           </Button>
                         : ""
                     }

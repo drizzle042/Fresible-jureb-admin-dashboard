@@ -40,6 +40,9 @@
 .filters .input {
   background-color: #fff;
 }
+.add_btn {
+  margin-left: auto;
+}
 @media (max-width: 420px) {
   .filters .search_bar {
     min-width: 100%;

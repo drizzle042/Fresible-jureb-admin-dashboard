@@ -7,7 +7,7 @@ import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
-import useFilePost from "../../lib/components/Hooks/useFilePost";
+import usePost from "../../lib/components/Hooks/usePost";
 
 const Settings = () => {
   const { hooksContent } = CustomHook();
@@ -20,14 +20,7 @@ const Settings = () => {
   // Get request
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
   // Post request
-  const { postDataFunc } = useFilePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
-
-  // intended Form Data
-  let postData = new FormData();
-  postData.set("avatarUpload", hooksContent?.image)
-  postData.set("lastName", hooksContent?.lastName)
-  postData.set("firstName", hooksContent?.firstName)
-  // postData.set("email", hooksContent?.email)
+  const { handleSubmit, submitForm } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
 
   return (
     <Layout>
@@ -37,10 +30,7 @@ const Settings = () => {
           {isLoading && <LoaderComponent />}
           {error && <FetchError error={error} />}
           {data && 
-          <form onSubmit={(e) => { 
-            e.preventDefault()
-            postDataFunc(postData)
-            }}>
+          <form onSubmit={handleSubmit(submitForm)}>
             <div className={styles.upload_wrapper}>
               <div>
                 <Avatar
@@ -88,7 +78,7 @@ const Settings = () => {
                 placeholder={data?.data?.lastName}
               />
             </div>
-            <div className={styles.form_group}>
+            {/* <div className={styles.form_group}>
               <label>Email</label>
               <TextField
                 type="email"
@@ -98,7 +88,7 @@ const Settings = () => {
                 fullWidth
                 placeholder={data?.data?.email}
               />
-            </div>
+            </div> */}
 
             <Button type="submit" variant="contained" color="secondary">
               Save

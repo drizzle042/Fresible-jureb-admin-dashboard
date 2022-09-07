@@ -9,31 +9,14 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
 
   const [searchUrl, setSearchUrl] = useState({
     keyword: "",
-    country: "",
-    state: "",
-    status: "",
+    dateFrom: "",
+    dateTo: "",
+    status: ""
   });
-  
-  const [country, setCountry] = useState("");
-  function handleSelectCountry(e){
-    setCountry(e?.target?.value);
-    setSearchUrl({
-      ...searchUrl,
-      country: e?.target?.value,
-    });
-  };
-  
-  const [state, setState] = useState("");
-  function handleSelectState(e){
-    setState(e?.target?.value);
-    setSearchUrl({
-      ...searchUrl,
-      state: e?.target?.value,
-    });
-  };
 
   const [status, setStatus] = useState("");
-  function handleSelectStatus(e){
+
+  function handleSelect(e){
     setStatus(e?.target?.value);
     setSearchUrl({
       ...searchUrl,
@@ -77,39 +60,8 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
           fullWidth
           size="small"
           displayEmpty
-          value={country}
-          onChange={handleSelectCountry}
-        >
-          <MenuItem disabled value="">Country</MenuItem>
-          <MenuItem value="nigeria">Nigeria</MenuItem>
-        </Select>
-      </div>
-      <div className={styles.select_bar}>
-        <Select
-          className={styles.input}
-          fullWidth
-          size="small"
-          displayEmpty
-          value={state}
-          onChange={handleSelectState}
-        >
-          <MenuItem disabled value="">State</MenuItem>
-          <MenuItem value="lagos">Lagos</MenuItem>
-          <MenuItem value="kebbi">Kebbi</MenuItem>
-          <MenuItem value="ondo">Ondo</MenuItem>
-          <MenuItem value="enugu">Enugu</MenuItem>
-          <MenuItem value="kwara">Kwara</MenuItem>
-          <MenuItem value="adamawa">Adamawa</MenuItem>
-        </Select>
-      </div>
-      <div className={styles.select_bar}>
-        <Select
-          className={styles.input}
-          fullWidth
-          size="small"
-          displayEmpty
           value={status}
-          onChange={handleSelectStatus}
+          onChange={handleSelect}
         >
           <MenuItem disabled value="">Status</MenuItem>
           <MenuItem value="active">Active</MenuItem>

@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import uploadImage from "../../assets/upload.png";
-// import useFilePost from "../../../../lib/components/Hooks/useFilePost";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -43,23 +42,10 @@ const NewMessage = ({
   messageData,
   openWebMessage,
   hooksContent,
-  sendNotification,
 }) => {
   const { filterData } = hooksContent;
   const imageRef = useRef();
 
-  // Post request
-  // const { postDataFunc } = useFilePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/create`)
-
-  // intended Form Data
-  let postData = new FormData();
-  postData.set("title", hooksContent?.messageTitle)
-  postData.set("deliveryType", hooksContent?.messageType)
-  postData.set("message", hooksContent?.editorState.getCurrentContent().getPlainText())
-  postData.set("recipients", hooksContent?.recipients)
-  postData.set("image", hooksContent?.image)
-  postData.set("date", hooksContent?.messageDate)
-  postData.set("scheduled", hooksContent?.scheduled)
 
   return (
     <Dialog
@@ -256,7 +242,6 @@ const NewMessage = ({
           See Preview
         </Button>
         <Button variant="contained" color="secondary" onClick={() => {
-          sendNotification(postData)
           handleClose()
           // postDataFunc(postData)
           }}>

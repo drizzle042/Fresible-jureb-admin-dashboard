@@ -28,7 +28,7 @@ const Payments = () => {
   // Get requests
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices/sub-period-stats`)
 
-  const { data:AllData, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}`)
+  const { data:AllData, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}`)
   const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=monthly`)
   const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=quarterly`)
   const { data:BiAnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=biannually`)
@@ -37,14 +37,14 @@ const Payments = () => {
   return (
     <Layout>
       <main className={styles.main}>
-      
         <section>
-          <Search hooksContent={hooksContent} styles={styles} setData={setData} />
+          <Search hooksContent={hooksContent} styles={styles} handleSearchInput={handleSearchInput} />
+          {isLoading && <LoaderComponent />}
+          {error && <FetchError error={error} />}
+          {AllData &&
           <div className={styles.tab_panel}>
             <TabContext value={value}>
               {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
-              {isLoading && <LoaderComponent />}
-              {error && <FetchError error={error} />}
               <TabPanel className={styles.t_p} value="1">
                 {AllData && <All data={AllData} styles={styles} />}
               </TabPanel>
@@ -61,7 +61,7 @@ const Payments = () => {
                 {AnnualData && <Annually data={AnnualData} styles={styles} />}
               </TabPanel>
             </TabContext>
-          </div>
+          </div>}
         </section>
       </main>
     </Layout>

@@ -31,7 +31,7 @@ const useFetch = (url) => {
       })
         .catch((err) => {
           if (err.message === "Failed to fetch"){
-            setError("Lost network connection")
+            setError("Please check your internet connection")
           }else{
             setError(err.message);
           }
@@ -40,7 +40,10 @@ const useFetch = (url) => {
   };
   
   function handleSearchInput(value){
-    let resourceEndpoint = `${url}${value}`;
+    let resourceEndpoint = `${url}`;
+    for (var key of Object.keys(value)){
+      resourceEndpoint = resourceEndpoint.concat("&", key, "=", value[key]);
+    }
     fetch(resourceEndpoint, {
       method: "GET",
       headers: {

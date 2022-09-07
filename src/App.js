@@ -7,6 +7,7 @@ import Overview from "./Pages/overview/Overview";
 import UserLogs from "./Pages/overview/activity logs/UserLogs";
 import SubsByLocation from "./Pages/overview/subs by location/SubsByLocation";
 import { Organizations } from "./Pages/organization/Organizations";
+import Members from "./Pages/organization/organization members/Users";
 import ViewOrganization from "./Pages/organization/ViewOrganization";
 import Payments from "./Pages/payments/Payments";
 import Notifications from "./Pages/push-notifications/Notifications";
@@ -50,6 +51,7 @@ function App() {
           <Route path="/overview" element={<Overview />} />
           <Route path="/organizations" element={<Organizations />} />
           <Route path="/organizations/:id" element={<ViewOrganization />} />
+          <Route path="/organizations/members/:id" element={<Members />} />
           <Route path="/organizations-activities" element={<UserLogs />} />
           <Route path="/subs-by-location" element={<SubsByLocation />} />
           <Route path="/payments" element={<Payments />} />

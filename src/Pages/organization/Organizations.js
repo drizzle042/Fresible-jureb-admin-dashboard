@@ -33,7 +33,7 @@ const Organizations = () => {
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/sub-period-stats`)
 
   // set Search Data
-  const {data:searchData, isLoading, error, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations`);
+  const {data:AllData, isLoading, error, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?`);
 
   const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=MONTHLY`)
   const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=QUARTERLY`)
@@ -52,7 +52,7 @@ const Organizations = () => {
               {isLoading && <LoaderComponent />}
               {error && <FetchError error={error} />}
               <TabPanel className={styles.t_p} value={"1"}>
-                {searchData && <All data={searchData} styles={styles} PaginatorTemplate={PaginatorTemplate} />}
+                {AllData && <All data={AllData} styles={styles} PaginatorTemplate={PaginatorTemplate} />}
               </TabPanel>
               <TabPanel className={styles.t_p} value={"2"}>
                 {MonthlyData && <Monthly data={MonthlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
