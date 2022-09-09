@@ -47,15 +47,20 @@ const usePost = (url) => {
   const { handleSubmit } = useForm({shouldUseNativeValidation: true});
 
   const submitForm = async (data) => {
-    try {
       await axios.put(url, data, {
         headers: {
           "Authorization": "Bearer " + tokens?.data?.accessToken,
+          "Content-Type": "multipart/form-data",
         }
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      })
+        .then((res) => {
+          if (res?.data?.status === "SUCCESS") {
+            window.location.reload();
+          }
+        })
+          .catch ((error) => {
+            console.log(error);
+          })
   };
 
   // eslint-disable-next-line

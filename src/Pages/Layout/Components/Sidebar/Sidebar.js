@@ -12,8 +12,10 @@ import styles from "../../styles/styles.module.css";
 import { Link, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
+
 const Sidebar = (props) => {
   const { window } = props;
+  const { roleName } = props;
   const { pathname } = useLocation();
   const path = pathname.split("/")[1];
 
@@ -79,6 +81,7 @@ const Sidebar = (props) => {
       <div className={styles.sidebar_links}>
         <div className={styles.preference_menu}>Preferences</div>
         <ul>
+        {roleName === "ROOT" ?
           <li>
             <Link
               className={path === "users" ? styles.active_link : ""}
@@ -89,7 +92,9 @@ const Sidebar = (props) => {
               </span>
               Users
             </Link>
-          </li>
+          </li> :
+          ""
+        }
           <li>
             <Link
               className={path === "settings" ? styles.active_link : ""}

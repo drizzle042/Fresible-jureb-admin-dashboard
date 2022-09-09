@@ -22,7 +22,7 @@ import FetchError from "../../lib/components/Hooks/FetchError";
 const Notifications = () => {
 
   // Get All Notifications
-  const { data, isLoading, error, setData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
+  const { data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
 
 
   const { hooksContent } = CustomHook();
@@ -108,7 +108,7 @@ const Notifications = () => {
     <Layout>
       <main className={styles.main}>
         <section>
-          <Search styles={styles} hooksContent={hooksContent} setData={setData} openNewMessage={openNewMessage} />
+          <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} openNewMessage={openNewMessage} />
           <div className={styles.tab_panel}>
             <TabContext value={value}>
               <TabHeaders handleChange={handleChange} styles={styles} />

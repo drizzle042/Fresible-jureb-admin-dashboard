@@ -6,6 +6,7 @@ import Home from "./Pages/Home/Home";
 import Overview from "./Pages/overview/Overview";
 import UserLogs from "./Pages/overview/activity logs/UserLogs";
 import SubsByLocation from "./Pages/overview/subs by location/SubsByLocation";
+import SubsByPreciseLocation from "./Pages/overview/subs by location/SubsByPreciseLocation";
 import { Organizations } from "./Pages/organization/Organizations";
 import Members from "./Pages/organization/organization members/Users";
 import ViewOrganization from "./Pages/organization/ViewOrganization";
@@ -54,6 +55,7 @@ function App() {
           <Route path="/organizations/members/:id" element={<Members />} />
           <Route path="/organizations-activities" element={<UserLogs />} />
           <Route path="/subs-by-location" element={<SubsByLocation />} />
+          <Route path="/subs-by-location/:state" element={<SubsByPreciseLocation />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/reset-password" element ={<Reset />} />
           <Route path="/reset-mail" element ={<Resetmail />} />

@@ -20,7 +20,7 @@ const SubscribersByLocation = ({ styles, data }) => {
               <div>{item?.state}</div>
               <div>{item?.count}</div>
               <div>
-                <Link to={""}>View details</Link>
+                <Link to={`/subs-by-location/${item?.state?.toLowerCase()}`}>View details</Link>
               </div>
             </div>
           </div>

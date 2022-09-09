@@ -67,7 +67,7 @@ const useFetch = (url) => {
       })
         .catch((err) => {
           if (err.message === "Failed to fetch"){
-            setError("Lost network connection")
+            setError("Please check your internet connection")
           }else{
             setError(err.message);
           }
@@ -77,7 +77,7 @@ const useFetch = (url) => {
   // eslint-disable-next-line
   useEffect(fetchData, [url]);
 
-  return {data, isLoading, error, setData, handleSearchInput};
+  return {data, isLoading, error, setData, fetchData, handleSearchInput};
 };
 
 export default useFetch;

@@ -3,6 +3,7 @@ import React from "react";
 import Header from "./Components/Header/Header";
 import OrgModal from "./Components/Sidebar/Components/OrgModal";
 import Sidebar from "./Components/Sidebar/Sidebar";
+import useFetch from "../../lib/components/Hooks/useFetch"
 
 const drawerWidth = 240;
 const Layout = ({ children }) => {
@@ -11,7 +12,10 @@ const Layout = ({ children }) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+    
+  // Get request
+  const { data } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+  
   return (
     <div>
       {open && <OrgModal setOpen={setOpen} />}
@@ -21,6 +25,7 @@ const Layout = ({ children }) => {
           mobileOpen={mobileOpen}
           setMobileOpen={setMobileOpen}
           setOpen={setOpen}
+          roleName={data?.data?.roleName}
         />
         <Box
           component="main"

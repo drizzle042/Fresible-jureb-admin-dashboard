@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
-import { InputAdornment, MenuItem, Select, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { MenuItem, Select, TextField } from "@mui/material";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,20 +16,31 @@ import downloadImg from "../assets/images/download.png";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
 const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchInput, clientID }) => {
-  const { filterData } = hooksContent;
 
   const [searchUrl, setSearchUrl] = useState({
-    keyword: "",
-    status: ""
+    dateFrom: "",
+    dateTo: "",
+    plan: "",
+    period: "",
   });
 
-  const [status, setStatus] = useState("");
+  const [plan, setPlan] = useState("");
 
-  function handleSelectStatus(e){
-    setStatus(e?.target?.value);
+  function handleSelectPlan(e){
+    setPlan(e?.target?.value);
     setSearchUrl({
       ...searchUrl,
-      status: e?.target?.value,
+      plan: e?.target?.value,
+    });
+  };
+  
+  const [period, setPeriod] = useState("");
+
+  function handleSelectPeriod(e){
+    setPeriod(e?.target?.value);
+    setSearchUrl({
+      ...searchUrl,
+      period: e?.target?.value,
     });
   };
 
@@ -42,43 +55,87 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
     <div className={styles.org_invoices}>
       <h4>Invoices</h4>
       <div className={styles.filters}>
-        <div className={styles.search_bar}>
-          <TextField
-            className={styles.input}
-            fullWidth
-            size="small"
-            placeholder="Enter Text Here..."
-            value={hooksContent?.title}
-            onChange={hooksContent?.handleChange(filterData.title)}
-            onInput={(e) => {
-              setSearchUrl({
-                ...searchUrl,
-                keyword: e?.target?.value,
-              });
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon className={styles.searchIcon} />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <div className={styles.date_bar}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DesktopDatePicker
+              label="Date From"
+              inputFormat="MM/dd/yyyy"
+              value={hooksContent.dateFrom}
+              onChange={(e) => {
+                hooksContent.setDateFrom(e);
+                setSearchUrl({
+                  ...searchUrl,
+                  dateFrom: e,
+                });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  className={styles.input}
+                  fullWidth
+                  size="small"
+                  {...params}
+                />
+              )}
+            />
+          </LocalizationProvider>
+        </div>
+        <div className={styles.date_bar}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DesktopDatePicker
+              label="Date To"
+              inputFormat="MM/dd/yyyy"
+              value={hooksContent.dateTo}
+              onChange={(e) => {
+                hooksContent.setDateTo(e);
+                setSearchUrl({
+                  ...searchUrl,
+                  dateTo: e,
+                });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  className={styles.input}
+                  fullWidth
+                  size="small"
+                  {...params}
+                />
+              )}
+            />
+          </LocalizationProvider>
         </div>
         <div className={styles.select_bar}>
           <Select
             className={styles.input}
             fullWidth
             size="small"
-            value={status}
-            onChange={handleSelectStatus}
+            value={plan}
+            onChange={handleSelectPlan}
             displayEmpty
           >
             <MenuItem disabled value="">
-              Status
+              Plan
             </MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="expired">Expired</MenuItem>
+            <MenuItem value="simple start">Simple Start</MenuItem>
+            <MenuItem value="standard">Standard</MenuItem>
+            <MenuItem value="premium">Premium</MenuItem>
+          </Select>
+        </div>
+        <div className={styles.select_bar}>
+          <Select
+            className={styles.input}
+            fullWidth
+            size="small"
+            value={period}
+            onChange={handleSelectPeriod}
+            displayEmpty
+          >
+            <MenuItem disabled value="">
+              Period
+            </MenuItem>
+            <MenuItem value="monthly">Monthly</MenuItem>
+            <MenuItem value="quarterly">Quarterly</MenuItem>
+            <MenuItem value="bi annually">Bi-Annually</MenuItem>
+            <MenuItem value="annually">Annually</MenuItem>
           </Select>
         </div>
         <div className={styles.viewUsers}>

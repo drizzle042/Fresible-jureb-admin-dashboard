@@ -10,17 +10,20 @@ import FetchError from "../../lib/components/Hooks/FetchError";
 import usePost from "../../lib/components/Hooks/usePost";
 
 const Settings = () => {
+
+  // Get request
+  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+  // Post request
+  const { handleSubmit, submitForm } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+
   const { hooksContent } = CustomHook();
   const {
     userData: { firstName, lastName, email }
   } = hooksContent;
 
   const imageRef = useRef();
-  
-  // Get request
-  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
-  // Post request
-  const { handleSubmit, submitForm } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+
+  const formData = new FormData();
 
   return (
     <Layout>
@@ -30,7 +33,9 @@ const Settings = () => {
           {isLoading && <LoaderComponent />}
           {error && <FetchError error={error} />}
           {data && 
-          <form onSubmit={handleSubmit(submitForm)}>
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit(submitForm(formData))}}>
             <div className={styles.upload_wrapper}>
               <div>
                 <Avatar
@@ -78,7 +83,8 @@ const Settings = () => {
                 placeholder={data?.data?.lastName}
               />
             </div>
-            {/* <div className={styles.form_group}>
+            {data?.data?.roleName !== "ROOT" ?
+            <div className={styles.form_group}>
               <label>Email</label>
               <TextField
                 type="email"
@@ -88,9 +94,19 @@ const Settings = () => {
                 fullWidth
                 placeholder={data?.data?.email}
               />
-            </div> */}
+            </div> :
+            ""
+            }
 
-            <Button type="submit" variant="contained" color="secondary">
+            <Button 
+              type="submit" 
+              variant="contained" 
+              color="secondary"
+              onClick={() => {
+                formData.set("avatarUpload", hooksContent.image)
+                formData.set("firstName", hooksContent.firstName)
+                formData.set("lastName", hooksContent.lastName)
+              }}>
               Save
             </Button>
           </form>
