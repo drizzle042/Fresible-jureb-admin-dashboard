@@ -35,7 +35,9 @@ const Layout = ({ children }) => {
           }}
         >
           <Header handleDrawerToggle={handleDrawerToggle} />
-          {children}
+          <div style={{marginTop:'80px'}}>
+            {children}
+          </div>
         </Box>
       </Box>
     </div>

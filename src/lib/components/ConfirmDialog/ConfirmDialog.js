@@ -4,19 +4,20 @@ import React from "react";
 
 const ConfirmDialog = ({
   open,
+  title,
   styles,
   content,
   action,
   handleClose,
-  actionColor,
+  actionName,
   type,
 }) => {
   return (
-    <Dialog open={open} onClose={() => handleClose(type)}>
-      <div className={styles.modalWrapper}>
-        <div className={styles.modalHeader}>
-          <span>Confirm Action</span>
-          <span onClick={() => handleClose(type)}>
+    <Dialog open={true} onClose={() => handleClose()}>
+      <div >
+        <div >
+          <span>{title}</span>
+          <span onClick={() => handleClose()}>
             <CloseIcon style={{ color: "#555" }} />
           </span>
         </div>
@@ -24,15 +25,19 @@ const ConfirmDialog = ({
           <p>{content}</p>
         </div>
         <div className={styles.dialogFooter}>
-          <Button onClick={() => handleClose(type)} color="secondary">
+          <Button onClick={() => handleClose()} color="secondary">
             Close
           </Button>
           <Button
             className={styles.btn}
-            color={actionColor}
             variant="contained"
+            color="secondary"
+            onClick={() => {
+              handleClose();
+              action();
+            }}
           >
-            {action}
+            {actionName}
           </Button>
         </div>
       </div>

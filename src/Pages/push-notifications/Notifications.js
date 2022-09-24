@@ -4,9 +4,7 @@ import styles from "./styles/styles.module.css";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import TabHeaders from "./components/TabPanel";
-import All from "./components/notifications/All";
-import Sent from "./components/notifications/Sent";
-import Scheduled from "./components/notifications/Scheduled";
+import TabBody from "./components/TabBody";
 import Search from "./components/Search";
 import NewMessage from "./components/message/NewMessage";
 import { convertToRaw } from "draft-js";
@@ -23,8 +21,6 @@ const Notifications = () => {
 
   // Get All Notifications
   const { data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
-
-
   const { hooksContent } = CustomHook();
   const [value, setValue] = React.useState("1");
   const [newMessage, setNewMessage] = useState(false);
@@ -68,6 +64,7 @@ const Notifications = () => {
 
   const closeNewMessage = () => {
     setNewMessage(false);
+    handleSearchInput("");
   };
   // Web  / mobile dialog handlers
 
@@ -110,20 +107,20 @@ const Notifications = () => {
         <section>
           <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} openNewMessage={openNewMessage} />
           <div className={styles.tab_panel}>
-            <TabContext value={value}>
-              <TabHeaders handleChange={handleChange} styles={styles} />
-              <TabPanel className={styles.t_p} value="1">
+            {data &&<TabContext value={value}>
+              <TabHeaders handleChange={handleChange} data={data} styles={styles} />
                 {isLoading && <LoaderComponent />}
                 {error && <FetchError error={error} />}
-                {data && <All data={data} styles={styles} />}
+              <TabPanel className={styles.t_p} value="1">
+                <TabBody data={data} type={0} handleSearchInput={handleSearchInput} styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value="2">
-                {data && <Sent data={data} styles={styles} />}
+                <TabBody data={data} type={1} handleSearchInput={handleSearchInput} styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value="3">
-                {data && <Scheduled data={data} styles={styles} />}
+                <TabBody data={data} type={2} handleSearchInput={handleSearchInput} styles={styles} />
               </TabPanel>
-            </TabContext>
+            </TabContext>}
           </div>
         </section>
       </main>

@@ -1,26 +1,43 @@
 .header {
+  position: fixed;
+  background: #fff;
   display: flex;
   align-items: center;
-  padding: 14px;
-  padding-top: 24px;
+  padding: 6px 20px;
+  z-index: 100;
   width: 100%;
   border-bottom: 1px solid #ccc;
 }
 .headerContent {
   display: flex;
+  padding-top: 10px;
   justify-content: space-between;
   width: 100%;
-  padding-top: 0.5rem;
-  padding-bottom: 1rem;
 }
 .headerContent img {
   width: auto;
 }
 .headerContent h2 {
-  font-size: 24px;
   font-weight: 500;
-  margin-bottom: 7px;
+  font-size: 26px;
+  line-height: 33px;
+  
+  color: #000000
 }
+.headerContent p {
+  font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 16px;
+padding-top: 3px;
+/* identical to box height, or 114% */
+
+letter-spacing: 0.03em;
+
+color: #9A9A9A;
+
+}
+
 .headerContent h5 {
   font-size: 16px;
   font-weight: 400;
@@ -64,6 +81,14 @@
     margin-bottom: 0px;
   }
 }
+.headerActionsWrapper  {
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+
 .headerActionsWrapper div:nth-child(2) {
   text-align: right;
   padding-top: 20px;
@@ -255,8 +280,7 @@
   border-radius: 3px;
 }
 .sidebar_links ul li a:hover {
-  background-color: #343a40;
-  color: #fff;
+  background-color: #eee;
 }
 .sidebar_links ul li a span {
   display: flex;
@@ -274,7 +298,37 @@
 .active_link {
   background-color: #343a40;
   color: #fff !important;
+  border-radius: 4px;
 }
 .list_top {
-  margin-bottom: 100px;
+  
+}
+
+.list_bottom{
+  position: absolute;
+  width:87%;
+  bottom: 30px;
+  background-color: #fff;
+}
+
+
+/* Dialog */
+.dialog_title {
+  padding: 16px;
+}
+.dialog_title .section_title {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+.dialog_title .section_title .header h2 {
+  font-size: 20px !important;
+}
+.dialog_title .section_title .header p {
+  font-size: 12px !important;
+}
+
+.dialog_content {
+  padding: 16px;
+  color: #000 !important;
+  /* min-height: 800px; */
 }

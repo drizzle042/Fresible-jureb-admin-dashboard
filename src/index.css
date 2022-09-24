@@ -30,3 +30,86 @@ td {
 th {
   white-space: nowrap !important;
 }
+
+
+.center {
+  align-content: center;
+  align-items: center;
+  align-self: center;
+  text-align: center;
+}
+
+.center2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-right {
+  margin-right: 20px !important;
+}
+
+.space-right2 {
+  margin-right: 10px !important;
+}
+
+.space-left {
+  margin-left: 20px !important;
+}
+
+.space-left2 {
+  margin-left: 10px !important;
+}
+.space-top {
+  margin-top: 20px;
+}
+
+.space-top2 {
+  margin-top: 10px;
+}
+
+.space-bottom {
+  margin-bottom: 20px;
+}
+
+.space-bottom2 {
+  margin-bottom: 10px;
+}
+
+.padding-x {
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+}
+
+.padding-y {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.padding {
+  padding: 10px !important;
+}
+
+.margin {
+  margin: 10px !important;
+}
+.margin-x {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+
+.ruby {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.push-left-right {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.push-right {
+  text-align: right;
+  justify-content: flex-end !important;
+}

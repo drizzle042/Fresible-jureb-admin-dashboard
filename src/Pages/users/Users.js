@@ -3,9 +3,7 @@ import React, { useState } from "react";
 import Layout from "../Layout/Layout";
 import Search from "./components/Search";
 import styles from "./styles/styles.module.css";
-import Active from "./users_categories/Active";
-import All from "./users_categories/All";
-import Inactive from "./users_categories/Inactive";
+import TabBody from "./components/TabBody";
 import TabHeaders from "./components/TabHeaders";
 import AddUser from "./components/AddUser";
 import useFetch from "../../lib/components/Hooks/useFetch";
@@ -29,7 +27,7 @@ const Users = () => {
   // Get data request
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/status-stats`)
 
-  const {data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators?`)
+  const {data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`)
 
   return (
     <Layout>
@@ -45,13 +43,13 @@ const Users = () => {
               {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
                 <div>
                   <TabPanel className={styles.t_p} value="1">
-                    <All data={data} styles={styles} />
+                    <TabBody data={data} type={0} handleSearchInput={handleSearchInput} styles={styles} />
                   </TabPanel>
                   <TabPanel className={styles.t_p} value="2">
-                    <Active data={data} styles={styles} />
+                    <TabBody data={data} type={1} handleSearchInput={handleSearchInput}styles={styles} />
                   </TabPanel>
                   <TabPanel className={styles.t_p} value="3">
-                    <Inactive data={data} styles={styles} />
+                    <TabBody data={data} type={2} handleSearchInput={handleSearchInput} styles={styles} />
                   </TabPanel>
                 </div>
             </TabContext>
@@ -61,6 +59,7 @@ const Users = () => {
           styles={styles}
           open={openUserDialog}
           handleClose={handleCloseUserDialog}
+          handleSearchInput={handleSearchInput}
         />
       </main>
     </Layout>

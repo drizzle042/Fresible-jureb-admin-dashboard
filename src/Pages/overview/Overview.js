@@ -39,7 +39,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image1} alt="Total Users" />
                       </div>
-                      <h3>{data?.data?.topStats?.usersCount.toLocaleString()}</h3>
+                      <h3 style={{marginTop:'-20px'}}>{data?.data?.topStats?.usersCount.toLocaleString()}</h3>
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={4}>
@@ -48,7 +48,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image2} alt="Active Users" />
                       </div>
-                      <h3>{data?.data?.topStats?.activeUsersCount.toLocaleString()}</h3>
+                      <h3 style={{marginTop:'-20px'}}>{data?.data?.topStats?.activeUsersCount.toLocaleString()}</h3>
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={4}>
@@ -57,7 +57,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image3} alt="Total Revenue" />
                       </div>
-                      <h3>₦{data?.data?.topStats?.totalRevenue.toLocaleString()}</h3>
+                      <h3 style={{marginTop:'-20px'}}>₦{data?.data?.topStats?.totalRevenue.toLocaleString()}</h3>
                     </div>
                   </Grid>
                 </Grid>
@@ -81,6 +81,7 @@ const Overview = () => {
                     <SubscribersByLocation styles={styles} data={data?.data?.subscribersByLocation}/>
                   </Grid>
                 </Grid>
+           
               </div>
             </section>
         }

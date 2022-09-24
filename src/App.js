@@ -10,11 +10,11 @@ import SubsByPreciseLocation from "./Pages/overview/subs by location/SubsByPreci
 import { Organizations } from "./Pages/organization/Organizations";
 import Members from "./Pages/organization/organization members/Users";
 import ViewOrganization from "./Pages/organization/ViewOrganization";
+import OrganizationInvoicespdf from "./Pages/organization/components/Organizationinvoicepdf";
 import Payments from "./Pages/payments/Payments";
 import Notifications from "./Pages/push-notifications/Notifications";
 import Settings from "./Pages/settings/Settings";
 import Users from "./Pages/users/Users";
-import Security from "./Pages/settings/Security";
 import Resetmail from "./Pages/Authentication/Components/Resetpassword/resetmail";
 import Resetpage from "./Pages/Authentication/Components/Resetpassword page/resetpage";
 
@@ -52,6 +52,7 @@ function App() {
           <Route path="/overview" element={<Overview />} />
           <Route path="/organizations" element={<Organizations />} />
           <Route path="/organizations/:id" element={<ViewOrganization />} />
+          <Route path="/organizations/pdf/:id" element={<OrganizationInvoicespdf />} />
           <Route path="/organizations/members/:id" element={<Members />} />
           <Route path="/organizations-activities" element={<UserLogs />} />
           <Route path="/subs-by-location" element={<SubsByLocation />} />
@@ -62,8 +63,6 @@ function App() {
           <Route path="/update-password" element ={<Resetpage />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/profile" element={<Settings />} />
-          <Route path="/settings/security" element={<Security />} />
           <Route path="/users" element={<Users />} />
         </Routes>
       </BrowserRouter>

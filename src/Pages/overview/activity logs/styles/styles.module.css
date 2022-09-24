@@ -17,10 +17,9 @@
 }
 .report_content {
   width: 100%;
-  background-color: #fff;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  border-radius: 5px;
+  background: #FFFFFF;
+  box-shadow: 0px 8px 20px rgba(18, 17, 39, 0.1);
+  border-radius: 8px;
   min-height: 100px;
   padding: 16px;
 }
@@ -39,11 +38,11 @@
 /* daily_subscribers */
 .daily_subscribers {
   background-color: #fff;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  border-radius: 5px;
   padding: 16px;
   min-height: 100%;
+  box-shadow: 0px 2px 12px rgba(37, 51, 66, 0.15);
+  border-radius: 8px;
+
 }
 .daily_subscribers .header {
   display: flex;
@@ -146,9 +145,10 @@
 .recent_subscribers {
   background-color: #fff;
   min-height: 100%;
-  border-radius: 5px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  background-color: #fff;
+  min-height: 100%;
+  box-shadow: 0px 2px 12px rgba(37, 51, 66, 0.15);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
 }

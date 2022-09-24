@@ -134,7 +134,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
             </MenuItem>
             <MenuItem value="monthly">Monthly</MenuItem>
             <MenuItem value="quarterly">Quarterly</MenuItem>
-            <MenuItem value="bi annually">Bi-Annually</MenuItem>
+            <MenuItem value="biannually">Bi-Annually</MenuItem>
             <MenuItem value="annually">Annually</MenuItem>
           </Select>
         </div>
@@ -198,9 +198,11 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
                   <TableCell align="left">{invoice?.subscriptionMeta?.planName}</TableCell>
                   <TableCell align="left">{String(invoice?.subscriptionMeta?.billingInterval)?.toLowerCase()}</TableCell>
                   <TableCell className={styles.client_cell} align="left">
+                  <Link to={`/organizations/pdf/${clientID}`}>
                     <button className={styles.download_invoice}>
                       Download <img src={downloadImg} alt="download invoice" />
                     </button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

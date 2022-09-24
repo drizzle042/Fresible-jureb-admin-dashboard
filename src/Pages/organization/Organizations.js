@@ -12,9 +12,6 @@ import BiAnnually from "./components/users/BiAnnually";
 import Annually from "./components/users/Annually";
 import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
-import FetchError from "../../lib/components/Hooks/FetchError";
-import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
 
 const Organizations = () => {
   const { hooksContent } = CustomHook();
@@ -24,21 +21,13 @@ const Organizations = () => {
     setValue(newValue);
   };
 
-  // Pagination
-  const { pageNumber, PaginatorTemplate } = usePaginator();
-
   // Get requests
 
   // tab headers
   const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/sub-period-stats`)
 
   // set Search Data
-  const {data:AllData, isLoading, error, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?`);
-
-  const { data:MonthlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=MONTHLY`)
-  const { data:QuarterlyData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=QUARTERLY`)
-  const { data:BiAnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=BIANNUALLY`)
-  const { data:AnnualData } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?page=${pageNumber}&plan=ANNUALLY`)
+  const {data:AllData, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations?`);
 
   return (
     <Layout>
@@ -49,22 +38,20 @@ const Organizations = () => {
           <div className={styles.tab_panel}>
             <TabContext value={value}>
               {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
-              {isLoading && <LoaderComponent />}
-              {error && <FetchError error={error} />}
               <TabPanel className={styles.t_p} value={"1"}>
-                {AllData && <All data={AllData} styles={styles} PaginatorTemplate={PaginatorTemplate} />}
+                <All allData={AllData} styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value={"2"}>
-                {MonthlyData && <Monthly data={MonthlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                <Monthly styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value={"3"}>
-                {QuarterlyData && <Quarterly data={QuarterlyData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                <Quarterly styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value={"4"}>
-                {BiAnnualData && <BiAnnually data={BiAnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                <BiAnnually styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value={"5"}>
-                {AnnualData && <Annually data={AnnualData} styles={styles}  PaginatorTemplate={PaginatorTemplate} />}
+                <Annually styles={styles} />
               </TabPanel>
             </TabContext>
           </div>

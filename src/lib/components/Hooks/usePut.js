@@ -6,7 +6,8 @@ const usePut = (url) => {
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
-  function putFunc(id){
+  function putFunc(id,gotoAction){
+    console.log("action",gotoAction)
     if (id){
       fetch(url + id, {
         method: "PUT",
@@ -27,7 +28,8 @@ const usePut = (url) => {
       })
         .then(() => {
           setIsLoading(false);
-          window.location.reload()
+          if(gotoAction!=null) gotoAction()
+          else window.location.reload()
         })
           .catch((err) => {
             if (err.message === "Failed to fetch"){

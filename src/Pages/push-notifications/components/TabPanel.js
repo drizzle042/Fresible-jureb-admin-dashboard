@@ -12,7 +12,8 @@ const TabLabel = ({ title, label, styles }) => {
   );
 };
 
-const TabHeaders = ({ handleChange, styles }) => {
+const TabHeaders = ({ handleChange, styles,data }) => {
+ 
   return (
     <div style={{ borderBottom: "1px solid #ccc" }}>
       <TabList
@@ -22,15 +23,15 @@ const TabHeaders = ({ handleChange, styles }) => {
         onChange={handleChange}
       >
         <Tab
-          label={<TabLabel styles={styles} title="All" label={112} />}
+          label={<TabLabel styles={styles} title="All" label={data?.data?.length} />}
           value="1"
         />
         <Tab
-          label={<TabLabel styles={styles} title="Sent" label={12} />}
+          label={<TabLabel styles={styles} title="Sent" label={data?.data?.filter(i => i?.scheduled !== true).length} />}
           value="2"
         />
         <Tab
-          label={<TabLabel styles={styles} title="Scheduled" label={52} />}
+          label={<TabLabel styles={styles} title="Scheduled" label={data?.data?.filter(i => i?.scheduled === true).length} />}
           value="3"
         />
       </TabList>

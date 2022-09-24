@@ -28,7 +28,6 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
   };
 
   useEffect(() => {
-    console.log(searchUrl);
     handleSearchInput(searchUrl);
     // eslint-disable-next-line
   }, [searchUrl])

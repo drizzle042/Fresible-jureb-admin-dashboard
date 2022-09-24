@@ -8,13 +8,21 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import usePaginator from "../../../../lib/components/Hooks/PaginatorTemplate";
+import useFetch from "../../../../lib/components/Hooks/useFetch";
+import FetchError from "../../../../lib/components/Hooks/FetchError";
+import LoaderComponent from "../../../../lib/components/LoaderComponent/Loader";
 
-const Quarterly = ({ styles, data }) => {
+const Quarterly = ({ styles }) => {
   
-  const { PaginatorTemplate } = usePaginator()
+  const { PaginatorTemplate, pageNumber } = usePaginator()
+  
+  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/invoices?page=${pageNumber}&period=quarterly`)
+
   return (
     <div>
       <TableContainer className={styles.table_container} component={Paper}>
+        {isLoading && <LoaderComponent />}
+        {error && <FetchError error={error} />}
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className={styles.thead}>
             <TableRow>

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import axios from 'axios';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Slide from "@mui/material/Slide";
 import { Editor } from "react-draft-wysiwyg";
+import usePost from "../../../../lib/components/Hooks/usePost";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   Button,
@@ -21,18 +23,17 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import uploadImage from "../../assets/upload.png";
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const names = ["In-app", "Email", "SMS"];
 const recipients = [
-  { title: "All Users", value: "all users" },
-  { title: "Simple Start", value: "simple start" },
-  { title: "Standard", value: "standard" },
-  { title: "Premuim", value: "premium" },
-  { title: "Employees", value: "employees" },
+  { title: "All Users", value: "ALL_USERS" },
+  { title: "Simple Start", value: "SIMPLE_START" },
+  { title: "Standard", value: "STANDARD" },
+  { title: "Premuim", value: "PREMIUM" },
+  { title: "Employees", value: "EMPLOYEE" },
 ];
 
 const NewMessage = ({
@@ -45,7 +46,28 @@ const NewMessage = ({
 }) => {
   const { filterData } = hooksContent;
   const imageRef = useRef();
+  const { postFormData } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/create`);
 
+
+
+const submitData = () =>{
+  let tokens=JSON.parse(localStorage.getItem("user-tokens"))
+  let d = new FormData();
+  d.append('title', hooksContent.messageTitle);
+  d.append('deliveryType', hooksContent.messageType);
+  d.append('message', hooksContent.messageTitle);
+  d.append('date', hooksContent.messageDate);
+  d.append('scheduled', true);
+  d.append('recipients', hooksContent.recipients);
+  d.append('image', hooksContent.image);
+
+  
+  //d.append('image', files[0]);
+  
+  console.log("S",d)
+  
+  postFormData(d,handleClose)
+}
 
   return (
     <Dialog
@@ -242,7 +264,8 @@ const NewMessage = ({
           See Preview
         </Button>
         <Button variant="contained" color="secondary" onClick={() => {
-          handleClose()
+         
+          submitData()
           // postDataFunc(postData)
           }}>
           Send Message

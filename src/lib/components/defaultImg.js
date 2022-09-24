@@ -1,5 +1,6 @@
 const DefaultImg = (name) => {
     const bgColors = [
+        "#1f53d7",
         "#FFE040",
         "#DC143C",
         "#8B008B",
@@ -7,7 +8,7 @@ const DefaultImg = (name) => {
         "#696969",
         "#800000"
     ];
-    let randomBg = bgColors[Math.floor(Math.random() * 6)];
+    let randomBg = bgColors[Math.floor(Math.random() * 1)];
     let text = String(name?.name)?.slice(0, 2)
     return(
         <>

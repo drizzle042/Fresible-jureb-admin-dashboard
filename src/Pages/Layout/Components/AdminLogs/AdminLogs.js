@@ -7,12 +7,15 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Userimage from "../../../../lib/assets/images/user-img.png";
 import Google from "../../../../lib/assets/images/google.png";
+import useFetch from "../../../../lib/components/Hooks/useFetch";
 import CloseIcon from "@mui/icons-material/Close";
+import { Divider } from "@mui/material";
   
 
 const AdminLogs = ({ open, setOpen }) => {
-
-    const [notifications, ]=  useState([
+  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/activities`);
+  
+  const [notifications, ]=  useState([
       {id:1,
         image: Google,
         name: "Oregon",
@@ -44,6 +47,26 @@ const AdminLogs = ({ open, setOpen }) => {
         time:"2 mins ago"
       },
     ])
+  
+    let activityTime = (createdAt) => {
+      let now = new Date();
+      let dateCreated = new Date(createdAt);
+      let time = (now - dateCreated)/1000;
+      var specificTime
+  
+      if (time < 60){
+        specificTime = Math.ceil(time) + " secs";
+      }else if (time >= 60 && time < 3600){
+        specificTime = Math.ceil(time/60) + " mins";
+      }else if(time >= 3600 && time < 86400){
+        specificTime = Math.ceil(time/3600) + " hrs";
+      }else {
+        specificTime = Math.ceil(time/86400) + " days";
+      }
+  
+      return specificTime
+    };
+  
     
     function displayDrawer(isOpen) {
         if (isOpen === false) {
@@ -73,9 +96,9 @@ const AdminLogs = ({ open, setOpen }) => {
               height: 20,
               flexShrink: 0,
               '& .MuiDrawer-paper': {
-                width: 600,
+                width: 500,
                 boxSizing: 'border-box',
-                height: 'calc(100% - 124px)',
+                height: '400px',
                 boxShadow: 4,
               },
             }}
@@ -87,8 +110,30 @@ const AdminLogs = ({ open, setOpen }) => {
               <h3>Notifications</h3>
               <CloseIcon onClick={handleDrawerClose}></CloseIcon>
             </DrawerHeader>
-            <div className={styles.user_logs}>
-              {notifications.map((data, index) => {
+            <Divider/>
+            <div className={styles.user_logs} style={{height:'400px',overflowY:'auto'}}>
+              {data?.data?.map((item, index) => (
+                <div>
+                {index>0 &&<Divider />}
+                <div
+                  style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#fff" }}
+                  key={index}
+                  className={styles.log}
+                >
+                  <div>
+                    <span>{item?.replacers[0]?.name}</span>
+                    {item?.text?.replace("$1", "").replace("$2", item?.replacers[1]?.name).replace("$3", item?.replacers[2]?.name).replace("$4", item?.replacers[3]?.name)}
+                  </div>
+                  <div  className={styles.time}>{
+                    item?.createdAt ?
+                      `${activityTime(item?.createdAt)} ago` :
+                      "unknown time"
+                  }</div>
+                </div>
+                </div>
+              ))}
+            </div>
+              {/* {notifications.map((data, index) => {
                 return(
                   <TableRow 
                     key={index} 
@@ -112,8 +157,7 @@ const AdminLogs = ({ open, setOpen }) => {
                     </TableCell>
                   </TableRow>
                 )
-              })}
-            </div>
+              })} */}
           </Drawer>
         </Box>
     );

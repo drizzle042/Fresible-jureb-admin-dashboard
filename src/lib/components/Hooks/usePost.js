@@ -8,7 +8,7 @@ const usePost = (url) => {
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
-  function postDataFunc(data, contentType){
+  function postDataFunc(data, contentType,gotoAction){
     if (data){
       fetch(url, {
         method: "POST",
@@ -31,7 +31,8 @@ const usePost = (url) => {
       })
         .then(() => {
           setIsLoading(false);
-          window.location.reload()
+          if(gotoAction!=null) gotoAction()
+          else window.location.reload()
         })
           .catch((err) => {
             if (err.message === "Failed to fetch"){
@@ -43,6 +44,34 @@ const usePost = (url) => {
             console.log(err);
           })}
   };
+
+
+  function postFormData(data,gotoAction){
+    axios({
+      method: "post",
+      url: url,
+      data: data,
+      headers: { 
+        "Content-Type": "multipart/form-data",
+        "Authorization": "Bearer " + tokens?.data?.accessToken,
+      },
+    })
+      .then(function (response) {
+        setIsLoading(false);
+        console.log(response);
+        if(gotoAction!=null) gotoAction()
+        else window.location.reload()
+      })
+      .catch(function (err) {
+        if (err.message === "Failed to fetch"){
+          setError("Lost network connection")
+        }else{
+          setError(err.message);
+        }
+        setIsLoading(false);
+        console.log(err);
+      });
+  }
 
   const { handleSubmit } = useForm({shouldUseNativeValidation: true});
 
@@ -66,7 +95,7 @@ const usePost = (url) => {
   // eslint-disable-next-line
   useEffect(postDataFunc, [url]);
 
-  return { isLoading, error, postDataFunc, handleSubmit, submitForm }
+  return { isLoading, error, postDataFunc, handleSubmit, submitForm,postFormData }
 }
 
 export default usePost

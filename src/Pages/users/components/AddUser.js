@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { IconButton, TextField } from "@mui/material";
 import usePost from "../../../lib/components/Hooks/usePost";
 
-const AddUser = ({ open, handleClose, styles }) => {
+const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
 
   // Make post request
   const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
@@ -68,7 +68,7 @@ const AddUser = ({ open, handleClose, styles }) => {
           variant="contained" 
           color="secondary"
           onClick={() => {
-            postDataFunc(JSON.stringify(formData), "application/json")
+            postDataFunc(JSON.stringify(formData), "application/json",handleSearchInput)
             handleClose()
           }}>
           Add User

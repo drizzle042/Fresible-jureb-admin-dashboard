@@ -78,6 +78,8 @@ const Sidebar = (props) => {
           </li>
         </ul>
       </div>
+      
+      <div className={styles.list_bottom}>
       <div className={styles.sidebar_links}>
         <div className={styles.preference_menu}>Preferences</div>
         <ul>
@@ -98,7 +100,7 @@ const Sidebar = (props) => {
           <li>
             <Link
               className={path === "settings" ? styles.active_link : ""}
-              to="/settings/profile"
+              to="/settings"
             >
               <span>
                 <SettingsOutlinedIcon />
@@ -108,6 +110,8 @@ const Sidebar = (props) => {
           </li>
         </ul>
       </div>
+      </div>
+      
     </div>
   );
 
