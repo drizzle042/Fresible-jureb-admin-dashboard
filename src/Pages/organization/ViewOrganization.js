@@ -1,6 +1,6 @@
-import { Divider, Grid, IconButton } from "@mui/material";
+import { Divider, Grid, IconButton,MenuItem, Select, TextField, Button, Dialog,DialogContent} from "@mui/material";
 import EastIcon from '@mui/icons-material/East';
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../Layout/Layout";
 import styles from "./styles/styles.module.css";
@@ -8,6 +8,9 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import OrganizationInvoices from "./components/OrganizationInvoices";
 import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
+import usePut from "../../lib/components/Hooks/usePut";
+import usePost from "../../lib/components/Hooks/usePost";
+import CloseIcon from "@mui/icons-material/Close";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../lib/components/Hooks/FetchError";
 
@@ -15,10 +18,20 @@ const ViewOrganization = () => {
   const { id } = useParams();
   const { hooksContent } = CustomHook();
   const navigate = useNavigate();
-
-  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
+  const [state,setState] = useState({plan:"",period:""})
+  const { data, isLoading, error,handleSearchInput:handleSearchInput2 } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
   const client = data?.data;
   const {data: invoiceData, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/invoices?organizationId=${id}`)
+  const {data: plans} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/plans`)
+  const { putFunc } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/cancel`);
+  const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/upgrade`);
+
+  const open = (type) =>{
+    setState({...state,modal:type})
+  }
+  const close = () =>{
+    setState({...state,modal:null})
+  }
 
   return (
     <Layout>
@@ -87,9 +100,9 @@ const ViewOrganization = () => {
                     <div className={styles.sub_action_wrapper}>
                       <Divider />
                       <div className={styles.sub_action}>
-                        <button className={styles.cancel}>Cancel Plan</button>
-                        <button className={styles.upgrade}>
-                          Upgrade Plan <IconButton><EastIcon sx={{color: "blue"}}/></IconButton>
+                        <button className={styles.cancel} onClick={()=>open(1)}>Cancel Plan</button>
+                        <button className={styles.upgrade} onClick={()=>open(2)}>
+                          Change Plan <IconButton><EastIcon sx={{color: "blue"}}/></IconButton>
                         </button>
                       </div>
                     </div>
@@ -151,6 +164,162 @@ const ViewOrganization = () => {
         </div>
         }
       </main>
+      
+      <Dialog
+        // eslint-disable-next-line
+        open={state.modal==1}
+        onClose={close}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+      <div className={styles.dialog_title}>
+        <div className={styles.section_title}>
+          <div className={styles.header}>
+            <h2>Cancel Plan</h2>
+          </div>
+          <div className={styles.CloseIcon}>
+            <IconButton onClick={close}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </div>
+      </div>
+      <DialogContent>
+        <div>
+          If you cancel this Jureb subscription,the user will lose access to the benefits of this plan. Team member would also not be albe to log into their accounts. Please note that cancellation takes effect at the end of the current subscription.
+        </div>
+        
+        <div className="push-right">
+          <Button
+            variant="contained" 
+            color="secondary"
+            onClick={() => {
+             // postDataFunc(JSON.stringify(formData), "application/json",handleSearchInput)
+             putFunc("",handleSearchInput2,{organizationId:id})
+             // close()
+            }}>
+            Confirm
+          </Button>
+        </div>
+      </DialogContent>
+      </Dialog>
+
+      <Dialog
+        // eslint-disable-next-line
+        open={state.modal==2}
+        onClose={close}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+      <DialogContent >
+        <div>
+          
+
+        <div className={[styles.select_bars,"space-top"].join(' ')}>
+          <Select
+            className={styles.input}
+            fullWidth
+            size="small"
+            value={state?.plan}
+            onChange={(e)=>setState({...state,plan:e.target.value})}
+            displayEmpty
+          >
+            <MenuItem disabled value="">
+              Select Plan
+            </MenuItem>
+            {plans?.data?.map((d)=>{
+              return  <MenuItem value={d.id}>{d.name}</MenuItem>
+            })}
+          </Select>
+        </div>
+        <div className={styles.select_bars}>
+          <Select
+            className={[styles.input,"space-top"].join(' ')}
+            fullWidth
+            size="small"
+            value={state?.period}
+            onChange={(e)=>setState({...state,period:e.target.value})}
+            displayEmpty
+          >
+            <MenuItem disabled value="">
+              Period
+            </MenuItem>
+            <MenuItem value="MONTHLY">Monthly</MenuItem>
+            <MenuItem value="QUARTERLY">Quarterly</MenuItem>
+            <MenuItem value="BIANNUALLY">Bi-Annually</MenuItem>
+            <MenuItem value="ANNUALLY">Annually</MenuItem>
+          </Select>
+        </div>
+        <TextField
+                className={[styles.input,"space-top"].join(' ')}
+                value={state?.reason}
+                onChange={(e)=>setState({...state,reason:e.target.value})}
+                fullWidth
+                style={{minWidth:'300px'}}
+                multiline={true}
+                rows={3}
+                size="small"
+                placeholder="Reason"
+              />
+        </div>
+        
+        <div className="push-right space-top">
+          <Button
+            variant="contained" 
+            color="secondary"
+            onClick={() => {
+             // postDataFunc(JSON.stringify(formData), "application/json",handleSearchInput)
+             state.plan.length>0 && state.period.length>0 && open(3)
+            }}>
+            Confirm
+          </Button>
+        </div>
+      </DialogContent>
+      </Dialog>
+
+      <Dialog
+        // eslint-disable-next-line
+        open={state.modal==3}
+        onClose={close}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+      <div className={styles.dialog_title}>
+        <div className={styles.section_title}>
+          <div className={styles.header}>
+            <h2>Change Subscription Plan</h2>
+          </div>
+          <div className={styles.CloseIcon}>
+            <IconButton onClick={()=>open(2)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </div>
+      </div>
+      <DialogContent>
+        <div>
+          This users plan will change to the selected plan for the duration of the period selected, the user will not be billed for this subscription
+        </div>
+        
+        <div className="push-right space-top">
+          <Button
+            variant="contained" 
+            color="secondary"
+            onClick={() => {
+              postDataFunc(JSON.stringify(
+                {
+                  organizationId:id,
+                  planId:state.plan,
+                  interval:state.period
+                }
+              ), "application/json",handleSearchInput2)
+              close()
+            }}>
+            Confirm
+          </Button>
+        </div>
+      </DialogContent>
+      </Dialog>
     </Layout>
   );
 };

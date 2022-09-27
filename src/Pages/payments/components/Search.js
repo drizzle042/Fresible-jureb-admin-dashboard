@@ -117,9 +117,9 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
           onChange={handleSelect}
         >
           <MenuItem disabled value="">Status</MenuItem>
-          <MenuItem value="success">Success</MenuItem>
-          <MenuItem value="failed">Failed</MenuItem>
-          <MenuItem value="cancelled">Cancelled</MenuItem>
+          <MenuItem value="SUCCESS">Success</MenuItem>
+          <MenuItem value="FAILED">Failed</MenuItem>
+          <MenuItem value="CANCELLED">Cancelled</MenuItem>
         </Select>
       </div>
     </div>

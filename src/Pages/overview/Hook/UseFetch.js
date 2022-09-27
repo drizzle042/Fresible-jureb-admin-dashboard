@@ -37,7 +37,7 @@ const UseFetch = (url) => {
         setIsLoading(false);
       });
   }
-
+  // eslint-disable-next-line
   useEffect(fetchData, [url]);
 
   return { data, isLoading, error };

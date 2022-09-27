@@ -13,6 +13,7 @@ import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 const Scheduled = ({ styles, data, type }) => {
 
   let notifications = data?.data
+  // eslint-disable-next-line
   switch (type){
     case 1: notifications=notifications.filter(i => i?.scheduled !== true); break;
     case 2: notifications=notifications.filter(i => i?.scheduled === true); break;

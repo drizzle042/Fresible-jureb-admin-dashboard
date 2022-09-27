@@ -46,7 +46,6 @@ const useFetch = (url) => {
   };
   
   function handleSearchInput(value){
-    console.log("GOT HERE",value)
     if(value==null)value={}
     let resourceEndpoint = `${url}`;
     let count=0

@@ -115,9 +115,8 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
           onChange={handleSelect}
         >
           <MenuItem disabled value="">Status</MenuItem>
-          <MenuItem value="active">Active</MenuItem>
-          <MenuItem value="inactive">Inactive</MenuItem>
-          <MenuItem value="expired">Expired</MenuItem>
+          <MenuItem value="ACTIVE">Active</MenuItem>
+          <MenuItem value="INACTIVE">Inactive</MenuItem>
         </Select>
       </div>
     </div>

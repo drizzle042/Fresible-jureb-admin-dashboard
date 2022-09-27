@@ -1,5 +1,4 @@
 import React,{useState,useRef} from "react";
-import { Link, useLocation } from "react-router-dom";
 import Layout from "../Layout/Layout";
 import styles from "./styles/styles.module.css";
 import { Button, TextField,Avatar,Table,TableBody,TableCell,TableHead,TableRow,Paper,TableContainer,Checkbox,FormControlLabel,InputAdornment } from "@mui/material";
@@ -14,8 +13,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const Settings = () => {
-  const { pathname } = useLocation();
-  const current_path = pathname.split("/")[2];
   const [page, setPage] = useState(1);
   const [value, setValue] = useState({});
   const navigations =[
@@ -36,7 +33,6 @@ const Settings = () => {
   ]
 
   const { hooksContent } = CustomHook();
-  let formData = {};
   let passwords = {};
   const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
 
@@ -62,7 +58,7 @@ const Settings = () => {
             return (
               <li key={d.id} onClick={() => setPage(d.id)} style={{marginBottom :'20px'}}>
                 <span style={{marginBottom :'5px'}}>{d.name}</span>
-                <span className={[page==d.id ? styles.active : ""].join(' ')} style={{cursor:'pointer'}}>
+                <span className={[page===d.id ? styles.active : ""].join(' ')} style={{cursor:'pointer'}}>
                   {d.details}
                 </span>
               </li>
@@ -70,7 +66,6 @@ const Settings = () => {
           })}
         </ul>
       </div>
-      {/* <div className={styles.content}>{children}</div> */}
       
       <div className={styles.content}>
         {getsettingPage()}
@@ -81,6 +76,7 @@ const Settings = () => {
   );
 
   function getsettingPage(){
+    // eslint-disable-next-line
     switch (page){
       case 1: return UserProfilePage();
       case 2: return TaxRatePage();
@@ -89,7 +85,7 @@ const Settings = () => {
   }
 
   function UserProfilePage(){
-    formData = {};
+    let formData = new FormData();
     return (
       <div>
         {isLoading && <LoaderComponent />}
@@ -179,6 +175,7 @@ const Settings = () => {
   
  
   function TaxRatePage(){
+    let formData = new FormData();
     const handleChange = (newValue,d) => {
       setValue({...value,[d]:newValue});
       console.log(value)
@@ -272,7 +269,7 @@ const Settings = () => {
   }
 
   function PasswordPage(){
-    formData = {};
+    let formData = {};
     function checkPassword(newPassword, confirmPassword){
       if (newPassword === confirmPassword){
         return true;

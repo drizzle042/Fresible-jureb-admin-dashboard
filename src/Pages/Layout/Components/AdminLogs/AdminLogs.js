@@ -1,52 +1,15 @@
-import { useState } from "react";
 import { styled } from '@mui/material/styles';
 import styles from "../../styles/styles.module.css";
 import Box from "@mui/material/Box";
 import Drawer from '@mui/material/Drawer';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import Userimage from "../../../../lib/assets/images/user-img.png";
-import Google from "../../../../lib/assets/images/google.png";
 import useFetch from "../../../../lib/components/Hooks/useFetch";
 import CloseIcon from "@mui/icons-material/Close";
 import { Divider } from "@mui/material";
   
 
 const AdminLogs = ({ open, setOpen }) => {
-  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/activities`);
+  const { data } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/activities`);
   
-  const [notifications, ]=  useState([
-      {id:1,
-        image: Google,
-        name: "Oregon",
-        message:"subscribed to the standard plan",
-        time:"2 mins ago"
-      },
-      {id:2,
-        image:Userimage,
-        name: "Medows",
-        message:"subscribed to the standard plan",
-        time:"3 mins ago"
-      },
-      {id:1,
-        image: Google,
-        name: "Oregon",
-        message:"subscribed to the standard plan",
-        time:"2 mins ago"
-      },
-      {id:2,
-        image:Userimage,
-        name: "Medows",
-        message:"subscribed to the standard plan",
-        time:"3 mins ago"
-      },
-      {id:1,
-        image: Google,
-        name: "Oregon",
-        message:"subscribed to the standard plan",
-        time:"2 mins ago"
-      },
-    ])
   
     let activityTime = (createdAt) => {
       let now = new Date();
@@ -133,31 +96,6 @@ const AdminLogs = ({ open, setOpen }) => {
                 </div>
               ))}
             </div>
-              {/* {notifications.map((data, index) => {
-                return(
-                  <TableRow 
-                    key={index} 
-                    sx={{ border: 0, backgroundColor: index % 2 === 0 ? "#F3F3F6" : "#fff" }} 
-                    className={styles.log}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      sx={{ border: 0 }}>
-                      <img src={data.image} alt="logo"></img>
-                    </TableCell>
-                    <TableCell 
-                      align="left"
-                      sx={{ border: 0 }}>
-                        <span className={styles.log_text}>{data.name} {data.message}</span>
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{ border: 0 }}>
-                      <span className={styles.time}>{data.time}</span>
-                    </TableCell>
-                  </TableRow>
-                )
-              })} */}
           </Drawer>
         </Box>
     );

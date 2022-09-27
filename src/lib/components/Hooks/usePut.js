@@ -6,14 +6,15 @@ const usePut = (url) => {
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
-  function putFunc(id,gotoAction){
-    console.log("action",gotoAction)
-    if (id){
+  function putFunc(id="",gotoAction,data=null){
+    // eslint-disable-next-line
+    if(id!="" || data!=null){
       fetch(url + id, {
         method: "PUT",
         headers: {
           "Authorization": "Bearer " + tokens?.data?.accessToken,
         },
+        body: JSON.stringify(data),
       })
       .then((res) => {
         switch (res.status) {

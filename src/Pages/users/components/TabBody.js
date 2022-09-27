@@ -16,6 +16,7 @@ const TabBody = ({ styles, data,type,handleSearchInput }) => {
   const { putFunc: activate } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/activate?id=`);
 
   let datas = data?.data;
+  // eslint-disable-next-line
   switch (type){
     case 1: datas= datas?.filter(i => i.status === "ACTIVE"); break;
     case 2: datas=datas?.filter(i => i.status === "INACTIVE"); break;
