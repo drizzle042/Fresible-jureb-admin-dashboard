@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { EditorState } from "draft-js";
 
 const CustomHook = () => {
-
   const [title, setTitle] = useState("");
-  const [dateFrom, setDateFrom] = useState(new Date());
-  const [dateTo, setDateTo] = useState(new Date());
+  const [dateFrom, setDateFrom] = useState(new Date("2022-01-18T21:11:54"));
+  const [dateTo, setDateTo] = useState(new Date("2022-01-18T21:11:54"));
   const [imageUrl, setImageUrl] = useState([]);
   const [status, setStatus] = useState("");
-
   //  For post data 
   const [messageTitle, setMessageTitle] = useState("");
-  const [receipients, setReceipients] = React.useState([]);
-  const [deliveryType, setdeliveryType] = React.useState([]);
-  const [subscriptionPlans, setSubscriptionPlans] = React.useState([]);
-  const [messageDate, setMessageDate] = React.useState(new Date());
-  const [messageTime, setMessageTime] = React.useState(new Date().getTime());
-
+  const [recipients, setRecipients] = useState("");
+  const [deliveryType, setMessageType] = React.useState(["SMS"]);
+  const [messageDate, setMessageDate] = React.useState(
+    new Date()
+  );
+  const [messageTime, setMessageTime] = React.useState(
+    new Date().getTime()
+  );
   // Text editor state
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -33,9 +33,9 @@ const CustomHook = () => {
     status: "status",
     dateFrom: "dateFrom",
     dateTo: "dateTo",
+    recipients: "recipients",
     messageTitle: "messageTitle",
   };
-
   const handleChange = (name) => (e) => {
     const { value } = e.target;
     switch (name) {
@@ -44,6 +44,9 @@ const CustomHook = () => {
         break;
       case filterData.status:
         setStatus(value);
+        break;
+      case filterData.recipients:
+        setRecipients(value);
         break;
       case filterData.messageTitle:
         setMessageTitle(value);
@@ -59,25 +62,11 @@ const CustomHook = () => {
     }
   };
 
-  const selectReceipients = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setReceipients(value);
-  };
-
   const selectType = (event) => {
     const {
       target: { value },
     } = event;
-    setdeliveryType(value);
-  };
-
-  const selectSubscription = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setSubscriptionPlans(value);
+    setMessageType(typeof value === "string" ? value.split(",") : value);
   };
 
   const hooksContent = {
@@ -92,17 +81,14 @@ const CustomHook = () => {
     onImageChange,
     image,
     imageUrl,
-    selectReceipients,
     selectType,
-    selectSubscription,
     messageDate,
     setMessageDate,
     messageTitle,
     messageTime,
     setMessageTime,
-    receipients,
     deliveryType,
-    subscriptionPlans,
+    recipients,
     editorState,
     scheduled,
     handleEditorChange,
