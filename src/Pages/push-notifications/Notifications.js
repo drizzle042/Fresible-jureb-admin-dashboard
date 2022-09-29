@@ -4,7 +4,9 @@ import styles from "./styles/styles.module.css";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import TabHeaders from "./components/TabPanel";
-import TabBody from "./components/TabBody";
+import AllNotifications from "./components/NotificationTypes/AllNotifications";
+import ScheduledNotifications from "./components/NotificationTypes/ScheduledNotifications";
+import SentNotifications from "./components/NotificationTypes/SentNotifications";
 import Search from "./components/Search";
 import NewMessage from "./components/message/NewMessage";
 import { convertToRaw } from "draft-js";
@@ -14,18 +16,15 @@ import PreviewMessageMobile from "./components/message/PreviewMessageMobile";
 import Feedback from "../../lib/components/Feedback/Feedback";
 import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
-import FetchError from "../../lib/components/Hooks/FetchError";
 
 const Notifications = () => {
 
-  // Get All Notifications
-  const { data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
+  // Accessories
   const { hooksContent } = CustomHook();
-  const [value, setValue] = React.useState("1");
   const [newMessage, setNewMessage] = useState(false);
   const [previewMessageWeb, setPreviewMessageWeb] = useState(false);
   const [previewMessageMobile, setPreviewMessageMobile] = useState(false);
+  
   // Feedback
   const short_message = "Warning: message too short";
   const warning_message = "Warning: message too long";
@@ -33,14 +32,10 @@ const Notifications = () => {
   const [severity, setSeverity] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
 
+  // Getting the value from editor
   const text = draftToHtml(
     convertToRaw(hooksContent.editorState?.getCurrentContent())
   );
-  const messageData = {
-    text,
-    imageUrl: hooksContent.imageUrl,
-  };
-  // Getting the value from editor
   const editors_raw_content = convertToRaw(
     hooksContent.editorState.getCurrentContent()
   ).blocks?.map((item) => ({
@@ -51,8 +46,9 @@ const Notifications = () => {
     0
   );
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const messageData = {
+    text,
+    imageUrl: hooksContent.imageUrl,
   };
 
   // New message handlers
@@ -64,10 +60,9 @@ const Notifications = () => {
 
   const closeNewMessage = () => {
     setNewMessage(false);
-    handleSearchInput("");
   };
-  // Web  / mobile dialog handlers
 
+  // Web  / mobile dialog handlers
   const openWebMessage = () => {
     if (content_Length <= 0) return handleFeedback();
     if (content_Length >= 120) return handleFeedback();
@@ -83,7 +78,6 @@ const Notifications = () => {
     setPreviewMessageMobile(true);
     setPreviewMessageWeb(false);
   };
-
   const closeMobileMessage = () => {
     setPreviewMessageMobile(false);
   };
@@ -100,27 +94,33 @@ const Notifications = () => {
     }
     setFeedback(false);
   };
+  const [pageValue, setpageValue] = React.useState("1");
+
+  const handleChange = (event, newValue) => {
+    setpageValue(newValue);
+  };
+
+  // Get All Notifications
+  const { data, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
 
   return (
     <Layout>
       <main className={styles.main}>
         <section>
-          <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} openNewMessage={openNewMessage} />
+          <Search styles={styles} handleSearchInput={handleSearchInput} hooksContent={hooksContent} openNewMessage={openNewMessage} />
           <div className={styles.tab_panel}>
-            {data &&<TabContext value={value}>
-              <TabHeaders handleChange={handleChange} data={data} styles={styles} />
-                {isLoading && <LoaderComponent />}
-                {error && <FetchError error={error} />}
+            <TabContext value={pageValue}>
+              {data && <TabHeaders handleChange={handleChange} data={data} styles={styles} />}
               <TabPanel className={styles.t_p} value="1">
-                <TabBody data={data} type={0} handleSearchInput={handleSearchInput} styles={styles} />
+                <AllNotifications allData={data} styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value="2">
-                <TabBody data={data} type={1} handleSearchInput={handleSearchInput} styles={styles} />
+                <SentNotifications styles={styles} />
               </TabPanel>
               <TabPanel className={styles.t_p} value="3">
-                <TabBody data={data} type={2} handleSearchInput={handleSearchInput} styles={styles} />
+                <ScheduledNotifications styles={styles} />
               </TabPanel>
-            </TabContext>}
+            </TabContext>
           </div>
         </section>
       </main>

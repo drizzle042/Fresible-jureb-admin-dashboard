@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom"
-import Search from "./components/Search";
+import Search from "./components/Search-Precise-Location";
 import styles from "./styles/styles.module.css";
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import Layout from "../../Layout/Layout";
@@ -26,12 +26,10 @@ const SubsByPreciseLocation = () => {
     const { pageNumber, PaginatorTemplate } = usePaginator();
   
     // State option
-    const [stateOption, setStateOption] = useState(`&state=${state}`)
-
-    let requestUrl = `${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/by-location?page=${pageNumber}` + stateOption
+    const [stateOption, ] = useState(state)
 
     // Get requests
-    const {data, isLoading, error, handleSearchInput} = useFetch(requestUrl);
+    const {data, isLoading, error, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/by-location?page=${pageNumber}&state=${stateOption}`);
 
     return (
       <Layout>
@@ -41,7 +39,7 @@ const SubsByPreciseLocation = () => {
           {data && 
           <div>
             <section>
-              <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} stateToFilter={state} setStateOption={setStateOption} stateOption={stateOption}/>
+              <Search styles={styles} hooksContent={hooksContent} handleSearchInput={handleSearchInput} stateOption={stateOption}/>
             </section> 
             <br/>
             <br/>

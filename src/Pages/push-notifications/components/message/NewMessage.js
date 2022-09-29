@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import axios from 'axios';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -27,13 +26,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const names = ["In-app", "Email", "SMS"];
+const names = [
+  { title: "In App", value: "IN_APP" },
+  { title: "Email", value: "EMAIL" },
+  { title: "Sms", value: "SMS" },
+  { title: "Push", value: "PUSH" },
+];
+// ];
 const recipients = [
-  { title: "All Users", value: "ALL_USERS" },
-  { title: "Simple Start", value: "SIMPLE_START" },
-  { title: "Standard", value: "STANDARD" },
-  { title: "Premuim", value: "PREMIUM" },
   { title: "Employees", value: "EMPLOYEE" },
+  { title: "Organizations", value: "ORGANIZATION" },
 ];
 
 const NewMessage = ({
@@ -51,16 +53,18 @@ const NewMessage = ({
 
 
 const submitData = () =>{
-  let tokens=JSON.parse(localStorage.getItem("user-tokens"))
+  let messageType=(hooksContent.messageType+"").split(',')
+  let recepient=(hooksContent.recipients+"").split(',')
   let d = new FormData();
   d.append('title', hooksContent.messageTitle);
-  d.append('deliveryType', hooksContent.messageType);
+  //d.append('deliveryTypes', (hooksContent.messageType+"").split(','));
+  messageType.forEach((item) => d.append("deliveryTypes[]", item))
+  recepient.forEach((item) => d.append("recipients[]", item))
   d.append('message', hooksContent.messageTitle);
-  d.append('date', hooksContent.messageDate);
+  d.append('dateTime', hooksContent.messageDate);
   d.append('scheduled', true);
-  d.append('recipients', hooksContent.recipients);
   d.append('image', hooksContent.image);
-
+  console.log(d.getAll("deliveryTypes[]"))
   
   //d.append('image', files[0]);
   
@@ -132,7 +136,7 @@ const submitData = () =>{
                 multiple
                 value={hooksContent.messageType}
                 onChange={hooksContent.selectType}
-                renderValue={(selected) => selected.join(", ")}
+                renderValue={(selected) => selected.join(", ").toLowerCase().replace('_',' ')}
                 displayEmpty
                 fullWidth
                 size="small"
@@ -143,14 +147,14 @@ const submitData = () =>{
                 {names.map((name) => (
                   <MenuItem
                     style={{ paddingTop: 0, paddingBottom: 0 }}
-                    key={name}
-                    value={name}
+                    key={name?.value}
+                    value={name?.value}
                   >
                     <Checkbox
                       size="small"
-                      checked={hooksContent.messageType.indexOf(name) > -1}
+                      checked={hooksContent.messageType.indexOf(name.value) > -1}
                     />
-                    {name}
+                    {name?.title}
                   </MenuItem>
                 ))}
               </Select>

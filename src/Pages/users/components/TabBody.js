@@ -8,18 +8,33 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import usePut from "../../../lib/components/Hooks/usePut";
+import useFetch from "../../../lib/components/Hooks/useFetch";
+import LoaderComponent from "../../../lib/components/LoaderComponent/Loader";
+import LoaderComponent2 from "../../../lib/components/LoaderComponent/LoaderSpinner";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
 const TabBody = ({ styles, data,type,handleSearchInput }) => {
   
-  const { putFunc: deactivate } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/deactivate?id=`);
-  const { putFunc: activate } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/activate?id=`);
+  const { putFunc: deactivate, isLoading:deactiveLoading } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/deactivate?id=`);
+  const { putFunc: activate, isLoading:activeLoading } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/activate?id=`);
+
+  const {data:data1, handleSearchInput:handleSearchInput1} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators?status=ACTIVE`)
+  const {data:data2, handleSearchInput:handleSearchInput2 } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators?status=INACTIVE`)
+
 
   let datas = data?.data;
   // eslint-disable-next-line
   switch (type){
-    case 1: datas= datas?.filter(i => i.status === "ACTIVE"); break;
-    case 2: datas=datas?.filter(i => i.status === "INACTIVE"); break;
+    case 1: 
+      //datas= datas?.filter(i => i.status === "ACTIVE"); 
+      datas=data1?.data
+      handleSearchInput=handleSearchInput1
+      break;
+    case 2: 
+      //datas=datas?.filter(i => i.status === "INACTIVE"); 
+      datas=data2?.data
+      handleSearchInput=handleSearchInput2
+      break;
   }
   const { PaginatorTemplate } = usePaginator()
   return (
@@ -43,6 +58,7 @@ const TabBody = ({ styles, data,type,handleSearchInput }) => {
               </TableCell>
             </TableRow>
           </TableHead>
+          {(deactiveLoading || activeLoading) && <LoaderComponent/>}
           <TableBody>
             {datas?.map((user, index) => (
               <TableRow
@@ -74,6 +90,7 @@ const TabBody = ({ styles, data,type,handleSearchInput }) => {
                         ? <Button 
                             variant="outlined" 
                             color="error"
+                            startIcon={(deactiveLoading && false) && <LoaderComponent2 />}
                             onClick={()=> {
                               deactivate(user?.id,handleSearchInput)
                             }}>
@@ -83,6 +100,7 @@ const TabBody = ({ styles, data,type,handleSearchInput }) => {
                         ? <Button 
                             variant="outlined" 
                             color="success"
+                            startIcon={(activeLoading && false) && <LoaderComponent2 />}
                             onClick={()=> {
                               activate(user?.id,handleSearchInput)
                             }}>

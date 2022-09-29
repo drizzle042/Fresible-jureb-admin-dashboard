@@ -3,15 +3,21 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import usePost from "../../../lib/components/Hooks/usePost";
+import LoaderComponent from "../../../lib/components/LoaderComponent/LoaderSpinner";
 
 const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
 
   // Make post request
-  const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
+  const { postDataFunc ,isLoading} = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
   // Post data
   let formData = {};
+
+  const action= ()=>{
+    handleSearchInput()
+    handleClose()
+  }
 
   return (
     <Dialog
@@ -67,9 +73,10 @@ const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
         <Button
           variant="contained" 
           color="secondary"
+          startIcon={isLoading && <LoaderComponent />}
           onClick={() => {
-            postDataFunc(JSON.stringify(formData), "application/json",handleSearchInput)
-            handleClose()
+            postDataFunc(JSON.stringify(formData), "application/json",action)
+            
           }}>
           Add User
         </Button>

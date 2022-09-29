@@ -48,7 +48,7 @@ const SignIn = () => {
                 />
               </div>
               <div>
-              <Link to="/reset-password" style={{color:"blue",  marginLeft:"60%"}}>Forgot Password?</Link>
+              <Link to="/reset-password"><p style={{color:"blue", textAlign: "right"}}>Forgot Password?</p></Link>
               </div>
               <div className={styles.buttonWrapper}>
                 <Button

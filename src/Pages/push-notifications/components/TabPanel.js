@@ -12,7 +12,7 @@ const TabLabel = ({ title, label, styles }) => {
   );
 };
 
-const TabHeaders = ({ handleChange, styles,data }) => {
+const TabHeaders = ({ handleChange, styles, data }) => {
  
   return (
     <div style={{ borderBottom: "1px solid #ccc" }}>

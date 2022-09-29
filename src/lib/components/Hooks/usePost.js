@@ -4,12 +4,13 @@ import axios from "axios";
 
 const usePost = (url) => {
     
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
   function postDataFunc(data, contentType,gotoAction){
     if (data){
+      setIsLoading(true)
       fetch(url, {
         method: "POST",
         headers: {
@@ -46,7 +47,9 @@ const usePost = (url) => {
   };
 
 
-  function postFormData(data,gotoAction){
+  function postFormData(data, gotoAction){
+    if (data){
+      setIsLoading(true)
     axios({
       method: "post",
       url: url,
@@ -58,7 +61,7 @@ const usePost = (url) => {
     })
       .then(function (response) {
         setIsLoading(false);
-        console.log(response);
+        console.log(response.text());
         if(gotoAction!=null) gotoAction()
         else window.location.reload()
       })
@@ -69,13 +72,16 @@ const usePost = (url) => {
           setError(err.message);
         }
         setIsLoading(false);
-        console.log(err);
+        console.log(err.message);
       });
+    }
   }
 
   const { handleSubmit } = useForm({shouldUseNativeValidation: true});
 
-  const submitForm = async (data) => {
+  const submitForm = async (data,gotoAction) => {
+    if(data){
+      setIsLoading(true)
       await axios.put(url, data, {
         headers: {
           "Authorization": "Bearer " + tokens?.data?.accessToken,
@@ -84,12 +90,17 @@ const usePost = (url) => {
       })
         .then((res) => {
           if (res?.data?.status === "SUCCESS") {
-            window.location.reload();
+            setIsLoading(false);
+            console.log(res);
+            if(gotoAction!=null) gotoAction()
+            else window.location.reload()
           }
         })
           .catch ((error) => {
             console.log(error);
+            setIsLoading(false);
           })
+        }
   };
 
   // eslint-disable-next-line

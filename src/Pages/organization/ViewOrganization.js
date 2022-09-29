@@ -310,7 +310,8 @@ const ViewOrganization = () => {
                 {
                   organizationId:id,
                   planId:state.plan,
-                  interval:state.period
+                  interval:state.period,
+                  reason:state.reason
                 }
               ), "application/json",handleSearchInput2)
               close()

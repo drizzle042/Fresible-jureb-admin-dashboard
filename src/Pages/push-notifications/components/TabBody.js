@@ -10,7 +10,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button } from "@mui/material";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
 
-const Scheduled = ({ styles, data, type }) => {
+const TabBody = ({ styles, data, type }) => {
 
   let notifications = data?.data
   // eslint-disable-next-line
@@ -87,4 +87,4 @@ const Scheduled = ({ styles, data, type }) => {
   );
 };
 
-export default Scheduled;
+export default TabBody;

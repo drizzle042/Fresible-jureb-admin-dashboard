@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
-const Search = ({ styles, hooksContent, handleSearchInput }) => {
+const Search = ({ styles, hooksContent, handleSearchInput, stateOption }) => {
 
   const { filterData } = hooksContent;
 
@@ -51,7 +51,7 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
   const [searchUrl, setSearchUrl] = useState({
     keyword: "",
     country: "",
-    state: "",
+    state: stateOption,
     status: "",
   });
   
@@ -64,7 +64,7 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
     });
   };
   
-  const [state, setState] = useState("");
+  const [state, setState] = useState(stateOption);
   function handleSelectState(e){
     setState(e?.target?.value);
     setSearchUrl({
@@ -152,7 +152,6 @@ const Search = ({ styles, hooksContent, handleSearchInput }) => {
           <MenuItem disabled value="">Status</MenuItem>
           <MenuItem value="active">Active</MenuItem>
           <MenuItem value="inactive">Inactive</MenuItem>
-          <MenuItem value="expired">Expired</MenuItem>
         </Select>
       </div>
     </div>

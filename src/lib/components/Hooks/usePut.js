@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 
 const usePut = (url) => {
     
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
   function putFunc(id="",gotoAction,data=null){
     // eslint-disable-next-line
     if(id!="" || data!=null){
+      setIsLoading(true)
       fetch(url + id, {
         method: "PUT",
         headers: {

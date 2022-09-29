@@ -4,6 +4,7 @@ import styles from "./styles/styles.module.css";
 import { Button, TextField,Avatar,Table,TableBody,TableCell,TableHead,TableRow,Paper,TableContainer,Checkbox,FormControlLabel,InputAdornment } from "@mui/material";
 import CustomHook from "./useCustomHook/CustomHook";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
+import LoaderComponent2 from "../../lib/components/LoaderComponent/LoaderSpinner";
 import FetchError from "../../lib/components/Hooks/FetchError";
 import info  from  "../../lib/assets/images/info.svg";
 import useFetch from "../../lib/components/Hooks/useFetch";
@@ -38,7 +39,7 @@ const Settings = () => {
 
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
   // Post request
-  const { handleSubmit, submitForm } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+  const { handleSubmit, submitForm,isLoading:isLoading2 } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
 
  
   const {
@@ -160,6 +161,7 @@ const Settings = () => {
                 type="submit" 
                 variant="contained" 
                 color="secondary"
+                startIcon={isLoading2 && <LoaderComponent2 />}
                 onClick={() => {
                   formData.set("avatarUpload", hooksContent.image)
                   formData.set("firstName", hooksContent.firstName)
