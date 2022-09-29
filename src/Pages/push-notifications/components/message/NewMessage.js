@@ -134,7 +134,7 @@ const submitData = () =>{
               <label>Delivery Type</label>
               <Select
                 multiple
-                value={hooksContent.messageType}
+                value={hooksContent.deliveryType}
                 onChange={hooksContent.selectType}
                 renderValue={(selected) => selected.join(", ").toLowerCase().replace('_',' ')}
                 displayEmpty
@@ -152,7 +152,7 @@ const submitData = () =>{
                   >
                     <Checkbox
                       size="small"
-                      checked={hooksContent.messageType.indexOf(name.value) > -1}
+                      checked={hooksContent.deliveryType.indexOf(name.value) > -1}
                     />
                     {name?.title}
                   </MenuItem>
