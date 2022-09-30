@@ -214,6 +214,7 @@
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  border: 1px solid #D1D1DB;
 }
 .payment_info .title {
   padding: 16px;

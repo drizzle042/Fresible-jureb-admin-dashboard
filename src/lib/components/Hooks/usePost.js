@@ -6,6 +6,7 @@ const usePost = (url) => {
     
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [message, setMessage] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
   function postDataFunc(data, contentType,gotoAction){
@@ -42,6 +43,9 @@ const usePost = (url) => {
               setError(err.message);
             }
             setIsLoading(false);
+            let m=err?.response?.data?.message
+            if(m==undefined) m=err?.response?.data
+            setMessage({...message,severity:'error',open:true,message:m})
             console.log(err);
           })}
   };
@@ -72,7 +76,10 @@ const usePost = (url) => {
           setError(err.message);
         }
         setIsLoading(false);
-        console.log(err.message);
+        let m=err?.response?.data?.message
+        if(m==undefined) m=err?.response?.data
+        setMessage({...message,severity:'error',open:true,message:m})
+        console.log(err);
       });
     }
   }
@@ -96,8 +103,11 @@ const usePost = (url) => {
             else window.location.reload()
           }
         })
-          .catch ((error) => {
-            console.log(error);
+          .catch ((err) => {
+            console.log(err);
+            let m=err?.response?.data?.message
+            if(m==undefined) m=err?.response?.data
+            setMessage({...message,severity:'error',open:true,message:m})
             setIsLoading(false);
           })
         }
@@ -106,7 +116,7 @@ const usePost = (url) => {
   // eslint-disable-next-line
   useEffect(postDataFunc, [url]);
 
-  return { isLoading, error, postDataFunc, handleSubmit, submitForm,postFormData }
+  return { isLoading, error, postDataFunc, handleSubmit, submitForm,postFormData , message, setMessage}
 }
 
 export default usePost

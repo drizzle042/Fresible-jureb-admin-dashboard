@@ -22,10 +22,10 @@ const TabBody = ({ styles, data, type }) => {
   return (
     <div>
       <TableContainer className={styles.table_container} component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} style={{ tableLayout: 'fixed' }} aria-label="simple table">
           <TableHead className={styles.thead}>
             <TableRow>
-              <TableCell className={styles.thead_cell}>Message</TableCell>
+              <TableCell className={styles.thead_cell}  style={{ width: '25%' }}>Message</TableCell>
               <TableCell className={styles.thead_cell} align="left">
                 Status
               </TableCell>

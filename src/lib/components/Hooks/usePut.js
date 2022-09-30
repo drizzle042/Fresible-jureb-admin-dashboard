@@ -5,6 +5,7 @@ const usePut = (url) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
+  const [message, setMessage] = useState(null)
 
   function putFunc(id="",gotoAction,data=null){
     // eslint-disable-next-line
@@ -40,13 +41,16 @@ const usePut = (url) => {
               setError(err.message);
             }
             setIsLoading(false);
+            let m=err?.response?.data?.message
+            if(m==undefined) m=err?.response?.data
+            setMessage({...message,severity:'error',open:true,message:m})
             console.log(err);
           })}
   };
   // eslint-disable-next-line
   useEffect(putFunc, [url]);
 
-  return { isLoading, error, putFunc }
+  return { isLoading, error, putFunc , message, setMessage}
 }
 
 export default usePut;

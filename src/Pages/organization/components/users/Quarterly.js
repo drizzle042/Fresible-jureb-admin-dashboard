@@ -63,7 +63,7 @@ const Quarterly = ({ styles }) => {
                   {new Date(user?.joinDate).toLocaleDateString("en-GB")}
                 </TableCell>
                 <TableCell className={styles.creator_cell} align="left">
-                  {user?.owner?.lastName} {user?.owner?.firstName}
+                  <Link to={`/organizationUsers/${user?.id}`}>{user?.owner?.lastName +' '+user?.owner?.firstName}</Link>
                 </TableCell>
                 <TableCell align="left">
                   <span

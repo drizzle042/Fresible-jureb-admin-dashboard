@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import React from "react";
 import {Link} from "react-router-dom"
 import JurebLogo from "../../../lib/assets/images/jureb-logo.png";
+import Feedback from "../../../lib/components/Feedback/Feedback2";
 
 import { InputField } from "../Components/Input";
 import styles from "./styles/styles.module.css";
@@ -9,10 +10,11 @@ import styles from "./styles/styles.module.css";
 import CustomHook from "./useCustomHook/CustomHook";
 
 const SignIn = () => {
-  const { handleSubmit, errors, submitForm, register } = CustomHook();
+  const { handleSubmit, errors, submitForm, register, message,setMessage } = CustomHook();
 
   return (
     <div className={styles.wrapper}>
+       {Feedback(message,setMessage)}
       <main className={styles.main}>
         <div className={styles.content}>
           <div className={styles.logoWrapper}>

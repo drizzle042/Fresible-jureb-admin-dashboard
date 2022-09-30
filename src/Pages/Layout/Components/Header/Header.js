@@ -42,6 +42,10 @@ const Header = ({ handleDrawerToggle, handleSearchInput }) => {
       title:"Subscribers",
       subtitle:"Get insights to accounts on Jureb here"
     },
+    'organizationUsers':{
+      title:"Subscribers",
+      subtitle:"Get insights to accounts on Jureb here"
+    },
     'organizations-activities':{
       title:"User Activities",
       subtitle:"Monitor all organizations' activities on Jureb"

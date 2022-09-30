@@ -10,6 +10,7 @@ import SubsByPreciseLocation from "./Pages/overview/subs by location/SubsByPreci
 import { Organizations } from "./Pages/organization/Organizations";
 import Members from "./Pages/organization/organization members/Users";
 import ViewOrganization from "./Pages/organization/ViewOrganization";
+import ViewOrganizationUsers from "./Pages/organization/ViewOrganizationUsers";
 import OrganizationInvoicespdf from "./Pages/organization/components/Organizationinvoicepdf";
 import Payments from "./Pages/payments/Payments";
 import Notifications from "./Pages/push-notifications/Notifications";
@@ -52,6 +53,7 @@ function App() {
           <Route path="/overview" element={<Overview />} />
           <Route path="/organizations" element={<Organizations />} />
           <Route path="/organizations/:id" element={<ViewOrganization />} />
+          <Route path="/organizationUsers/:id" element={<ViewOrganizationUsers />} />
           <Route path="/organizations/pdf/:id" element={<OrganizationInvoicespdf />} />
           <Route path="/organizations/members/:id" element={<Members />} />
           <Route path="/organizations-activities" element={<UserLogs />} />

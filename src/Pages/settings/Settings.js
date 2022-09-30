@@ -12,6 +12,7 @@ import usePost from "../../lib/components/Hooks/usePost";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import Feedback from "../../lib/components/Feedback/Feedback2";
 
 const Settings = () => {
   const [page, setPage] = useState(1);
@@ -35,11 +36,11 @@ const Settings = () => {
 
   const { hooksContent } = CustomHook();
   let passwords = {};
-  const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
+  const { postDataFunc,message:m2,setMessage:setM2 } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
 
   const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
   // Post request
-  const { handleSubmit, submitForm,isLoading:isLoading2 } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+  const { handleSubmit, submitForm,isLoading:isLoading2,message:m1,setMessage:setM1 } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
 
  
   const {
@@ -50,7 +51,8 @@ const Settings = () => {
 
   return (
     <Layout>
-     
+    {m1!=null && Feedback(m1,setM1)}
+    {m2!=null && Feedback(m2,setM2)}
     <main className={styles.main}>
     <div className={styles.settings_layout}>
       <div className={styles.links}>

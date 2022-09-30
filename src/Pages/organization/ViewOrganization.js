@@ -12,6 +12,7 @@ import usePut from "../../lib/components/Hooks/usePut";
 import usePost from "../../lib/components/Hooks/usePost";
 import CloseIcon from "@mui/icons-material/Close";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
+import Feedback from "../../lib/components/Feedback/Feedback2";
 import FetchError from "../../lib/components/Hooks/FetchError";
 
 const ViewOrganization = () => {
@@ -23,8 +24,8 @@ const ViewOrganization = () => {
   const client = data?.data;
   const {data: invoiceData, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/invoices?organizationId=${id}`)
   const {data: plans} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/plans`)
-  const { putFunc } = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/cancel`);
-  const { postDataFunc } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/upgrade`);
+  const { putFunc,message:m2,setMessage:setM2} = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/cancel`);
+  const { postDataFunc,message:m1,setMessage:setM1 } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/upgrade`);
 
   const open = (type) =>{
     setState({...state,modal:type})
@@ -36,6 +37,8 @@ const ViewOrganization = () => {
   return (
     <Layout>
       <main className={styles.main}>
+        {m1!=null && Feedback(m1,setM1)}
+        {m2!=null && Feedback(m2,setM2)}
         {isLoading && <LoaderComponent />}
         {error && <FetchError error={error}/>}
         {client &&
