@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button } from "@mui/material";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
+import stringnify from "../../../lib/components/Helper/stringnify";
 
 const TabBody = ({ styles, data, type }) => {
 
@@ -26,6 +27,9 @@ const TabBody = ({ styles, data, type }) => {
           <TableHead className={styles.thead}>
             <TableRow>
               <TableCell className={styles.thead_cell}  style={{ width: '25%' }}>Message</TableCell>
+              <TableCell className={styles.thead_cell} align="left">
+                Sent to
+              </TableCell>
               <TableCell className={styles.thead_cell} align="left">
                 Status
               </TableCell>
@@ -52,23 +56,22 @@ const TabBody = ({ styles, data, type }) => {
                     {notification?.message}
                   </span>
                 </TableCell>
+                <TableCell align="left">{stringnify(notification?.recipients)}</TableCell>
                 <TableCell align="left">
                   <span
                     className={
-                      !notification?.scheduled
-                        ? styles.status_sent
-                        : notification?.scheduled
+                      notification?.status=="SCHEDULED"
                         ? styles.status_scheduled
-                        : ""
+                        : styles.status_sent
                     }
                   >
-                    {notification.scheduled?"Scheduled":"Sent"}
+                    {notification.status}
                   </span>
                 </TableCell>
                 <TableCell align="left">
                   {new Date(notification?.createdAt).toLocaleDateString("en-GB")}
                 </TableCell>
-                <TableCell align="left">{notification?.deliveryType}</TableCell>
+                <TableCell align="left">{stringnify(notification?.deliveryTypes)}</TableCell>
                 <TableCell align="left">
                   <span>
                     <Button>

@@ -10,7 +10,8 @@ const CustomHook = () => {
   //  For post data 
   const [messageTitle, setMessageTitle] = useState("");
   const [recipients, setRecipients] = useState("");
-  const [deliveryType, setMessageType] = React.useState(["SMS"]);
+  const [subplan, setSubplan] = useState("");
+  const [messageType, setMessageType] = React.useState(["SMS"]);
   const [messageDate, setMessageDate] = React.useState(
     new Date()
   );
@@ -35,6 +36,7 @@ const CustomHook = () => {
     dateTo: "dateTo",
     recipients: "recipients",
     messageTitle: "messageTitle",
+    subplan: "subplan",
   };
   const handleChange = (name) => (e) => {
     const { value } = e.target;
@@ -47,6 +49,9 @@ const CustomHook = () => {
         break;
       case filterData.recipients:
         setRecipients(value);
+        break;
+      case filterData.subplan:
+        setSubplan(value);
         break;
       case filterData.messageTitle:
         setMessageTitle(value);
@@ -87,11 +92,12 @@ const CustomHook = () => {
     messageTitle,
     messageTime,
     setMessageTime,
-    deliveryType,
+    messageType,
     recipients,
     editorState,
     scheduled,
     handleEditorChange,
+    subplan,
   };
 
   return { hooksContent };

@@ -11,6 +11,7 @@ import usePaginator from "../../../../lib/components/Hooks/PaginatorTemplate";
 import useFetch from "../../../../lib/components/Hooks/useFetch";
 import FetchError from "../../../../lib/components/Hooks/FetchError";
 import LoaderComponent from "../../../../lib/components/LoaderComponent/Loader";
+import { moneyFormat } from "../../../../lib/components/Helper/formatCurrency";
 
 const BiAnnually = ({ styles }) => {
   
@@ -63,7 +64,7 @@ const BiAnnually = ({ styles }) => {
                   {new Date(user?.paidAt).toLocaleDateString("en-GB")}
                 </TableCell>
                 <TableCell align="left">
-                  {user?.amountPaid?.toLocaleString()}
+                  {moneyFormat(user?.amountPaid)}
                 </TableCell>
                 <TableCell align="left">{String(user?.subscriptionMeta?.planName).toLowerCase()}</TableCell>
                 <TableCell align="left">{String(user?.subscriptionMeta?.billingInterval).toLowerCase()}</TableCell>

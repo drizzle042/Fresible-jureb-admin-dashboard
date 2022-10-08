@@ -60,8 +60,8 @@ function App() {
           <Route path="/subs-by-location" element={<SubsByLocation />} />
           <Route path="/subs-by-location/:state" element={<SubsByPreciseLocation />} />
           <Route path="/payments" element={<Payments />} />
-          <Route path="/reset-password" element ={<Reset />} />
-          <Route path="/reset-mail" element ={<Resetmail />} />
+          <Route path="/request-password-reset" element ={<Reset />} />
+          <Route path="/success-check-your-mail" element ={<Resetmail />} />
           <Route path="/update-password" element ={<Resetpage />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />

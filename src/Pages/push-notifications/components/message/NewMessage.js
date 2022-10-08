@@ -9,6 +9,9 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Slide from "@mui/material/Slide";
 import { Editor } from "react-draft-wysiwyg";
 import usePost from "../../../../lib/components/Hooks/usePost";
+import Feedback from "../../../../lib/components/Feedback/Feedback2";
+import LoaderComponent2 from "../../../../lib/components/LoaderComponent/LoaderSpinner";
+import stringnify from "../../../../lib/components/Helper/stringnify";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   Button,
@@ -33,6 +36,13 @@ const names = [
   { title: "Push", value: "PUSH" },
 ];
 // ];
+
+const subplans = [
+  { title: "Simple", value: "SIMPLE" },
+  { title: "Standard", value: "STANDARD" },
+  { title: "Premium", value: "PREMIUM" }
+];
+
 const recipients = [
   { title: "Employees", value: "EMPLOYEE" },
   { title: "Organizations", value: "ORGANIZATION" },
@@ -48,25 +58,24 @@ const NewMessage = ({
 }) => {
   const { filterData } = hooksContent;
   const imageRef = useRef();
-  const { postFormData } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/create`);
+  const { postFormData,isLoading,message,setMessage } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/create`);
 
 
 
 const submitData = () =>{
   let messageType=(hooksContent.messageType+"").split(',')
   let recepient=(hooksContent.recipients+"").split(',')
+  // let subplan=(hooksContent.subplan+"").split(',')
   let d = new FormData();
   d.append('title', hooksContent.messageTitle);
-  //d.append('deliveryTypes', (hooksContent.messageType+"").split(','));
   messageType.forEach((item) => d.append("deliveryTypes[]", item))
   recepient.forEach((item) => d.append("recipients[]", item))
+  subplans.forEach((item) => d.append("subscriptionPlans[]", item))
   d.append('message', hooksContent.messageTitle);
   d.append('dateTime', hooksContent.messageDate);
   d.append('scheduled', true);
   d.append('image', hooksContent.image);
   console.log(d.getAll("deliveryTypes[]"))
-  
-  //d.append('image', files[0]);
   
   console.log("S",d)
   
@@ -131,12 +140,32 @@ const submitData = () =>{
           </div>
           <div className={styles.form_group}>
             <div className={styles.input_field}>
+              <label>Subscription Plan</label>
+              <Select
+                className={styles.input}
+                fullWidth
+                size="small"
+                value={hooksContent?.subplan}
+                onChange={hooksContent?.handleChange(filterData.subplan)}
+                displayEmpty
+              >
+                <MenuItem disabled value="">
+                  Plans
+                </MenuItem>
+                {subplans?.map((item, index) => (
+                  <MenuItem key={index} value={item?.value}>
+                    {item?.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <div className={styles.input_field}>
               <label>Delivery Type</label>
               <Select
                 multiple
-                value={hooksContent.deliveryType}
+                value={hooksContent.messageType}
                 onChange={hooksContent.selectType}
-                renderValue={(selected) => selected.join(", ").toLowerCase().replace('_',' ')}
+                renderValue={(selected) => stringnify(selected)}
                 displayEmpty
                 fullWidth
                 size="small"
@@ -152,7 +181,7 @@ const submitData = () =>{
                   >
                     <Checkbox
                       size="small"
-                      checked={hooksContent.deliveryType.indexOf(name.value) > -1}
+                      checked={hooksContent.messageType.indexOf(name.value) > -1}
                     />
                     {name?.title}
                   </MenuItem>
@@ -267,13 +296,16 @@ const submitData = () =>{
         <Button variant="outlined" onClick={openWebMessage}>
           See Preview
         </Button>
-        <Button variant="contained" color="secondary" onClick={() => {
+        <Button 
+          startIcon={isLoading && <LoaderComponent2 />}
+          variant="contained" color="secondary" onClick={() => {
          
           submitData()
           // postDataFunc(postData)
           }}>
           Send Message
         </Button>
+        {Feedback(message,setMessage)}
       </DialogActions>
     </Dialog>
   );

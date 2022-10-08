@@ -13,6 +13,7 @@ import ReactToPrint from 'react-to-print';
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Logo from "../assets/images/jureb-logo.png";
+import { moneyFormat } from "../../../lib/components/Helper/formatCurrency";
 
 
 const OrganizationInvoicespdf = () => {
@@ -100,7 +101,7 @@ const OrganizationInvoicespdf = () => {
                       >
                         Amount Charged
                       </TableCell>
-                      <TableCell align="left">{invoice?.amountPaid.toLocaleString(undefined, { maximumFractionDigits: 2 })}</TableCell>
+                      <TableCell align="left">{moneyFormat(invoice?.amountPaid)}</TableCell>
                     </TableRow>
                   </TableBody>
                 ))}

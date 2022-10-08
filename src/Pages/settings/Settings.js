@@ -168,6 +168,9 @@ const Settings = () => {
                   formData.set("avatarUpload", hooksContent.image)
                   formData.set("firstName", hooksContent.firstName)
                   formData.set("lastName", hooksContent.lastName)
+                  if (data?.data?.roleName !== "ROOT"){
+                    formData.set("email", hooksContent.email)
+                  }
                 }}>
                 Save
               </Button>
@@ -245,7 +248,6 @@ const Settings = () => {
                     <FormControlLabel
                         value="VAT(7.5%)"
                         control={<Checkbox size="small" fontSize="small"  color="primary" defaultChecked={data.selected} />}
-                      
                         size="small"
                         fontSize="small"
                       />
@@ -273,7 +275,7 @@ const Settings = () => {
   }
 
   function PasswordPage(){
-    let formData = {};
+    const [formData, setFormData] = useState({});
     function checkPassword(newPassword, confirmPassword){
       if (newPassword === confirmPassword){
         return true;
@@ -294,7 +296,10 @@ const Settings = () => {
                 type="password"
                 size="small"
                 onChange={(e) => {
-                  formData.password = e?.target?.value;
+                  setFormData({
+                    ...formData,
+                    password: e?.target?.value
+                  })
                 }}
                 fullWidth
                 placeholder="***************"
@@ -330,7 +335,10 @@ const Settings = () => {
               color="secondary"
               onClick={() => {
                 if (checkPassword(passwords?.newPassword, passwords?.confirmPassword) === true){
-                  formData.newPassword = passwords?.confirmPassword;
+                  setFormData({
+                    ...formData,
+                    newPassword: passwords?.confirmPassword
+                  })
                   postDataFunc(JSON.stringify(formData), "application/json")
                 }
               }}>

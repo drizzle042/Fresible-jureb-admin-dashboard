@@ -65,7 +65,7 @@ const usePost = (url) => {
     })
       .then(function (response) {
         setIsLoading(false);
-        console.log(response.text());
+        console.log(response);
         if(gotoAction!=null) gotoAction()
         else window.location.reload()
       })

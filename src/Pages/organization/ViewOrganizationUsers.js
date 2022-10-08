@@ -1,19 +1,12 @@
-import { Divider, Grid, IconButton,MenuItem, Select, TextField, Button, Dialog,DialogActions,DialogContent, Avatar, InputAdornment} from "@mui/material";
-import EastIcon from '@mui/icons-material/East';
+import { Grid, IconButton,MenuItem, Select, TextField, Avatar, InputAdornment} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Layout from "../Layout/Layout";
 import styles from "./styles/styles.module.css";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import OrganizationInvoices from "./components/OrganizationInvoices";
-import CustomHook from "./useCustomHook/CustomHook";
 import useFetch from "../../lib/components/Hooks/useFetch";
-import usePut from "../../lib/components/Hooks/usePut";
-import usePost from "../../lib/components/Hooks/usePost";
-import CloseIcon from "@mui/icons-material/Close";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
-import Feedback from "../../lib/components/Feedback/Feedback2";
 import FetchError from "../../lib/components/Hooks/FetchError";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,19 +15,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
 import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
 
 const ViewOrganizationUsers = () => {
   const { id } = useParams();
-  const { hooksContent } = CustomHook();
   const navigate = useNavigate();
-  const [state,setState] = useState({status:"ACTIVE",period:""})
-  const { data, isLoading, error,handleSearchInput:handleSearchInput2 } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
-  const client = data?.data;
-  const {data: invoiceData, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/invoices?organizationId=${id}`)
-  const {data: plans} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/plans`)
-  const { PaginatorTemplate } = usePaginator();
+  const [state, setState] = useState({status:"ACTIVE", period:""})
+  const {PaginatorTemplate} = usePaginator()
+  const { isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
   const user={
     name:"Peter Ihaza",
     phone:"08130958234",
@@ -47,12 +35,6 @@ const ViewOrganizationUsers = () => {
       { id:1, name:'Obembium Ltd',email:'Obembium@gmail.com',date:'8/12/15',position:'SuperAdmin',status:'INACTIVE',users:2 },
       { id:1, name:'Obembium Ltd',email:'Obembium@gmail.com',date:'8/12/15',position:'SuperAdmin',status:'ACTIVE',users:2 },
     ]
-  }
-  const open = (type) =>{
-    setState({...state,modal:type})
-  }
-  const close = () =>{
-    setState({...state,modal:null})
   }
 
   function form(title,value){
