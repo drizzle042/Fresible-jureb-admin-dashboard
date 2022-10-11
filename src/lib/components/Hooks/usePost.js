@@ -9,7 +9,7 @@ const usePost = (url) => {
   const [message, setMessage] = useState(null)
   const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
 
-  function postDataFunc(data, contentType,gotoAction){
+  function postDataFunc(data, contentType, gotoAction){
     if (data){
       setIsLoading(true)
       fetch(url, {

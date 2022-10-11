@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import JurebLogo from "../../../../lib/assets/images/jureb-logo.png";
 import { Button } from "@mui/material";
 import { InputField } from "../Input";
@@ -14,6 +14,7 @@ function Resetpage() {
   const [error, setError] = useState(null);
   const [severity, setSeverity] = useState(null)
   const [openSnackBar, setOpenSnackBar] = useState(false)
+  const navigate = useNavigate();
 
   function closeSnackBar(){
     setOpenSnackBar(false)
@@ -44,6 +45,9 @@ function Resetpage() {
                   setSeverity("success")
                   setError(resObj?.data);
                   setOpenSnackBar(true)
+                  window.setTimeout(() => {
+                    navigate("/signin")
+                  }, 3)
                 })
         } else {
             let promise = response.json()

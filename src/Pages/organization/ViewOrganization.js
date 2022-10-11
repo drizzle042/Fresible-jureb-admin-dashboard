@@ -53,6 +53,7 @@ const ViewOrganization = () => {
             </div>
             <section style={{ marginTop: 24 }}>
               <Grid container spacing={4}>
+              {Object.keys(client?.subscription).length !== 0 ?
                 <Grid item xs={12} sm={6} md={4} lg={5}>
                   <div className={styles.payment_info}>
                     <div className={styles.title}>
@@ -110,7 +111,24 @@ const ViewOrganization = () => {
                       </div>
                     </div>
                   </div>
+                </Grid> :
+                <Grid item xs={12} sm={6} md={4} lg={5}>
+                  <div className={styles.payment_info} style={{backgroundColor: "rgb(255, 255, 255, 50%)"}}>
+                    <div style={{display: "flex", flexDirection: "column", height: "100%", justifyContent: "center"}}>
+                      <h1 style={{display: "inline", textAlign: "center"}}>No Subscription</h1>
+                    </div>
+                    <div className={styles.sub_action_wrapper}>
+                      <Divider />
+                      <div className={styles.sub_action} style={{backgroundColor: "#fff"}}>
+                        <button className={styles.cancel} onClick={()=>open(1)}>Cancel Plan</button>
+                        <button className={styles.upgrade} onClick={()=>open(2)}>
+                          Change Plan <IconButton><EastIcon sx={{color: "blue"}}/></IconButton>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </Grid>
+              }
                 <Grid item xs={12} sm={6} md={4} lg={4}>
                   <div
                     style={{
@@ -189,7 +207,7 @@ const ViewOrganization = () => {
       </div>
       <DialogContent>
         <div>
-          If you cancel this Jureb subscription,the user will lose access to the benefits of this plan. Team member would also not be albe to log into their accounts. Please note that cancellation takes effect at the end of the current subscription.
+          If you cancel this Jureb subscription,the user will lose access to the benefits of this plan. Team member would also not be able to log into their accounts. Please note that cancellation takes effect at the end of the current subscription.
         </div>
         
         <div className="push-right">
@@ -197,9 +215,7 @@ const ViewOrganization = () => {
             variant="contained" 
             color="secondary"
             onClick={() => {
-             // postDataFunc(JSON.stringify(formData), "application/json",handleSearchInput)
              putFunc("",handleSearchInput2,{organizationId:id})
-             // close()
             }}>
             Confirm
           </Button>
@@ -271,7 +287,6 @@ const ViewOrganization = () => {
             variant="contained" 
             color="secondary"
             onClick={() => {
-             // postDataFunc(JSON.stringify(formData), "application/json",handleSearchInput)
              state.plan.length>0 && state.period.length>0 && open(3)
             }}>
             Confirm

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Search from "./components/Search";
 import styles from "./styles/styles.module.css";
 import Layout from "../../Layout/Layout";
@@ -58,12 +58,9 @@ const Members = () => {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 },  backgroundColor: index % 2 === 0 ? "#F3F3F6" : "#fff" }}
                       >
                       <TableCell 
-                        component="th" 
-                        style={{ color: "blue" }}
+                        component="th"
                         scope="row">
-                        <Link to={"/organizationUsers/6339b5ae538790001d73010f"}>
                           {member?.name}
-                        </Link>
                       </TableCell>
                       <TableCell align="left"><a href={`mailto:${member?.email}`} style={{ color: "blue" }}>{member?.email}</a></TableCell>
                       <TableCell align="left">{member?.position}</TableCell>

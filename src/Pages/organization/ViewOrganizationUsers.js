@@ -1,4 +1,4 @@
-import { Grid, IconButton,MenuItem, Select, TextField, Avatar, InputAdornment} from "@mui/material";
+import { Grid, IconButton,MenuItem, Select, TextField, InputAdornment} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -56,11 +56,6 @@ const ViewOrganizationUsers = () => {
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6} md={4} lg={5}>
                 <div className={[styles.payment_info,'padding2'].join(' ')}>
-                  <Avatar
-                      alt={user?.name}
-                      src={"JDjD"}
-                      sx={{ width: 76, height: 76 }}
-                    />
                     <div style={{fontWeight: "500,",fontSize: "24px",lineHeight: "28px",marginTop:'15px'}}>{user?.name}</div>
                     <div>
                       {form('Phone number 1',user.phone)}

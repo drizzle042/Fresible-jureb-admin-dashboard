@@ -75,7 +75,13 @@ const AllNotifications = ({ styles, allData }) => {
                   <TableCell align="left">
                     {new Date(notification?.createdAt).toLocaleDateString("en-GB")}
                   </TableCell>
-                  <TableCell align="left">{notification?.deliveryType}</TableCell>
+                  <TableCell align="left">{
+                    /* Delivery types is an array so it is output this way */
+                    notification?.deliveryTypes.map((i, index, arr) => (
+                      arr.length - 1 === index ? 
+                      i.toLocaleLowerCase() :
+                      i.toLocaleLowerCase() + ", "
+                    ))}</TableCell>
                   <TableCell align="left">
                     <span>
                       <Button>

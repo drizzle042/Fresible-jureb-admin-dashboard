@@ -44,7 +44,7 @@ const Settings = () => {
 
  
   const {
-    userData: { firstName, lastName, email }
+    userData: { firstName, lastName }
   } = hooksContent;
 
   const imageRef = useRef();
@@ -144,7 +144,7 @@ const Settings = () => {
                   placeholder={data?.data?.lastName}
                 />
               </div>
-              {data?.data?.roleName !== "ROOT" ?
+              {/* {data?.data?.roleName !== "ROOT" ?
               <div className={styles.form_group}>
                 <label>Email</label>
                 <TextField
@@ -157,7 +157,7 @@ const Settings = () => {
                 />
               </div> :
               ""
-              }
+              } */}
 
               <Button 
                 type="submit" 
@@ -168,9 +168,9 @@ const Settings = () => {
                   formData.set("avatarUpload", hooksContent.image)
                   formData.set("firstName", hooksContent.firstName)
                   formData.set("lastName", hooksContent.lastName)
-                  if (data?.data?.roleName !== "ROOT"){
-                    formData.set("email", hooksContent.email)
-                  }
+                  // if (data?.data?.roleName !== "ROOT"){
+                  //   formData.set("email", hooksContent.email)
+                  // }
                 }}>
                 Save
               </Button>
@@ -275,7 +275,7 @@ const Settings = () => {
   }
 
   function PasswordPage(){
-    const [formData, setFormData] = useState({});
+    let formData = {};
     function checkPassword(newPassword, confirmPassword){
       if (newPassword === confirmPassword){
         return true;
@@ -289,17 +289,15 @@ const Settings = () => {
           <h2 style={{ marginBottom: 16, fontSize: 20 }}>Change Password</h2>
           <form onSubmit={(e) => {
             e.preventDefault()
-            hooksContent.handleSubmit()}}>
+            hooksContent.handleSubmit()
+          }}>
             <div className={styles.form_group}>
               <label>Current Password</label>
               <TextField
                 type="password"
                 size="small"
                 onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    password: e?.target?.value
-                  })
+                  formData.password = e?.target?.value
                 }}
                 fullWidth
                 placeholder="***************"
@@ -335,10 +333,7 @@ const Settings = () => {
               color="secondary"
               onClick={() => {
                 if (checkPassword(passwords?.newPassword, passwords?.confirmPassword) === true){
-                  setFormData({
-                    ...formData,
-                    newPassword: passwords?.confirmPassword
-                  })
+                  formData.newPassword = passwords?.confirmPassword
                   postDataFunc(JSON.stringify(formData), "application/json")
                 }
               }}>
