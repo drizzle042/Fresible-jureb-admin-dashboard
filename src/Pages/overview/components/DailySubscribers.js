@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
-import useFetch from "../../../lib/components/Hooks/useFetch";
+import useFetch from "../../../lib/components/Hooks/Requests/useFetch";
+import { Misc } from "../../../lib/components/Endpoints/Endpoints";
 import LoaderComponent from "../../../lib/components/LoaderComponent/Loader";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -19,7 +20,7 @@ const DailySubscribers = ({ styles }) => {
   };
   // Get chart data
   const { data, isLoading } = useFetch(
-    `${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/subscribers-count-by-period?period=${selectedPeriod}`
+    `${Misc.getSubsCountByPeriod}?period=${selectedPeriod}`
   );
 
   const subscribers = data?.data;

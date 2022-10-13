@@ -7,7 +7,7 @@ const usePost = (url) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null)
-  const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
+  const tokens = localStorage.getItem("user-tokens") || "none"
 
   function postDataFunc(data, contentType, gotoAction){
     if (data){
@@ -15,7 +15,7 @@ const usePost = (url) => {
       fetch(url, {
         method: "POST",
         headers: {
-          "Authorization": "Bearer " + tokens?.data?.accessToken,
+          "Authorization": "Bearer " + tokens,
           "Content-Type": contentType,
         },
         body: data,
@@ -60,7 +60,7 @@ const usePost = (url) => {
       data: data,
       headers: { 
         "Content-Type": "multipart/form-data",
-        "Authorization": "Bearer " + tokens?.data?.accessToken,
+        "Authorization": "Bearer " + tokens,
       },
     })
       .then(function (response) {
@@ -91,7 +91,7 @@ const usePost = (url) => {
       setIsLoading(true)
       await axios.put(url, data, {
         headers: {
-          "Authorization": "Bearer " + tokens?.data?.accessToken,
+          "Authorization": "Bearer " + tokens,
           "Content-Type": "multipart/form-data",
         }
       })

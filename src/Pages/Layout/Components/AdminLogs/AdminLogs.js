@@ -2,14 +2,15 @@ import { styled } from '@mui/material/styles';
 import styles from "../../styles/styles.module.css";
 import Box from "@mui/material/Box";
 import Drawer from '@mui/material/Drawer';
-import useFetch from "../../../../lib/components/Hooks/useFetch";
+import useFetch from "../../../../lib/components/Hooks/Requests/useFetch";
+import { Activity } from '../../../../lib/components/Endpoints/Endpoints';
 import CloseIcon from "@mui/icons-material/Close";
 import { Divider } from "@mui/material";
   
 
 const AdminLogs = ({ open, setOpen }) => {
-  const { data } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/activities`);
-  
+
+  const { data } = useFetch(Activity.getAdminActivities);
   
     let activityTime = (createdAt) => {
       let now = new Date();
@@ -30,7 +31,6 @@ const AdminLogs = ({ open, setOpen }) => {
       return specificTime
     };
   
-    
     function displayDrawer(isOpen) {
         if (isOpen === false) {
         return "none"
@@ -77,7 +77,7 @@ const AdminLogs = ({ open, setOpen }) => {
             <div className={styles.user_logs} style={{height:'400px',overflowY:'auto'}}>
               {data?.data?.map((item, index) => (
                 <div>
-                {index>0 &&<Divider />}
+                { index > 0 && <Divider /> }
                 <div
                   style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#fff" }}
                   key={index}

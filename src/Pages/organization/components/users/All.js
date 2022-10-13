@@ -66,7 +66,7 @@ const All = ({ styles, allData }) => {
                   {new Date(user?.joinDate).toLocaleDateString("en-GB")}
                 </TableCell>
                 <TableCell className={styles.creator_cell} align="left">
-                <Link to={`/organizationUsers/${user?.id}`}>{user?.owner?.lastName +' '+user?.owner?.firstName}</Link>
+                <Link to={`/organizationUsers/${user?.owner?.accountId}`}>{user?.owner?.lastName +' '+user?.owner?.firstName}</Link>
                 </TableCell>
                 <TableCell align="left">
                   <span

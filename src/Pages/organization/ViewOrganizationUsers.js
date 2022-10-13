@@ -1,6 +1,6 @@
-import { Grid, IconButton,MenuItem, Select, TextField, InputAdornment} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Grid, IconButton,MenuItem, Select, TextField, InputAdornment} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Layout from "../Layout/Layout";
 import styles from "./styles/styles.module.css";
@@ -15,29 +15,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
 
 const ViewOrganizationUsers = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [state, setState] = useState({status:"ACTIVE", period:""})
-  const {PaginatorTemplate} = usePaginator()
-  const { isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
-  const user={
-    name:"Peter Ihaza",
-    phone:"08130958234",
-    email:'Peterihaza@gmail.com',
-    sex:'Male',
-    organization:'5',
-    business:[
-      { id:1, name:'Obembium Ltd',email:'Obembium@gmail.com',date:'8/12/15',position:'SuperAdmin',status:'ACTIVE',users:2 },
-      { id:1, name:'Obembium Ltd',email:'Obembium@gmail.com',date:'8/12/15',position:'SuperAdmin',status:'EXPIRED',users:2 },
-      { id:1, name:'Obembium Ltd',email:'Obembium@gmail.com',date:'8/12/15',position:'SuperAdmin',status:'INACTIVE',users:2 },
-      { id:1, name:'Obembium Ltd',email:'Obembium@gmail.com',date:'8/12/15',position:'SuperAdmin',status:'ACTIVE',users:2 },
-    ]
-  }
 
-  function form(title,value){
+  const [filter, setFilter] = useState({
+    status:"ACTIVE", 
+    period:""
+  })
+
+  const { id } = useParams();
+  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/users/single?id=${id}`)
+
+  const navigate = useNavigate();
+
+  function form(title, value){
     return (
       <div>
         <div className="ruby space-top2">
@@ -56,13 +47,17 @@ const ViewOrganizationUsers = () => {
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6} md={4} lg={5}>
                 <div className={[styles.payment_info,'padding2'].join(' ')}>
-                    <div style={{fontWeight: "500,",fontSize: "24px",lineHeight: "28px",marginTop:'15px'}}>{user?.name}</div>
+                    <div style={{fontWeight: "500,",fontSize: "24px",lineHeight: "28px",marginTop:'15px'}}>{data?.data?.lastName} {data?.data?.firstName}</div>
                     <div>
-                      {form('Phone number 1',user.phone)}
-                      {form('Phone number 2',user.phone)}
-                      {form('Email',user.email)}
-                      {form('Sex',user.sex)}
-                      {form('Organization',user.organization)}
+                      <div className="ruby space-top2">
+                        <span style={{color:'#6C6B80'}}>Phone number:</span>
+                        <span className="space-left2 bold" style={{color: "blue"}}><a href={`tel:+${data?.data?.phone}`}>+{data?.data?.phone}</a></span>
+                      </div>
+                      <div className="ruby space-top2">
+                        <span style={{color:'#6C6B80'}}>Email:</span>
+                        <span className="space-left2 bold" style={{color: "blue"}}><a href={`mailto:${data?.data?.email}`}>{data?.data?.email}</a></span>
+                      </div>
+                      {form('Organizations', data?.data?.organizations?.length)}
                     </div>
                 </div>
               </Grid>
@@ -85,8 +80,11 @@ const ViewOrganizationUsers = () => {
           fullWidth
           size="small"
           placeholder="Enter Text Here..."
-          value={state?.text}
-          onChange={(e)=>setState({...state,text:e.target.value})}
+          value={filter?.text}
+          onChange={(e)=> setFilter({
+            ...filter, 
+            text: e.target.value
+          })}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -101,8 +99,10 @@ const ViewOrganizationUsers = () => {
             className={styles.input}
             fullWidth
             size="small"
-            value={state?.status}
-            onChange={(e)=>setState({...state,status:e.target.value})}
+            value={filter?.status}
+            onChange={(e)=> setFilter({
+              ...filter, status: e.target.value
+            })}
             displayEmpty
           >
             <MenuItem disabled value="">
@@ -140,7 +140,7 @@ const ViewOrganizationUsers = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {user?.business?.map((d, index) => (
+              {data?.data?.organizations?.map((d, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -156,13 +156,13 @@ const ViewOrganizationUsers = () => {
                     {d?.email}
                   </TableCell>
                   <TableCell align="left">
-                    {new Date(d?.date).toLocaleDateString("en-GB")}
+                    {new Date(d?.profile?.createdAt).toLocaleDateString("en-GB")}
                   </TableCell>
-                  <TableCell align="left">{d?.position}</TableCell>
+                  <TableCell align="left">{d?.profile?.role?.toLowerCase().split("_").join(" ")}</TableCell>
                   <TableCell align="left">
                   <span
                     className={
-                      d?.status === "ACTIVE"
+                      d?.profile?.status === "ACTIVE"
                         ? styles.status_active
                         : d?.status === "EXPIRED"
                         ? styles.status_expired
@@ -171,7 +171,7 @@ const ViewOrganizationUsers = () => {
                         : ""
                     }
                   >
-                    {String(d?.status).toLowerCase()}
+                    {String(d?.profile?.status).toLowerCase()}
                   </span>
                   </TableCell>
                   <TableCell align="left">{d?.users}</TableCell>
@@ -180,7 +180,6 @@ const ViewOrganizationUsers = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <PaginatorTemplate totalDocs={user?.business?.length} limit={100} page={1} totalPages={1} />
       </div>
       </div>
     )
@@ -195,14 +194,14 @@ const ViewOrganizationUsers = () => {
       
         {isLoading && <LoaderComponent />}
         {error && <FetchError error={error}/>}
-
-        {user && viewCard()}
+        {data && 
+        <>
+        {viewCard()}
         <section style={{ marginTop: 24 }}>
             {viewBusiness()}
         </section>
+        </>}
       </main>
-      
-      
     </Layout>
   );
 };

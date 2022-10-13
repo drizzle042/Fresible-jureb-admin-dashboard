@@ -4,7 +4,7 @@ const usePut = (url) => {
     
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-  const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
+  const tokens = localStorage.getItem("user-tokens") || "none"
   const [message, setMessage] = useState(null)
 
   function putFunc(id="",gotoAction,data=null){
@@ -14,7 +14,7 @@ const usePut = (url) => {
       fetch(url + id, {
         method: "PUT",
         headers: {
-          "Authorization": "Bearer " + tokens?.data?.accessToken,
+          "Authorization": "Bearer " + tokens,
         },
         body: JSON.stringify(data),
       })

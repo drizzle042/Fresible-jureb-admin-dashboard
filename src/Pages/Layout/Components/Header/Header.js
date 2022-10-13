@@ -7,13 +7,15 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Notification from "../../../../lib/assets/images/notification.png";
 import DefaultImg from "../../../../lib/components/defaultImg";
 import styles from "../../styles/styles.module.css";
-import useFetch from "../../../../lib/components/Hooks/useFetch";
+import useFetch from "../../../../lib/components/Hooks/Requests/useFetch";
+import { Account } from "../../../../lib/components/Endpoints/Endpoints";
 import { Link, useLocation } from "react-router-dom";
 import AdminLogs from "../AdminLogs/AdminLogs";
 import { useNavigate } from "react-router-dom";
-import { Button, Dialog,DialogActions,DialogContent } from "@mui/material";;
+import { Button, Dialog,DialogActions,DialogContent } from "@mui/material";
+;
 
-const Header = ({ handleDrawerToggle, handleSearchInput }) => {
+const Header = ({ handleDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [opens, setOpens] = React.useState(false);
@@ -33,6 +35,7 @@ const Header = ({ handleDrawerToggle, handleSearchInput }) => {
   const id = open ? 'simple-popover' : undefined;
 
   const {pathname} = useLocation()
+  
   const path = {
     'overview':{
       title: "Overview",
@@ -72,13 +75,14 @@ const Header = ({ handleDrawerToggle, handleSearchInput }) => {
     },
   }
   const checkPath = pathname.split('/')
-  const navigate = useNavigate();
+
   // Get profilepic and name
-  const { data:profileData } =useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+  const { data:profileData } =useFetch(Account.getAccount)
  
+  const navigate = useNavigate();
   const logout =()=>{
-      setState()
-      localStorage.setItem("user-tokens", '');
+      setState({})
+      localStorage.removeItem("user-tokens");
       navigate("/signin");
   }
 
@@ -121,44 +125,43 @@ const Header = ({ handleDrawerToggle, handleSearchInput }) => {
               style={{marginTop:"1rem"}}
             >
               <Link to='/settings'> <Typography sx={{ p: 2 }}   style={{width: '10rem', marginLeft:"2rem"}}>Profile</Typography></Link>
-              <Typography sx={{ p: 2 }}  style={{width: '10rem', marginLeft:"2rem", color: '#EB5757',cursor:'pointer'}} onClick={()=>setState({...state,logout:true})}>Logout</Typography>
+              <Typography sx={{ p: 2 }}  style={{width: '10rem', marginLeft:"2rem", color: '#EB5757',cursor:'pointer'}} onClick={()=>setState({...state, logout:true})}>Logout</Typography>
             </Popover>
             </div>
           </div>
         </div>
         <AdminLogs open={opens} setOpen={setOpens} />
        
-        <Dialog open={state?.logout} onClose={() => setState()}>
-      <div >
-      <div className={styles.dialog_title}>
-        <div className={styles.section_title}>
-         
-          <span>Logout</span>
-        </div>
-        </div>
-        <DialogContent>
-        <div className={styles.dialogContent}>
-          <p>Are you sure you want to logout?</p>
-        </div>
-        </DialogContent>
-        <DialogActions>
-        <div className={styles.dialogFooter}>
-          <Button onClick={() => setState()} color="secondary">
-            Close
-          </Button>
-          <Button
-            style={{marginLeft:'15px'}}
-            className={styles.btn}
-            variant="contained"
-            color="secondary"
-            onClick={() =>logout() }
-          >
-            Yes
-          </Button>
-        </div>
-        </DialogActions>
-      </div>
-    </Dialog>
+        <Dialog open={state?.logout} onClose={() => setState({})}>
+          <div >
+          <div className={styles.dialog_title}>
+            <div className={styles.section_title}>
+              <span>Logout</span>
+            </div>
+            </div>
+            <DialogContent>
+            <div className={styles.dialogContent}>
+              <p>Are you sure you want to logout?</p>
+            </div>
+            </DialogContent>
+            <DialogActions>
+            <div className={styles.dialogFooter}>
+              <Button onClick={() => setState({})} color="secondary">
+                Close
+              </Button>
+              <Button
+                style={{marginLeft:'15px'}}
+                className={styles.btn}
+                variant="contained"
+                color="secondary"
+                onClick={() =>logout() }
+              >
+                Yes
+              </Button>
+            </div>
+            </DialogActions>
+          </div>
+        </Dialog>
       </div>
     </div>
   );

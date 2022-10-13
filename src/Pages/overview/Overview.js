@@ -9,7 +9,8 @@ import DailySubscribers from "./components/DailySubscribers";
 import RecentSubscribers from "./components/RecentSubscribers";
 import UserLogs from "./components/UserLogs";
 import SubscribersByLocation from "./components/SubscribersByLocation";
-import useFetch from "../../lib/components/Hooks/useFetch"
+import useFetch from "../../lib/components/Hooks/Requests/useFetch"
+import { Misc } from "../../lib/components/Endpoints/Endpoints";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader"
 import FetchError from "../../lib/components/Hooks/FetchError"
 
@@ -18,17 +19,15 @@ import FetchError from "../../lib/components/Hooks/FetchError"
 const Overview = () => {
 
   // Get requests and Overview data
-  const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/overview`);
+  const { data, isLoading, error } = useFetch(Misc.getOverview);
 
   const recentSubs = data?.data?.recentSubscribers?.slice(0, 4);
 
   return (
     <Layout>
-     
       <main className={styles.main}>
-        
         {isLoading && <LoaderComponent />}
-        {error && <FetchError error={error} />}
+        {error && <FetchError error={error.message} />}
         {data && 
             <section>
               <div className={styles.reports}>
@@ -39,7 +38,7 @@ const Overview = () => {
                       <div className={styles.img}>
                         <img src={Image1} alt="Total Users" />
                       </div>
-                      <h3 style={{marginTop:'-20px'}}>{data?.data?.topStats?.usersCount.toLocaleString()}</h3>
+                      <h3 style={{marginTop:'-20px'}}>{data?.data?.topStats?.usersCount?.toLocaleString()}</h3>
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={4}>
