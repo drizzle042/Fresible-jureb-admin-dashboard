@@ -23,23 +23,23 @@ const TabHeaders = ({ handleChange, styles, data }) => {
       >
         <Tab
           label={<TabLabel styles={styles} title="All" label={data?.data?.all} />}
-          value="1"
+          value=""
         />
         <Tab
           label={<TabLabel styles={styles} title="Monthly" label={data?.data?.monthly} />}
-          value="2"
+          value="MONTHLY"
         />
         <Tab
           label={<TabLabel styles={styles} title="Quarterly" label={data?.data?.quarterly} />}
-          value="3"
+          value="QUARTERLY"
         />
         <Tab
           label={<TabLabel styles={styles} title="Bi-annually" label={data?.data?.biannually} />}
-          value="4"
+          value="BIANNUALLY"
         />
         <Tab
           label={<TabLabel styles={styles} title="Annually" label={data?.data?.annually} />}
-          value="5"
+          value="ANNUALLY"
         />
       </TabList>
     </div>

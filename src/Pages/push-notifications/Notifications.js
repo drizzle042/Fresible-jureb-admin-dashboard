@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../Layout/Layout";
 import styles from "./styles/styles.module.css";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import TabHeaders from "./components/TabPanel";
-import AllNotifications from "./components/NotificationTypes/AllNotifications";
-import ScheduledNotifications from "./components/NotificationTypes/ScheduledNotifications";
-import SentNotifications from "./components/NotificationTypes/SentNotifications";
+import Tab from "./components/Tab";
 import Search from "./components/Search";
 import NewMessage from "./components/message/NewMessage";
 import { convertToRaw } from "draft-js";
@@ -15,7 +13,12 @@ import PreviewMessageWeb from "./components/message/PreviewMessage";
 import PreviewMessageMobile from "./components/message/PreviewMessageMobile";
 import Feedback from "../../lib/components/Feedback/Feedback";
 import CustomHook from "./useCustomHook/CustomHook";
-import useFetch from "../../lib/components/Hooks/useFetch";
+import useFetch from "../../lib/components/Hooks/Requests/useFetch";
+import usePost from "../../lib/components/Hooks/Requests/usePost";
+import { Notification } from "../../lib/components/Endpoints/Endpoints";
+import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
+import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
+import FetchError from "../../lib/components/Hooks/FetchError";
 
 const Notifications = () => {
 
@@ -74,10 +77,12 @@ const Notifications = () => {
   const closeWebMessage = () => {
     setPreviewMessageWeb(false);
   };
+
   const openMobileMessage = () => {
     setPreviewMessageMobile(true);
     setPreviewMessageWeb(false);
   };
+
   const closeMobileMessage = () => {
     setPreviewMessageMobile(false);
   };
@@ -88,42 +93,102 @@ const Notifications = () => {
     setSeverity("warning");
     setFeedbackMessage(content_Length <= 0 ? short_message : warning_message);
   };
+
   const closeFeedback = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setFeedback(false);
   };
-  const [pageValue, setpageValue] = React.useState("1");
 
+  const {pageNumber, PaginatorTemplate} = usePaginator();
+
+  const [pageValue, setpageValue] = React.useState("");
   const handleChange = (event, newValue) => {
     setpageValue(newValue);
   };
 
   // Get All Notifications
-  const { data, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/push-notification/fetch`)
+  const { data, isLoading, error, handleSearchInput, fetchData } = useFetch(`${Notification.adminFetchPushNotifications}/?page=${pageNumber}&status=${pageValue}`)
+
+  // Post Notification
+  const { postForm, isLoading:postIsLoading, message, messageSeverity } = usePost(Notification.createPushNotification);
+  
+  // FeedBack controller
+  const [openSnackBar, setOpenSnackBar] = useState(false)
+  function closeSnackBar(){
+    setOpenSnackBar(false)
+  }
+
+  const [feedBackMessage, setFeedBackMessage] = useState([])
+  useEffect(() => {
+    if (typeof(message?.message) === "string"){
+      setFeedBackMessage([message?.message])
+      setOpenSnackBar(true)
+    } else if (Array.isArray(message?.message)){
+      let cummulativeMessage = [];
+      for (var i of message?.message) {
+        for (var n of Object.values(i)) {
+          cummulativeMessage.push(n)
+        }
+      }
+      setFeedBackMessage(cummulativeMessage)
+      setOpenSnackBar(true)
+      } else if (message?.status === "SUCCESS"){
+        setFeedBackMessage([message?.status])
+        setOpenSnackBar(true)
+        // Data will only be refetched when post is successful
+        setTimeout(() => {
+          fetchData()
+        }, 2000)
+        }
+    // eslint-disable-next-line
+  }, [message])
 
   return (
     <Layout>
       <main className={styles.main}>
         <section>
           <Search styles={styles} handleSearchInput={handleSearchInput} hooksContent={hooksContent} openNewMessage={openNewMessage} />
-          <div className={styles.tab_panel}>
-            <TabContext value={pageValue}>
-              {data && <TabHeaders handleChange={handleChange} data={data} styles={styles} />}
-              <TabPanel className={styles.t_p} value="1">
-                <AllNotifications allData={data} styles={styles} />
-              </TabPanel>
-              <TabPanel className={styles.t_p} value="2">
-                <SentNotifications styles={styles} />
-              </TabPanel>
-              <TabPanel className={styles.t_p} value="3">
-                <ScheduledNotifications styles={styles} />
-              </TabPanel>
-            </TabContext>
-          </div>
+          {isLoading && <LoaderComponent />}
+          {postIsLoading && <LoaderComponent />}
+          {error && <FetchError error={error.message} />}
+          {
+            data && 
+            <>
+              <div className={styles.tab_panel}>
+                <TabContext value={pageValue}>
+                  <TabHeaders handleChange={handleChange} data={data} styles={styles} />
+                  {
+                    [
+                      "",
+                      "SENT",
+                      "SCHEDULED"
+                    ].map((i, index) => (
+                      <TabPanel key={index} className={styles.t_p} value={i}>
+                        <Tab data={data} styles={styles} />
+                      </TabPanel>
+                    ))
+                  }
+                </TabContext>
+              </div>
+              <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
+            </>
+          }
+          {
+            message &&
+              feedBackMessage.map((i, index) => (
+                <Feedback 
+                  key={index}
+                  severity={messageSeverity} 
+                  message={i}
+                  open={openSnackBar}
+                  handleClose={closeSnackBar} />
+              ))
+          }
         </section>
       </main>
+
       <NewMessage
         messageData={messageData}
         openWebMessage={openWebMessage}
@@ -131,6 +196,7 @@ const Notifications = () => {
         open={newMessage}
         handleClose={closeNewMessage}
         hooksContent={hooksContent}
+        postForm={postForm}
       />
       <PreviewMessageWeb
         styles={styles}

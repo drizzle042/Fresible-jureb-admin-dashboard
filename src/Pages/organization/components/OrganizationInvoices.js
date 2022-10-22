@@ -14,8 +14,10 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import downloadImg from "../assets/images/download.png";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
+import useFetch from "../../../lib/components/Hooks/Requests/useFetch";
+import { Orgs } from "../../../lib/components/Endpoints/Endpoints";
 
-const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchInput, clientID }) => {
+const OrganizationInvoices = ({ styles, hooksContent, clientID }) => {
 
   const [searchUrl, setSearchUrl] = useState({
     dateFrom: "",
@@ -44,12 +46,14 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
     });
   };
 
+  const { PaginatorTemplate, pageNumber } = usePaginator();
+  
+  const {data, handleSearchInput} = useFetch(`${Orgs.getOrgInvoices}/?page=${pageNumber}&organizationId=${clientID}`)
+
   useEffect(() => {
     handleSearchInput(searchUrl);
     // eslint-disable-next-line
   }, [searchUrl])
-
-  const { PaginatorTemplate } = usePaginator();
 
   return (
     <div className={styles.org_invoices}>
@@ -58,6 +62,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
         <div className={styles.date_bar}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
+              maxDate={new Date()}
               label="Date From"
               inputFormat="MM/dd/yyyy"
               value={hooksContent.dateFrom}
@@ -82,6 +87,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
         <div className={styles.date_bar}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
+            maxDate={new Date()}
               label="Date To"
               inputFormat="MM/dd/yyyy"
               value={hooksContent.dateTo}
@@ -167,7 +173,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoiceData?.data?.map((invoice, index) => (
+              {data?.data?.map((invoice, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -209,7 +215,7 @@ const OrganizationInvoices = ({ styles, hooksContent, invoiceData, handleSearchI
             </TableBody>
           </Table>
         </TableContainer>
-        <PaginatorTemplate totalDocs={invoiceData?.data?.length} limit={invoiceData?.limit} page={invoiceData?.page} totalPages={invoiceData?.totalPages} />
+        <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
       </div>
     </div>
   );

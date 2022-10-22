@@ -1,52 +1,113 @@
-import { Divider, Grid, IconButton,MenuItem, Select, TextField, Button, Dialog,DialogContent} from "@mui/material";
-import EastIcon from '@mui/icons-material/East';
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import EastIcon from '@mui/icons-material/East';
 import Layout from "../Layout/Layout";
 import styles from "./styles/styles.module.css";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import OrganizationInvoices from "./components/OrganizationInvoices";
 import CustomHook from "./useCustomHook/CustomHook";
-import useFetch from "../../lib/components/Hooks/useFetch";
-import usePut from "../../lib/components/Hooks/usePut";
-import usePost from "../../lib/components/Hooks/usePost";
-import CloseIcon from "@mui/icons-material/Close";
+import useFetch from "../../lib/components/Hooks/Requests/useFetch";
+import usePost from "../../lib/components/Hooks/Requests/usePost";
+import { Orgs, Misc } from "../../lib/components/Endpoints/Endpoints";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
-import Feedback from "../../lib/components/Feedback/Feedback2";
 import FetchError from "../../lib/components/Hooks/FetchError";
+import CloseIcon from "@mui/icons-material/Close";
+import Feedback from "../../lib/components/Feedback/Feedback";
 
 const ViewOrganization = () => {
+
   const { id } = useParams();
+
   const { hooksContent } = CustomHook();
+
   const navigate = useNavigate();
-  const [state,setState] = useState({plan:"",period:""})
-  const { data, isLoading, error,handleSearchInput:handleSearchInput2 } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/single?id=${id}`)
-  const client = data?.data;
-  const {data: invoiceData, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/invoices?organizationId=${id}`)
-  const {data: plans} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/meta/plans`)
-  const { putFunc,message:m2,setMessage:setM2} = usePut(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/cancel`);
-  const { postDataFunc,message:m1,setMessage:setM1 } = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/subscription/upgrade`);
+
+  // Why call this state? I also have the same question for the last developer.
+  const [state, setState] = useState({
+    plan: "",
+    period: "",
+    reason: ""
+  })
 
   const open = (type) =>{
-    setState({...state,modal:type})
+    setState({
+      ...state, 
+      modal: type
+    })
   }
   const close = () =>{
-    setState({...state,modal:null})
+    setState({
+      ...state, 
+      modal: null
+    })
   }
+
+  const { data, isLoading, error, fetchData } = useFetch(`${Orgs.getOrganization}/?id=${id}`)
+  const client = data?.data;
+  
+  const {data:plans} = useFetch(Misc.getPlans)
+
+  const [postDependencies, setPostDependencies] = useState({
+    postData: {},
+    postEndpoint: ""
+  })
+
+  const { 
+    postFunc, 
+    message, 
+    messageSeverity, 
+    isLoading:postIsLoading 
+  } = usePost(postDependencies.postEndpoint);
+
+  const initialRender = useRef(true) 
+  useEffect(() => {
+    if (initialRender.current){
+      initialRender.current = false
+    } else {
+      postFunc("POST", "application/json", JSON.stringify(postDependencies.postData))
+    }
+    // eslint-disable-next-line
+  }, [postDependencies])
+
+  const [openSnackBar, setOpenSnackBar] = useState(false)
+  function closeSnackBar(){
+    setOpenSnackBar(false)
+  }
+  const [feedBackMessage, setFeedBackMessage] = useState("")
+
+  useEffect(() => {
+    if (message?.message){
+      setOpenSnackBar(true)
+      setFeedBackMessage(message?.message)
+    } else if (message?.status === "SUCCESS"){
+      setOpenSnackBar(true)
+      setFeedBackMessage(message?.status)
+      setTimeout(() => fetchData(), 2000)
+    }
+    // eslint-disable-next-line
+  }, [message])
 
   return (
     <Layout>
       <main className={styles.main}>
-        {m1!=null && Feedback(m1,setM1)}
-        {m2!=null && Feedback(m2,setM2)}
+        <IconButton onClick={() => navigate(-1)}>
+          <KeyboardBackspaceIcon />
+        </IconButton>
+        {postIsLoading && <LoaderComponent />}
         {isLoading && <LoaderComponent />}
-        {error && <FetchError error={error}/>}
+        {error && <FetchError error={error.message}/>}
         {client &&
         <div>
           <div>
-            <IconButton onClick={() => navigate(-1)}>
-              <KeyboardBackspaceIcon />
-            </IconButton>
             <div className={styles.section_title}>
               <h2>{client?.name}</h2>
               <p>Get insights to accounts on jureb here</p>
@@ -100,12 +161,11 @@ const ViewOrganization = () => {
                         </li>
                       </ul>
                     </div>
-
                     <div className={styles.sub_action_wrapper}>
                       <Divider />
                       <div className={styles.sub_action}>
-                        <button className={styles.cancel} onClick={()=>open(1)}>Cancel Plan</button>
-                        <button className={styles.upgrade} onClick={()=>open(2)}>
+                        <button className={styles.cancel} onClick={()=>open("cancel")}>Cancel Plan</button>
+                        <button className={styles.upgrade} onClick={()=>open("upgrade")}>
                           Change Plan <IconButton><EastIcon sx={{color: "blue"}}/></IconButton>
                         </button>
                       </div>
@@ -120,8 +180,8 @@ const ViewOrganization = () => {
                     <div className={styles.sub_action_wrapper}>
                       <Divider />
                       <div className={styles.sub_action} style={{backgroundColor: "#fff"}}>
-                        <button className={styles.cancel} onClick={()=>open(1)}>Cancel Plan</button>
-                        <button className={styles.upgrade} onClick={()=>open(2)}>
+                        <button className={styles.cancel} onClick={() => open("cancel")}>Cancel Plan</button>
+                        <button className={styles.upgrade} onClick={() => open("upgrade")}>
                           Change Plan <IconButton><EastIcon sx={{color: "blue"}}/></IconButton>
                         </button>
                       </div>
@@ -179,7 +239,7 @@ const ViewOrganization = () => {
               </Grid>
             </section>
             <section style={{ marginTop: 24 }}>
-              <OrganizationInvoices hooksContent={hooksContent} styles={styles} invoiceData={invoiceData} handleSearchInput={handleSearchInput} clientID={id}/>
+              <OrganizationInvoices hooksContent={hooksContent} styles={styles} clientID={id}/>
             </section>
           </div>
         </div>
@@ -187,158 +247,175 @@ const ViewOrganization = () => {
       </main>
       
       <Dialog
-        // eslint-disable-next-line
-        open={state.modal==1}
+        open={state.modal === "cancel"}
         onClose={close}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-      <div className={styles.dialog_title}>
-        <div className={styles.section_title}>
-          <div className={styles.header}>
-            <h2>Cancel Plan</h2>
+        <div className={styles.dialog_title}>
+          <div className={styles.section_title}>
+            <div className={styles.header}>
+              <h2>Cancel Plan</h2>
+            </div>
+            <div className={styles.CloseIcon}>
+              <IconButton onClick={close}>
+                <CloseIcon />
+              </IconButton>
+            </div>
           </div>
-          <div className={styles.CloseIcon}>
-            <IconButton onClick={close}>
-              <CloseIcon />
-            </IconButton>
+        </div>
+        <DialogContent>
+          <div>
+            If you cancel this Jureb subscription, the user will lose access to the benefits of this plan. Team members would also not be able to log into their accounts. Please note that cancellation takes effect at the end of the current subscription.
           </div>
-        </div>
-      </div>
-      <DialogContent>
-        <div>
-          If you cancel this Jureb subscription,the user will lose access to the benefits of this plan. Team member would also not be able to log into their accounts. Please note that cancellation takes effect at the end of the current subscription.
-        </div>
-        
-        <div className="push-right">
-          <Button
-            variant="contained" 
-            color="secondary"
-            onClick={() => {
-             putFunc("",handleSearchInput2,{organizationId:id})
-            }}>
-            Confirm
-          </Button>
-        </div>
-      </DialogContent>
+          <div className="push-right">
+            <Button
+              variant="contained" 
+              color="secondary"
+              onClick={() => {
+                setPostDependencies({
+                  ...postDependencies,
+                  postData: {
+                  organizationId: id,
+                  },
+                  postEndpoint: Orgs.cancelOrgSub
+                })
+                close()
+              }}>
+              Confirm
+            </Button>
+          </div>
+        </DialogContent>
       </Dialog>
 
       <Dialog
-        // eslint-disable-next-line
-        open={state.modal==2}
+        open={state.modal === "upgrade"}
         onClose={close}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-      <DialogContent >
-        <div>
+        <DialogContent >
+          <div>
+          <div className={[styles.select_bars, "space-top"].join(' ')}>
+            <Select
+              className={styles.input}
+              fullWidth
+              size="small"
+              value={state?.plan}
+              onChange={(e) => setState({
+                ...state,
+                plan: e.target.value
+              })}
+              displayEmpty
+            >
+              <MenuItem disabled value="">
+                Select Plan
+              </MenuItem>
+              {plans?.data?.map((d, index)=>{
+                return  <MenuItem key={index} value={d.id}>{d.name}</MenuItem>
+              })}
+            </Select>
+          </div>
+          <div className={styles.select_bars}>
+            <Select
+              className={[styles.input, "space-top"].join(' ')}
+              fullWidth
+              size="small"
+              value={state?.period}
+              onChange={(e) => setState({
+                ...state,
+                period: e.target.value
+              })}
+              displayEmpty
+            >
+              <MenuItem disabled value="">
+                Period
+              </MenuItem>
+              <MenuItem value="MONTHLY">Monthly</MenuItem>
+              <MenuItem value="QUARTERLY">Quarterly</MenuItem>
+              <MenuItem value="BIANNUALLY">Bi-Annually</MenuItem>
+              <MenuItem value="ANNUALLY">Annually</MenuItem>
+            </Select>
+          </div>
+            <TextField
+              className={[styles.input, "space-top"].join(' ')}
+              value={state?.reason}
+              onChange={(e)=> setState({
+                ...state, 
+                reason: e.target.value
+              })}
+              fullWidth
+              style={{minWidth:'300px'}}
+              multiline={true}
+              rows={3}
+              size="small"
+              placeholder="Reason"
+            />
+          </div>
+          <div className="push-right space-top">
+            <Button
+              variant="contained" 
+              color="secondary"
+              onClick={() => {
+              state.plan.length > 0 && state.period.length > 0 && open("confirm upgrade")
+              }}>
+                Continue
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={state.modal === "confirm upgrade"}
+        onClose={close}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <div className={styles.dialog_title}>
+          <div className={styles.section_title}>
+            <div className={styles.header}>
+              <h2>Change Subscription Plan</h2>
+            </div>
+            <div className={styles.CloseIcon}>
+              <IconButton onClick={() => open("upgrade")}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </div>
+        </div>
+        <DialogContent>
+          <div>
+            This user's plan will change to the selected plan for the duration of the period selected. This user will not be billed for this subscription during this duration.
+          </div>
           
-
-        <div className={[styles.select_bars,"space-top"].join(' ')}>
-          <Select
-            className={styles.input}
-            fullWidth
-            size="small"
-            value={state?.plan}
-            onChange={(e)=>setState({...state,plan:e.target.value})}
-            displayEmpty
-          >
-            <MenuItem disabled value="">
-              Select Plan
-            </MenuItem>
-            {plans?.data?.map((d)=>{
-              return  <MenuItem value={d.id}>{d.name}</MenuItem>
-            })}
-          </Select>
-        </div>
-        <div className={styles.select_bars}>
-          <Select
-            className={[styles.input,"space-top"].join(' ')}
-            fullWidth
-            size="small"
-            value={state?.period}
-            onChange={(e)=>setState({...state,period:e.target.value})}
-            displayEmpty
-          >
-            <MenuItem disabled value="">
-              Period
-            </MenuItem>
-            <MenuItem value="MONTHLY">Monthly</MenuItem>
-            <MenuItem value="QUARTERLY">Quarterly</MenuItem>
-            <MenuItem value="BIANNUALLY">Bi-Annually</MenuItem>
-            <MenuItem value="ANNUALLY">Annually</MenuItem>
-          </Select>
-        </div>
-        <TextField
-                className={[styles.input,"space-top"].join(' ')}
-                value={state?.reason}
-                onChange={(e)=>setState({...state,reason:e.target.value})}
-                fullWidth
-                style={{minWidth:'300px'}}
-                multiline={true}
-                rows={3}
-                size="small"
-                placeholder="Reason"
-              />
-        </div>
-        
-        <div className="push-right space-top">
-          <Button
-            variant="contained" 
-            color="secondary"
-            onClick={() => {
-             state.plan.length>0 && state.period.length>0 && open(3)
-            }}>
-            Confirm
-          </Button>
-        </div>
-      </DialogContent>
+          <div className="push-right space-top">
+            <Button
+              variant="contained" 
+              color="secondary"
+              onClick={() => {
+                setPostDependencies({
+                  ...postDependencies,
+                  postData: {
+                    organizationId: id,
+                    planId: state.plan,
+                    interval: state.period,
+                    reason: state.reason
+                  },
+                  postEndpoint: Orgs.upgradeOrgSub
+                })
+                close()
+              }}>
+                Confirm
+            </Button>
+          </div>
+        </DialogContent>
       </Dialog>
 
-      <Dialog
-        // eslint-disable-next-line
-        open={state.modal==3}
-        onClose={close}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-      <div className={styles.dialog_title}>
-        <div className={styles.section_title}>
-          <div className={styles.header}>
-            <h2>Change Subscription Plan</h2>
-          </div>
-          <div className={styles.CloseIcon}>
-            <IconButton onClick={()=>open(2)}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-        </div>
-      </div>
-      <DialogContent>
-        <div>
-          This users plan will change to the selected plan for the duration of the period selected, the user will not be billed for this subscription
-        </div>
-        
-        <div className="push-right space-top">
-          <Button
-            variant="contained" 
-            color="secondary"
-            onClick={() => {
-              postDataFunc(JSON.stringify(
-                {
-                  organizationId:id,
-                  planId:state.plan,
-                  interval:state.period,
-                  reason:state.reason
-                }
-              ), "application/json",handleSearchInput2)
-              close()
-            }}>
-            Confirm
-          </Button>
-        </div>
-      </DialogContent>
-      </Dialog>
+      <Feedback 
+        severity={messageSeverity} 
+        message={feedBackMessage}
+        open={openSnackBar}
+        handleClose={closeSnackBar} />
     </Layout>
   );
 };

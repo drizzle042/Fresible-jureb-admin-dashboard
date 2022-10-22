@@ -116,3 +116,29 @@ th {
   text-align: right;
   justify-content: flex-end !important;
 }
+
+
+.blue {
+  color: #1f53d7 !important;
+}
+
+.click {
+  cursor: pointer;
+}
+.text{
+
+font-family: 'Rubik';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 19px;
+color: #010A1B;
+}
+
+.bold {
+  font-weight: 500 !important;
+}
+
+.sm {
+  font-size: 13px !important;
+}

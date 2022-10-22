@@ -12,7 +12,8 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
 import CustomHook from "./useCustomHook/CustomHook";
-import useFetch from "../../../lib/components/Hooks/useFetch";
+import useFetch from "../../../lib/components/Hooks/Requests/useFetch";
+import { Orgs } from "../../../lib/components/Endpoints/Endpoints";
 import LoaderComponent from "../../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../../lib/components/Hooks/FetchError";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
@@ -29,7 +30,7 @@ const SubsByPreciseLocation = () => {
     const [stateOption, ] = useState(state)
 
     // Get requests
-    const {data, isLoading, error, handleSearchInput} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/by-location?page=${pageNumber}&state=${stateOption}`);
+    const {data, isLoading, error, handleSearchInput} = useFetch(`${Orgs.getOrgsByLocation}/?page=${pageNumber}&state=${stateOption}`);
 
     return (
       <Layout>

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserAccount } from "../../../../App";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Logo from "../../../../lib/assets/images/jureb-logo.png";
@@ -15,7 +16,9 @@ const drawerWidth = 240;
 
 const Sidebar = (props) => {
   const { window } = props;
-  const { roleName } = props;
+  // Get profilepic and name
+  const [profileData,] = useContext(UserAccount)
+  const roleName = profileData?.data?.roleName
   const { pathname } = useLocation();
   const path = pathname.split("/")[1];
 

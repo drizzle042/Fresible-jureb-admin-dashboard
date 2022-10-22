@@ -1,20 +1,30 @@
+import React, { useContext, useEffect } from "react";
+import { UserAccount } from "../../App";
+import useFetch from "../../lib/components/Hooks/Requests/useFetch";
+import { Account } from "../../lib/components/Endpoints/Endpoints";
 import { Box } from "@mui/material";
-import React from "react";
 import Header from "./Components/Header/Header";
 import OrgModal from "./Components/Sidebar/Components/OrgModal";
 import Sidebar from "./Components/Sidebar/Sidebar";
-import useFetch from "../../lib/components/Hooks/useFetch"
+
 
 const drawerWidth = 240;
+
 const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-    
-  // Get request
-  const { data } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`)
+  
+  const [, setProfile] = useContext(UserAccount)
+  const { data } = useFetch(Account.getAccount)
+  // Put User profile in a global state
+  useEffect(() => {
+    if (data){
+      setProfile(data)
+    }
+  }, [data, setProfile])
   
   return (
     <div>
@@ -25,7 +35,6 @@ const Layout = ({ children }) => {
           mobileOpen={mobileOpen}
           setMobileOpen={setMobileOpen}
           setOpen={setOpen}
-          roleName={data?.data?.roleName}
         />
         <Box
           component="main"

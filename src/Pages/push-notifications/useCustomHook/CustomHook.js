@@ -3,14 +3,14 @@ import { EditorState } from "draft-js";
 
 const CustomHook = () => {
   const [title, setTitle] = useState("");
-  const [dateFrom, setDateFrom] = useState(new Date("2022-01-18T21:11:54"));
-  const [dateTo, setDateTo] = useState(new Date("2022-01-18T21:11:54"));
+  const [dateFrom, setDateFrom] = useState(new Date());
+  const [dateTo, setDateTo] = useState(new Date());
   const [imageUrl, setImageUrl] = useState([]);
   const [status, setStatus] = useState("");
   //  For post data 
   const [messageTitle, setMessageTitle] = useState("");
-  const [recipients, setRecipients] = useState("");
-  const [subplan, setSubplan] = useState("");
+  const [recipients, setRecipients] = useState("ORGANIZATION");
+  const [subplan, setSubplan] = useState(["PREMIUM"]);
   const [messageType, setMessageType] = React.useState(["SMS"]);
   const [messageDate, setMessageDate] = React.useState(
     new Date()
@@ -36,7 +36,6 @@ const CustomHook = () => {
     dateTo: "dateTo",
     recipients: "recipients",
     messageTitle: "messageTitle",
-    subplan: "subplan",
   };
   const handleChange = (name) => (e) => {
     const { value } = e.target;
@@ -50,9 +49,6 @@ const CustomHook = () => {
       case filterData.recipients:
         setRecipients(value);
         break;
-      case filterData.subplan:
-        setSubplan(value);
-        break;
       case filterData.messageTitle:
         setMessageTitle(value);
         break;
@@ -65,6 +61,13 @@ const CustomHook = () => {
       setImage(event.target.files[0]);
       setImageUrl(URL.createObjectURL(event.target.files[0]));
     }
+  };
+
+  const selectSubPlan = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSubplan(typeof value === "string" ? value.split(",") : value);
   };
 
   const selectType = (event) => {
@@ -87,6 +90,7 @@ const CustomHook = () => {
     image,
     imageUrl,
     selectType,
+    selectSubPlan,
     messageDate,
     setMessageDate,
     messageTitle,

@@ -23,15 +23,15 @@ const TabHeaders = ({ handleChange, styles, data }) => {
       >
         <Tab
           label={<TabLabel styles={styles} title="All" label={data?.data?.all} />}
-          value="1"
+          value=""
         />
         <Tab
           label={<TabLabel styles={styles} title="Active" label={data?.data?.active} />}
-          value="2"
+          value="ACTIVE"
         />
         <Tab
           label={<TabLabel styles={styles} title="Inactive" label={data?.data?.inactive} />}
-          value="3"
+          value="INACTIVE"
         />
       </TabList>
     </div>

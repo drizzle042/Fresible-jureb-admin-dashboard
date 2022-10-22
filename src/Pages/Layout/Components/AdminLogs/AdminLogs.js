@@ -4,8 +4,10 @@ import Box from "@mui/material/Box";
 import Drawer from '@mui/material/Drawer';
 import useFetch from "../../../../lib/components/Hooks/Requests/useFetch";
 import { Activity } from '../../../../lib/components/Endpoints/Endpoints';
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
 import { Divider } from "@mui/material";
+import { Link } from 'react-router-dom';
   
 
 const AdminLogs = ({ open, setOpen }) => {
@@ -75,7 +77,7 @@ const AdminLogs = ({ open, setOpen }) => {
             </DrawerHeader>
             <Divider/>
             <div className={styles.user_logs} style={{height:'400px',overflowY:'auto'}}>
-              {data?.data?.map((item, index) => (
+              {data?.data?.slice(0,20).map((item, index) => (
                 <div>
                 { index > 0 && <Divider /> }
                 <div
@@ -84,10 +86,10 @@ const AdminLogs = ({ open, setOpen }) => {
                   className={styles.log}
                 >
                   <div>
-                    <span>{item?.replacers[0]?.name}</span>
-                    {item?.text?.replace("$1", "").replace("$2", item?.replacers[1]?.name).replace("$3", item?.replacers[2]?.name).replace("$4", item?.replacers[3]?.name)}
+                    <span className='text sm'>{item?.replacers[0]?.name}</span>
+                    <span className='text sm'>{item?.text?.replace("$1", "").replace("$2", item?.replacers[1]?.name).replace("$3", item?.replacers[2]?.name).replace("$4", item?.replacers[3]?.name)}</span>
                   </div>
-                  <div  className={styles.time}>{
+                  <div  className={[styles.time,'text sm'].join(' ')}>{
                     item?.createdAt ?
                       `${activityTime(item?.createdAt)} ago` :
                       "unknown time"
@@ -96,6 +98,16 @@ const AdminLogs = ({ open, setOpen }) => {
                 </div>
               ))}
             </div>
+            <Divider/>
+            <div className='blue' style={{padding:'15px 20px'}}>
+              <Link to="/admin-activities">
+                See all
+                <span>
+                  <ArrowForwardIosIcon style={{ fontSize: 12 }} />
+                </span>
+              </Link>
+            </div>
+            
           </Drawer>
         </Box>
     );

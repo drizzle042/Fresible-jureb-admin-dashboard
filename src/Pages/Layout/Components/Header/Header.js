@@ -1,4 +1,5 @@
-import React,{useState} from "react";
+import React, { useState, useContext } from "react";
+import { UserAccount } from "../../../../App";
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -7,15 +8,14 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Notification from "../../../../lib/assets/images/notification.png";
 import DefaultImg from "../../../../lib/components/defaultImg";
 import styles from "../../styles/styles.module.css";
-import useFetch from "../../../../lib/components/Hooks/Requests/useFetch";
-import { Account } from "../../../../lib/components/Endpoints/Endpoints";
 import { Link, useLocation } from "react-router-dom";
 import AdminLogs from "../AdminLogs/AdminLogs";
 import { useNavigate } from "react-router-dom";
-import { Button, Dialog,DialogActions,DialogContent } from "@mui/material";
-;
+import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+
 
 const Header = ({ handleDrawerToggle }) => {
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [opens, setOpens] = React.useState(false);
@@ -53,6 +53,10 @@ const Header = ({ handleDrawerToggle }) => {
       title:"User Activities",
       subtitle:"Monitor all organizations' activities on Jureb"
     },
+    'admin-activities':{
+      title:"Admin Activities",
+      subtitle:"Monitor all admins' activities on Jureb"
+    },
     'subs-by-location':{
       title:"Subscribers By Location",
       subtitle:"Get insights to accounts on Jureb here"
@@ -77,7 +81,7 @@ const Header = ({ handleDrawerToggle }) => {
   const checkPath = pathname.split('/')
 
   // Get profilepic and name
-  const { data:profileData } =useFetch(Account.getAccount)
+  const [profileData,] = useContext(UserAccount)
  
   const navigate = useNavigate();
   const logout =()=>{
@@ -104,34 +108,40 @@ const Header = ({ handleDrawerToggle }) => {
                 <img src={Notification} alt="Notification" onClick={handleDrawerOpen}/>
             </span>
             <div className={styles.clickAway}>
-            {profileData?.data && 
               <span style={{ display: "flex" }} onClick={handleClick}>
-                {profileData?.data?.avatarUploadMeta?.url ? 
-                  <img style={{width: "40px", height: "40px", borderRadius: "50%"}} src={profileData?.data?.avatarUploadMeta?.url} alt={profileData?.data?.lastName} /> :
-                  <DefaultImg name={profileData?.data?.lastName}/> }
-                  <span>{profileData?.data?.lastName} {profileData?.data?.firstName}</span>
-                  <KeyboardArrowDownIcon sx={{ color: "black" }} />
+              {
+                profileData?.data && 
+                <>
+                  {
+                    profileData?.data?.avatarUploadMeta?.url ? 
+                    <img 
+                      style={{width: "40px", height: "40px", borderRadius: "50%"}} 
+                      src={profileData?.data?.avatarUploadMeta?.url} 
+                      alt={profileData?.data?.lastName} /> :
+                    <DefaultImg name={profileData?.data?.lastName}/>}
+                    <span>{profileData?.data?.lastName} {profileData?.data?.firstName}</span>
+                </>
+              }
+                <KeyboardArrowDownIcon sx={{ color: "black" }} />
               </span>
-            }
-            <Popover
-              id={id}
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              style={{marginTop:"1rem"}}
-            >
-              <Link to='/settings'> <Typography sx={{ p: 2 }}   style={{width: '10rem', marginLeft:"2rem"}}>Profile</Typography></Link>
-              <Typography sx={{ p: 2 }}  style={{width: '10rem', marginLeft:"2rem", color: '#EB5757',cursor:'pointer'}} onClick={()=>setState({...state, logout:true})}>Logout</Typography>
-            </Popover>
             </div>
           </div>
         </div>
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          style={{marginTop:"1rem"}}
+        >
+          <Link to='/settings'> <Typography sx={{ p: 2 }}   style={{width: '10rem', marginLeft:"2rem"}}>Profile</Typography></Link>
+          <Typography sx={{ p: 2 }}  style={{width: '10rem', marginLeft:"2rem", color: '#EB5757',cursor:'pointer'}} onClick={()=>setState({...state, logout:true})}>Logout</Typography>
+        </Popover>
         <AdminLogs open={opens} setOpen={setOpens} />
-       
         <Dialog open={state?.logout} onClose={() => setState({})}>
           <div >
           <div className={styles.dialog_title}>

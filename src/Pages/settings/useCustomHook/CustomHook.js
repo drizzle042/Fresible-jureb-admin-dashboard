@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const CustomHook = () => {
   const [image, setImage] = useState([]);
@@ -9,19 +9,6 @@ const CustomHook = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
-  const tokens = JSON.parse(localStorage.getItem("user-tokens")) || {};
-
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/account`, {
-        headers: {
-          "Authorization": "Bearer " + tokens?.data?.accessToken,
-        }
-      })
-        .then((res) => res.json())
-          .then((data) => setImageUrl(data?.data?.avatarUploadMeta?.url))
-    // eslint-disable-next-line
-  }, []);
 
   const userData = {
     firstName: "firstName",

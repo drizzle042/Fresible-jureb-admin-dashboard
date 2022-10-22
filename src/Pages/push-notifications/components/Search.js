@@ -48,6 +48,7 @@ const Search = ({ styles, hooksContent, handleSearchInput, openNewMessage }) => 
       <div className={styles.date_bar}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
+            maxDate={new Date()}
             label="Date From"
             inputFormat="MM/dd/yyyy"
             value={hooksContent.dateFrom}
@@ -72,6 +73,7 @@ const Search = ({ styles, hooksContent, handleSearchInput, openNewMessage }) => 
       <div className={styles.date_bar}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
+            maxDate={new Date()}
             label="Date To"
             inputFormat="MM/dd/yyyy"
             value={hooksContent.dateTo}

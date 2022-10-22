@@ -1,65 +1,130 @@
 import { TabContext, TabPanel } from "@mui/lab";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../Layout/Layout";
 import Search from "./components/Search";
 import styles from "./styles/styles.module.css";
-import TabBody from "./components/TabBody";
+import Tab from "./components/Tab";
 import TabHeaders from "./components/TabHeaders";
 import AddUser from "./components/AddUser";
-import useFetch from "../../lib/components/Hooks/useFetch";
+import usePaginator from "../../lib/components/Hooks/PaginatorTemplate";
+import useFetch from "../../lib/components/Hooks/Requests/useFetch";
+import usePost from "../../lib/components/Hooks/Requests/usePost";
+import { Administrators } from "../../lib/components/Endpoints/Endpoints";
 import LoaderComponent from "../../lib/components/LoaderComponent/Loader";
+import Feedback from "../../lib/components/Feedback/Feedback";
 import FetchError from "../../lib/components/Hooks/FetchError";
 
 const Users = () => {
-  const [value, setValue] = React.useState("1");
-  const [openUserDialog, setOpenUserDialog] = useState(false);
 
+  const [openUserDialog, setOpenUserDialog] = useState(false);
   const handleOpenUserDailog = () => {
     setOpenUserDialog(true);
   };
   const handleCloseUserDialog = () => {
     setOpenUserDialog(false);
   };
+
+  const [value, setValue] = React.useState("");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // Get data request
-  const {data:tabheaderData} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators/status-stats`)
+  const { PaginatorTemplate, pageNumber } = usePaginator()
 
-  const {data, isLoading, error, handleSearchInput } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`)
+  // Get requests
+  const {data:tabheaderData, fetchData:fetchTabHeaders} = useFetch(Administrators.getAdminsStatusStat)
+
+  const {data, isLoading, error, handleSearchInput, fetchData } = useFetch(`${Administrators.getAdmins}/?page=${pageNumber}&status=${value}`)
+
+  // Make post, put or delete requests
+  const [endpoint, setEndpoint] = useState("")
+  const { postFunc, isLoading:postIsLoading, message, messageSeverity } = usePost(endpoint);
+
+  // FeedBack controller
+  const [openSnackBar, setOpenSnackBar] = useState(false)
+  function closeSnackBar(){
+    setOpenSnackBar(false)
+  }
+
+  const [feedBackMessage, setFeedBackMessage] = useState([])
+  useEffect(() => {
+    if (typeof(message?.message) === "string"){
+      setFeedBackMessage([message?.message])
+      setOpenSnackBar(true)
+    } else if (Array.isArray(message?.message)){
+      let cummulativeMessage = [];
+      for (var i of message?.message) {
+        for (var n of Object.values(i)) {
+          cummulativeMessage.push(n)
+        }
+      }
+      setFeedBackMessage(cummulativeMessage)
+      setOpenSnackBar(true)
+      } else if (message?.status === "SUCCESS"){
+        setFeedBackMessage([message?.data])
+        setOpenSnackBar(true)
+        // Data will only be refetched when post is successfull
+        setTimeout(() => {
+          fetchData()
+          fetchTabHeaders()
+        }, 2000)
+        }
+    // eslint-disable-next-line
+  }, [message])
 
   return (
     <Layout>
       <main className={styles.main}>
-       
         <section>
           <Search styles={styles} openDialog={handleOpenUserDailog} handleSearchInput={handleSearchInput} />
           {isLoading && <LoaderComponent />}
-          {error && <FetchError error={error} />}
-          {data &&
-          <div className={styles.tab_panel}>
-            <TabContext value={value}>
-              {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
-                <div>
-                  <TabPanel className={styles.t_p} value="1">
-                    <TabBody data={data} type={0} handleSearchInput={handleSearchInput} styles={styles} />
-                  </TabPanel>
-                  <TabPanel className={styles.t_p} value="2">
-                    <TabBody data={data} type={1} handleSearchInput={handleSearchInput}styles={styles} />
-                  </TabPanel>
-                  <TabPanel className={styles.t_p} value="3">
-                    <TabBody data={data} type={2} handleSearchInput={handleSearchInput} styles={styles} />
-                  </TabPanel>
-                </div>
-            </TabContext>
-          </div>}
+          {postIsLoading && <LoaderComponent />}
+          {error && <FetchError error={error.message} />}
+          {
+            data &&
+              <div className={styles.tab_panel}>
+                <TabContext value={value}>
+                  {tabheaderData && <TabHeaders handleChange={handleChange} styles={styles} data={tabheaderData} />}
+                    <div>
+                    {
+                      [
+                        "",
+                        "ACTIVE",
+                        "INACTIVE"
+                      ].map((i, index) => (
+                        <TabPanel key={index} className={styles.t_p} value={i}>
+                          <Tab 
+                            data={data} 
+                            styles={styles}
+                            postFunc={postFunc}
+                            setEndpoint={setEndpoint} />
+                        </TabPanel>
+                      ))
+                    }
+                    </div>
+                </TabContext>
+                <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
+              </div>
+          }
+          {
+            message &&
+              feedBackMessage.map((i, index) => (
+                <Feedback 
+                  key={index}
+                  severity={messageSeverity} 
+                  message={i}
+                  open={openSnackBar}
+                  handleClose={closeSnackBar} />
+              ))
+          }
         </section>
         <AddUser
           styles={styles}
           open={openUserDialog}
           handleClose={handleCloseUserDialog}
-          handleSearchInput={handleSearchInput}
+          postFunc={postFunc}
+          endpoint={endpoint}
+          setEndpoint={setEndpoint}
         />
       </main>
     </Layout>

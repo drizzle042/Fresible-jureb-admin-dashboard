@@ -1,23 +1,28 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
-import usePost from "../../../lib/components/Hooks/usePost";
-import LoaderComponent from "../../../lib/components/LoaderComponent/LoaderSpinner";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import { Administrators } from "../../../lib/components/Endpoints/Endpoints";
 
-const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
+const AddUser = ({ open, handleClose, styles, postFunc, setEndpoint }) => {
 
-  // Make post request
-  const { postDataFunc ,isLoading} = usePost(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/administrators`);
   // Post data
-  let formData = {};
+  const [formData, setFormData] = useState({});
 
-  const action= ()=>{
-    handleSearchInput()
-    handleClose()
-  }
+  // Control useEffect's render
+  const [signal, setSignal] = useState(true)
+  const isMounted = useRef(true)
+  useEffect(() => {
+    if (isMounted.current){
+      isMounted.current = false
+    } else {
+      postFunc("POST", "application/json", JSON.stringify(formData))
+    }
+    // eslint-disable-next-line
+  }, [signal])
 
   return (
     <Dialog
@@ -46,8 +51,13 @@ const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
             type="text" 
             size="small" 
             fullWidth 
+            required
             placeholder="John"
-            onChange={(e) => formData.firstName = e.target.value}
+            value={formData.firstName}
+            onChange={(e) => setFormData({
+                ...formData,
+                firstName: e.target.value
+              })}
           />
         </div>
         <div className={styles.form_group}>
@@ -56,8 +66,13 @@ const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
             type="text" 
             size="small" 
             fullWidth 
+            required
             placeholder="Doe"
-            onChange={(e) => formData.lastName = e.target.value}
+            value={formData.lastName}
+            onChange={(e) => setFormData({
+                ...formData,
+                lastName: e.target.value
+              })}
           />
         </div>
         <div className={styles.form_group}>
@@ -66,17 +81,21 @@ const AddUser = ({ open, handleClose, styles,handleSearchInput }) => {
             type="email"
             size="small"
             fullWidth
+            required
             placeholder="john@example.com"
-            onChange={(e) => formData.email = e.target.value}
+            value={formData.email}
+            onChange={(e) => setFormData({
+                ...formData,
+                email: e.target.value
+              })}
           />
         </div>
         <Button
           variant="contained" 
           color="secondary"
-          startIcon={isLoading && <LoaderComponent />}
           onClick={() => {
-            postDataFunc(JSON.stringify(formData), "application/json",action)
-            
+            setEndpoint(Administrators.createAdmin)
+            setSignal(!signal)
           }}>
           Add User
         </Button>

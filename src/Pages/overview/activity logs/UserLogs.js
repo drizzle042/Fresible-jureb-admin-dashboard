@@ -1,10 +1,11 @@
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Layout from "../../Layout/Layout";
 import styles from "./styles/styles.module.css";
 import { useNavigate } from "react-router-dom";
 import usePaginator from "../../../lib/components/Hooks/PaginatorTemplate";
-import useFetch from "../../../lib/components/Hooks/useFetch";
+import useFetch from "../../../lib/components/Hooks/Requests/useFetch";
+import { Activity } from "../../../lib/components/Endpoints/Endpoints";
 import LoaderComponent from "../../../lib/components/LoaderComponent/Loader";
 import FetchError from "../../../lib/components/Hooks/FetchError";
 
@@ -15,7 +16,7 @@ const UserLogs = () => {
     const { PaginatorTemplate, pageNumber } = usePaginator();
 
     // Get requests
-    const { data, isLoading, error } = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/activities?page=${pageNumber}`);
+    const { data, isLoading, error } = useFetch(`${Activity.getActivities}/?page=${pageNumber}`);
     
     let activityTime = (createdAt) => {
       let now = new Date();

@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import { useParams } from "react-router-dom"
-import useFetch from "../../../lib/components/Hooks/useFetch";
+import useFetch from "../../../lib/components/Hooks/Requests/useFetch";
 import LoaderComponent from "../../../lib/components/LoaderComponent/Loader";
 import styles from "./styles/styles.module.css";
 import Layout from "../../Layout/Layout";
@@ -14,6 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Logo from "../assets/images/jureb-logo.png";
 import { moneyFormat } from "../../../lib/components/Helper/formatCurrency";
+import { Orgs } from "../../../lib/components/Endpoints/Endpoints";
 
 
 const OrganizationInvoicespdf = () => {
@@ -22,7 +23,7 @@ const OrganizationInvoicespdf = () => {
 
   const componentRef = useRef();
 
-  const {data: invoiceData, isLoading, error} = useFetch(`${process.env.REACT_APP_BACKEND_API_URL}/api/v1/admin/cp/organizations/invoices?organizationId=${id}`) 
+  const {data:invoiceData, isLoading, error} = useFetch(`${Orgs.getOrgInvoices}/?organizationId=${id}`) 
 
   return (
    <div>
