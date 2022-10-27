@@ -70,7 +70,8 @@ const Tab = ({ styles, data }) => {
                     ))}</TableCell>
                   <TableCell align="left">
                     <span>
-                      <Button>
+                      <Button
+                        disabled={notification?.status === "SENT"}>
                         <DeleteForeverIcon />
                       </Button>
                     </span>

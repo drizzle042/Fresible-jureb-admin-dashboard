@@ -240,7 +240,6 @@ const NewMessage = ({
                         "link",
                       ],
                     }}
-                    // toolbarHidden={true}
                     editorState={hooksContent.editorState}
                     wrapperClassName="demo-wrapper"
                     editorClassName="demo-editor"
@@ -249,46 +248,50 @@ const NewMessage = ({
                 </div>
               </div>
             </div>
-            <div className={styles.input_image_field}>
-              <label>Image</label>
-              <div className={styles.image_wrapper}>
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  ref={imageRef}
-                  accept=".png, .jpg, .jpeg, .gif"
-                  onChange={hooksContent.onImageChange}
-                />
-                {hooksContent.image?.length <= 0 ? (
-                  <>
-                    <button onClick={() => imageRef.current.click()}>
-                      <img src={uploadImage} alt="Upload" />
-                    </button>
+            {
+              hooksContent.messageType?.includes("SMS") ?
+              "" :
+              <div className={styles.input_image_field}>
+                <label>Image</label>
+                <div className={styles.image_wrapper}>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    ref={imageRef}
+                    accept=".png, .jpg, .jpeg, .gif"
+                    onChange={hooksContent.onImageChange}
+                  />
+                  {hooksContent.image?.length <= 0 ? (
+                    <>
+                      <button onClick={() => imageRef.current.click()}>
+                        <img src={uploadImage} alt="Upload" />
+                      </button>
+                      <p
+                        className={styles.p}
+                        onClick={() => imageRef.current.click()}
+                      >
+                        Upload Image
+                      </p>
+                      <p className={styles.fade}>PNG, JPG, GIF up to 5MB</p>
+                    </>
+                  ) : (
                     <p
                       className={styles.p}
                       onClick={() => imageRef.current.click()}
                     >
-                      Upload Image
+                      Change Image
                     </p>
-                    <p className={styles.fade}>PNG, JPG, GIF up to 5MB</p>
-                  </>
-                ) : (
-                  <p
-                    className={styles.p}
-                    onClick={() => imageRef.current.click()}
-                  >
-                    Change Image
-                  </p>
-                )}
-                <Collapse in={hooksContent.image?.length <= 0 ? false : true}>
-                  <img
-                    className={styles.user_image}
-                    src={hooksContent.imageUrl}
-                    alt=""
-                  />
-                </Collapse>
+                  )}
+                  <Collapse in={hooksContent.image?.length <= 0 ? false : true}>
+                    <img
+                      className={styles.user_image}
+                      src={hooksContent.imageUrl}
+                      alt=""
+                    />
+                  </Collapse>
+                </div>
               </div>
-            </div>
+            }
           </div>
         </DialogContent>
         <DialogActions style={{ padding: "16px" }}>

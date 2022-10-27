@@ -10,7 +10,7 @@ const Search = ({ styles, hooksContent, handleSearchInput, openNewMessage }) => 
   const { filterData } = hooksContent;
 
   const [searchUrl, setSearchUrl] = useState({
-    keyword: "",
+    term: "",
     dateFrom: "",
     dateTo: "",
   });

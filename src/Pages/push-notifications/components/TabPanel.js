@@ -23,15 +23,15 @@ const TabHeaders = ({ handleChange, styles, data }) => {
         onChange={handleChange}
       >
         <Tab
-          label={<TabLabel styles={styles} title="All" label={data?.data?.length} />}
+          label={<TabLabel styles={styles} title="All" label={data?.data?.all} />}
           value=""
         />
         <Tab
-          label={<TabLabel styles={styles} title="Sent" label={data?.data?.filter(i => i?.status === "SENT").length} />}
+          label={<TabLabel styles={styles} title="Sent" label={data?.data?.sent} />}
           value="SENT"
         />
         <Tab
-          label={<TabLabel styles={styles} title="Scheduled" label={data?.data?.filter(i => i?.status === "SCHEDULED").length} />}
+          label={<TabLabel styles={styles} title="Scheduled" label={data?.data?.scheduled} />}
           value="SCHEDULED"
         />
       </TabList>

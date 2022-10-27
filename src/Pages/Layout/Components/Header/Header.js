@@ -19,7 +19,9 @@ const Header = ({ handleDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [opens, setOpens] = React.useState(false);
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    logout: false
+  });
   const handleDrawerOpen = () => {
     setOpens(true);
   };
@@ -139,10 +141,10 @@ const Header = ({ handleDrawerToggle }) => {
           style={{marginTop:"1rem"}}
         >
           <Link to='/settings'> <Typography sx={{ p: 2 }}   style={{width: '10rem', marginLeft:"2rem"}}>Profile</Typography></Link>
-          <Typography sx={{ p: 2 }}  style={{width: '10rem', marginLeft:"2rem", color: '#EB5757',cursor:'pointer'}} onClick={()=>setState({...state, logout:true})}>Logout</Typography>
+          <Typography sx={{ p: 2 }}  style={{width: '10rem', marginLeft:"2rem", color: '#EB5757',cursor:'pointer'}} onClick={()=>setState({...state, logout: true})}>Logout</Typography>
         </Popover>
         <AdminLogs open={opens} setOpen={setOpens} />
-        <Dialog open={state?.logout} onClose={() => setState({})}>
+        <Dialog open={state?.logout} onClose={() => setState({...state, logout: false})}>
           <div >
           <div className={styles.dialog_title}>
             <div className={styles.section_title}>

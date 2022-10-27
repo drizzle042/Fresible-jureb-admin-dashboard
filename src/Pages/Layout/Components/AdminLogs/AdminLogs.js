@@ -78,11 +78,10 @@ const AdminLogs = ({ open, setOpen }) => {
             <Divider/>
             <div className={styles.user_logs} style={{height:'400px',overflowY:'auto'}}>
               {data?.data?.slice(0,20).map((item, index) => (
-                <div>
+                <div key={index}>
                 { index > 0 && <Divider /> }
                 <div
                   style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#fff" }}
-                  key={index}
                   className={styles.log}
                 >
                   <div>

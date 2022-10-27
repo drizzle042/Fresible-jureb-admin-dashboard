@@ -31,6 +31,7 @@ const Account = {
 }
 const Activity = {
     getAdminActivities: `${baseUrl}/api/v1/admin/cp/activities/admin`,
+    getOrgActivities: `${baseUrl}/api/v1/admin/cp/activities/organization`,
     getActivities: `${baseUrl}/api/v1/admin/cp/activities`
 }
 const Administrators = {
@@ -59,7 +60,9 @@ const Users = {
 }
 const Notification = {
     adminFetchPushNotifications: `${baseUrl}/api/v1/admin/cp/administrators/push-notification/fetch`,
-    createPushNotification: `${baseUrl}/api/v1/admin/cp/administrators/push-notification/create`
+    adminSearchPushNotifications: `${baseUrl}/api/v1/admin/cp/administrators/push-notification/search`,
+    createPushNotification: `${baseUrl}/api/v1/admin/cp/administrators/push-notification/create`,
+    getCategoryCount: `${baseUrl}/api/v1/admin/cp/administrators/push-notification/category-count`
 }
 
 export { 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Layout from "../../Layout/Layout";
@@ -19,9 +20,17 @@ const AdminLogs = () => {
     const { PaginatorTemplate, pageNumber } = usePaginator();
 
     // Get requests
-    const { data, isLoading, error } = useFetch(`${Activity.getAdminActivities}/?page=${pageNumber}`);
+    const { data, isLoading, error, handleSearchInput } = useFetch(`${Activity.getAdminActivities}/?page=${pageNumber}`);
     
-    const [searchUrl, setSearchUrl] = useState({ });
+    const [searchUrl, setSearchUrl] = useState({
+      keyword: ""
+    });
+
+    useEffect(() => {
+      handleSearchInput(searchUrl);
+      // eslint-disable-next-line
+    }, [searchUrl])
+
     let activityTime = (createdAt) => {
       let now = new Date();
       let dateCreated = new Date(createdAt);
@@ -43,41 +52,47 @@ const AdminLogs = () => {
 
     return (
         <Layout>
-            <main className={styles.main}>
-                <IconButton onClick={() => navigate(-1)}>
-                    <KeyboardBackspaceIcon />
-                </IconButton>
-                {isLoading && <LoaderComponent />}
-                {error && <FetchError error={error} />}
-                {data && 
+          <main className={styles.main}>
+            <IconButton onClick={() => navigate(-1)}>
+                <KeyboardBackspaceIcon />
+            </IconButton>
+            {isLoading && <LoaderComponent />}
+            {error && <FetchError error={error} />}
+            {data && 
+              <>
                 <div >
-                    <div className={styles.search_bar} style={{margin:'30px 0px'}}>
-                      <TextField
-                        className={styles.input}
-                        fullWidth
-                        style={{width:'400px'}}
-                        size="small"
-                        placeholder="Search by organization, admin, or plans"
-                        onChange={()=>console.log()}
-                        onInput={(e) => {
-                          setSearchUrl({
-                            ...searchUrl,
-                            keyword: e?.target?.value,
-                          });
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <SearchIcon className={styles.searchIcon} />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </div>
-                  <div className={styles.user_logs} style={{ backgroundColor: "#fff", borderRadius: "11px", border: "1px, solid, #fff", boxShadow: "0px 2.93842px 17.6305px rgba(37, 51, 66, 0.15)" }}>
-
-
-                      {data?.data?.map((item, index) => (
+                  <div className={styles.search_bar} style={{margin:'30px 0px'}}>
+                    <TextField
+                      className={styles.input}
+                      fullWidth
+                      style={{width:'400px'}}
+                      size="small"
+                      placeholder="Search by organization, admin, or plans"
+                      onInput={(e) => {
+                        setSearchUrl({
+                          ...searchUrl,
+                          keyword: e?.target?.value,
+                        });
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <SearchIcon className={styles.searchIcon} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </div>
+                  <div 
+                    className={styles.user_logs} 
+                    style={{ 
+                      backgroundColor: "#fff", 
+                      borderRadius: "11px", 
+                      border: "1px, solid, #fff", 
+                      boxShadow: "0px 2.93842px 17.6305px rgba(37, 51, 66, 0.15)" 
+                    }}>
+                  {
+                    data?.data?.map((item, index) => (
                       <div
                           style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#F3F3F6" }}
                           key={index}
@@ -88,17 +103,22 @@ const AdminLogs = () => {
                           {item?.text?.replace("$1", "").replace("$2", item?.replacers[1]?.name).replace("$3", item?.replacers[2]?.name).replace("$4", item?.replacers[3]?.name)}
                           </div>
                           <div>{
-                          item?.createdAt ?
-                              `${activityTime(item?.createdAt)} ago` :
-                              "unknown time"
+                            item?.createdAt ?
+                                `${activityTime(item?.createdAt)} ago` :
+                                "unknown time"
                           }</div>
                       </div>
-                      ))}
+                  ))}
                   </div>
                 </div>
-                }
-                <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
-            </main>
+                <PaginatorTemplate 
+                  totalDocs={data?.data?.length} 
+                  limit={data?.limit} 
+                  page={data?.page} 
+                  totalPages={data?.totalPages} />
+              </>
+            }
+          </main>
         </Layout>
     );
 };

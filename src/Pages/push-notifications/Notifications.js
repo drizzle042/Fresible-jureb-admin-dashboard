@@ -108,6 +108,9 @@ const Notifications = () => {
     setpageValue(newValue);
   };
 
+  // Get Tab headers
+  const { data:tabData } = useFetch(Notification.getCategoryCount)
+
   // Get All Notifications
   const { data, isLoading, error, handleSearchInput, fetchData } = useFetch(`${Notification.adminFetchPushNotifications}/?page=${pageNumber}&status=${pageValue}`)
 
@@ -158,7 +161,7 @@ const Notifications = () => {
             <>
               <div className={styles.tab_panel}>
                 <TabContext value={pageValue}>
-                  <TabHeaders handleChange={handleChange} data={data} styles={styles} />
+                  <TabHeaders handleChange={handleChange} data={tabData} styles={styles} />
                   {
                     [
                       "",
@@ -172,7 +175,11 @@ const Notifications = () => {
                   }
                 </TabContext>
               </div>
-              <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
+              <PaginatorTemplate 
+                totalDocs={data?.data?.length} 
+                limit={data?.limit} 
+                page={data?.page} 
+                totalPages={data?.totalPages} />
             </>
           }
           {

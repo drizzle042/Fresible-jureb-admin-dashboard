@@ -16,7 +16,7 @@ const UserLogs = () => {
     const { PaginatorTemplate, pageNumber } = usePaginator();
 
     // Get requests
-    const { data, isLoading, error } = useFetch(`${Activity.getActivities}/?page=${pageNumber}`);
+    const { data, isLoading, error } = useFetch(`${Activity.getOrgActivities}/?page=${pageNumber}`);
     
     let activityTime = (createdAt) => {
       let now = new Date();
@@ -39,13 +39,14 @@ const UserLogs = () => {
 
     return (
         <Layout>
-            <main className={styles.main}>
-                <IconButton onClick={() => navigate(-1)}>
-                    <KeyboardBackspaceIcon />
-                </IconButton>
-                {isLoading && <LoaderComponent />}
-                {error && <FetchError error={error} />}
-                {data && 
+          <main className={styles.main}>
+            <IconButton onClick={() => navigate(-1)}>
+                <KeyboardBackspaceIcon />
+            </IconButton>
+            {isLoading && <LoaderComponent />}
+            {error && <FetchError error={error} />}
+            {data && 
+              <>
                 <div className={styles.user_logs} style={{ backgroundColor: "#fff", borderRadius: "10px", border: "1px, solid, #fff", boxShadow: "3px 3px 3px 3px rgba(0, 0, 0, 0.05)" }}>
                     {data?.data?.map((item, index) => (
                     <div
@@ -64,9 +65,15 @@ const UserLogs = () => {
                         }</div>
                     </div>
                     ))}
-                </div>}
-                <PaginatorTemplate totalDocs={data?.data?.length} limit={data?.limit} page={data?.page} totalPages={data?.totalPages} />
-            </main>
+                </div>
+                <PaginatorTemplate 
+                  totalDocs={data?.data?.length} 
+                  limit={data?.limit} 
+                  page={data?.page} 
+                  totalPages={data?.totalPages} />
+              </>
+            }
+          </main>
         </Layout>
     );
 };
